@@ -74,7 +74,8 @@ public class Automaton {
    */
   public void prepareForRun() {
     currentStates.clear();
-    currentStates.addAll(getEpsilonClosure(startState));
+    currentStates.add(startState);
+    currentStates.addAll(getEpsilonClosure(currentStates));
   }
 
   /**
@@ -94,21 +95,10 @@ public class Automaton {
   }
 
   private Set<Integer> getEpsilonClosure(Set<Integer> states) {
-    Set<Integer> epsilonClosure = new HashSet<Integer>();
-    for (int state : states) {
-      epsilonClosure.addAll(getEpsilonClosure(state));
-    }
-    return epsilonClosure;
-  }
-
-  private Set<Integer> getEpsilonClosure(int state) {
-    Set<Integer> epsilonClosure = new HashSet<Integer>();
-    epsilonClosure.add(state);
-    Queue<Integer> queue = new LinkedList<>();
-    queue.add(state);
+    Set<Integer> epsilonClosure = new HashSet<Integer>(states);
+    Queue<Integer> queue = new LinkedList<>(states);
     while (!queue.isEmpty()) {
       int currState = queue.remove();
-      epsilonClosure.add(currState);
       if (epsilonTransitions.containsKey(currState)) {
         for (int nextState : epsilonTransitions.get(currState)) {
           if (!epsilonClosure.contains(nextState)) {
