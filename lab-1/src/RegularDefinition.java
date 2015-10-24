@@ -1,8 +1,21 @@
+/**
+ * A class that represents a regular definition. Regular definition is defined by a name and an expression.
+ * Expression is regular expression which can contain other regular definitions written inside of an curly brackets e.g. {name}.
+ * 
+ * @author Josipa Kelava
+ *
+ */
 public class RegularDefinition {
 
   private String name;
   private String value;
 
+  /**
+   * Constructor takes name and expression.
+   * 
+   * @param name - name of regular definition
+   * @param value - expression
+   */
   public RegularDefinition(String name, String value) {
     this.name = name;
     this.value = value;
