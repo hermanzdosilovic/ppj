@@ -6,37 +6,90 @@ import java.util.List;
 import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.Automaton;
 
+/**
+ * Represents regular expression. Usage example:<br>
+ * <br>
+ * <code>
+ * Regex regex = new Regex("(a|b)*123(c|d|e|f)*");<br>
+ * regex.accepts("abab123cd"); // true <br>
+ * regex.accepts("123"); // true <br>
+ * regex.accepts("cdef"); // false
+ * </code> <br>
+ * <br>
+ * You can get automaton which accepts the same language as this regex by calling
+ * {@link #toAutomaton()} method.
+ * 
+ * @author Herman Zvonimir Došilović
+ */
 public class Regex {
-
-  private String expression;
+  private String value;
   private Automaton automaton;
 
   public Regex(final String value) {
-    this.expression = value;
+    this.value = value;
   }
 
-  public String getExpression() {
-    return expression;
+  /**
+   * Returns string representation of this regex.
+   * 
+   * @return string representation of this regex
+   */
+  public String getValue() {
+    return value;
   }
 
+  /**
+   * Returns automaton which accepts the same language as this regex.
+   * 
+   * @return automaton which accepts the same language as this regex
+   */
   public Automaton toAutomaton() {
     if (automaton != null) {
       return automaton;
     }
     automaton = new Automaton();
-    Pair<Integer, Integer> statePair = convertExpressionToAutomaton(expression);
+    Pair<Integer, Integer> statePair = convertExpressionToAutomaton(value);
     automaton.setStartState(statePair.getFirst());
     automaton.setAcceptState(statePair.getSecond());
     return automaton;
   }
   
+  /**
+   * Returns <code>true</code> if this regex accepts given string, <code>false</code> otherwise.
+   * @param matcher
+   * @return <code>true</code> if this regex accepts given string, <code>false</code> otherwise
+   */
   public boolean accepts(String matcher) {
-    this.toAutomaton();
+    toAutomaton();
     automaton.prepareForRun();
-    for(char character : matcher.toCharArray()) {
+    for (char character : matcher.toCharArray()) {
       automaton.makeTransitions(character);
     }
     return automaton.isInAcceptableState();
+  }
+  
+  /**
+   * Returns first level subexpressions of this string. Example: <br>
+   * First level subexpressions of regex <code>(a|b)*123|ABCD</code> are: <br>
+   * <ul>
+   * <code>
+   * <li>(a|b)*123
+   * <li>ABCD
+   * </code>
+   * </ul> 
+   * @return first level subexpressions of this string
+   */
+  public List<String> getSubExpressions() {
+    return getSubExpressions(value);
+  }
+  
+  /**
+   * Returns <code>true</code> if this regex has escaped character at position <code>index</code>, <code>false</code> otherwise.
+   * @param index
+   * @return <code>true</code> if this regex has escaped character at position <code>index</code>, <code>false</code> otherwise
+   */
+  public boolean escapedCharacterAt(int index) {
+    return escapedCharacterAt(value, index);
   }
   
   private Pair<Integer, Integer> convertExpressionToAutomaton(String expression) {
@@ -118,10 +171,6 @@ public class Regex {
     return new Pair<>(leftState, rightState);
   }
 
-  public List<String> getSubExpressions() {
-    return getSubExpressions(expression);
-  }
-
   private List<String> getSubExpressions(String expression) {
     List<String> subExpressions = new ArrayList<>();
     int numberOfParenthesis = 0;
@@ -151,9 +200,5 @@ public class Regex {
       index--;
     }
     return isEscaped;
-  }
-
-  public boolean escapedCharacterAt(int index) {
-    return escapedCharacterAt(expression, index);
   }
 }
