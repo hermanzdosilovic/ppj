@@ -24,6 +24,7 @@ public class AnalyzerInputDefinition {
   private String[] parsedStateDefinition;
   private List<RegularDefinition> listOfRegDefinitions;
   private List<LexicalUnit> lexicalName;
+  private List<String> lexicalRules;
   private HashMap<String, LexicalAnalyzerState> lexicalState;
 
   public AnalyzerInputDefinition() {
@@ -88,6 +89,41 @@ public class AnalyzerInputDefinition {
   }
 
   public void lexicalAnalyzerRulesDefinition() {
- 
+    String[] parsedRules;
+    String name;
+    String regEx;
+    while (true) {
+
+      try {
+        textInput = input.readLine();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      parsedRules = textInput.split(">", 2);
+      name = parsedRules[0].substring(1);
+      regEx = parsedRules[1];
+      
+      try {
+        textInput = input.readLine();
+        textInput = input.readLine();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      
+      while(!textInput.equals("}")){
+        
+        lexicalRules.add(textInput);
+
+        try {
+          textInput = input.readLine();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+
+      lexicalState.get(name).list.add(new RegexAction(regEx, lexicalRules));
+
+    }
   }
 }

@@ -1,7 +1,5 @@
 package hr.fer.zemris.ppj;
 
-import hr.fer.zemris.ppj.regex.RegularDefinition;
-
 import java.util.List;
 
 /**
@@ -13,7 +11,7 @@ import java.util.List;
 public class LexicalAnalyzerState {
 
   String name;
-  List<RegularDefinition> list;
+  List<RegexAction> list;
 
   public LexicalAnalyzerState(String name) {
     this.name = name;
