@@ -1,7 +1,12 @@
+package hr.fer.zemris.ppj;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import hr.fer.zemris.ppj.regex.RegDefResolver;
+import hr.fer.zemris.ppj.regex.RegularDefinition;
 
 /**
  * Class for lexical analyzer definition with a specific input format.
