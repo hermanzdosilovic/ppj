@@ -50,7 +50,7 @@ public class AnalyzerInputDefinition {
       }
       parsedRegularDefinition = textInput.split(" ");
 
-      name = parsedRegularDefinition[0];
+      name = parsedRegularDefinition[0].substring(1, parsedRegularDefinition[0].length() - 1);
       value = parsedRegularDefinition[1];
       RegularDefinition regularDefinition = new RegularDefinition(name, value);
       listOfRegDefinitions.add(regularDefinition);
