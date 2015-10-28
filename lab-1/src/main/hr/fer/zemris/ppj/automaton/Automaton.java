@@ -1,3 +1,5 @@
+package hr.fer.zemris.ppj.automaton;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;

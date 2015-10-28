@@ -1,3 +1,5 @@
+package hr.fer.zemris.ppj.regex;
+
 public class RegularDefinition {
 
   private String name;

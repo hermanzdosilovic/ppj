@@ -1,3 +1,5 @@
+package hr.fer.zemris.ppj.automaton;
+
 
 import static org.junit.Assert.*;
 
