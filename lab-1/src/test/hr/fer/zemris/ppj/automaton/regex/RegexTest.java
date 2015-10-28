@@ -1,6 +1,8 @@
 package hr.fer.zemris.ppj.automaton.regex;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -70,8 +72,30 @@ public class RegexTest {
   
   @Test
   public void acceptsTest() {
-    Regex regex = new Regex("a|b");
-    assertEquals(true, regex.accepts("a"));
-    assertEquals(true, regex.accepts("b"));
+    Regex regex = new Regex("a");
+    assertTrue(regex.accepts("a"));
+    assertFalse(regex.accepts("aa"));
+    
+    regex = new Regex("a|b");
+    assertTrue(regex.accepts("a"));
+    assertTrue(regex.accepts("b"));
+    assertFalse(regex.accepts("aa"));
+    assertFalse(regex.accepts("bb"));
+    
+    regex = new Regex("a\\|b");
+    assertTrue(regex.accepts("a|b"));
+    assertFalse(regex.accepts("a"));
+    
+    regex = new Regex("(a|b)*");
+    assertTrue(regex.accepts("aaa"));
+    assertTrue(regex.accepts("ababbaa"));
+    assertTrue(regex.accepts(""));
+    
+    regex = new Regex("(a|b|c|d)*");
+    assertTrue(regex.accepts("abcddcba"));
+    
+    regex = new Regex("(abcd)*1(2|3|4)*");
+    assertTrue(regex.accepts("abcd134"));
+    assertFalse(regex.accepts("1134"));
   }
 }

@@ -48,7 +48,7 @@ public class Regex {
       for (String subExpression : subExpressions) {
         Pair<Integer, Integer> statePair = convertExpressionToAutomaton(subExpression);
         automaton.addEpsilonTransition(leftState, statePair.getFirst());
-        automaton.addEpsilonTransition(rightState, statePair.getSecond());
+        automaton.addEpsilonTransition(statePair.getSecond(), rightState);
       }
     } else {
       boolean prefixed = false;
