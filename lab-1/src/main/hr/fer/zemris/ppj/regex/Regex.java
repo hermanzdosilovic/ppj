@@ -12,12 +12,12 @@ public class Regex {
     return value;
   }
   
-  private boolean isOperator(int index) {
-    int countEscape = 0;
-    while(index - 1 >= 0 && value.charAt(index) == '\\') {
-      countEscape++;
+  public boolean isEscapedCharacterAt(int index) {
+    boolean isEscaped = false;
+    while(index - 1 >= 0 && value.charAt(index - 1) == '\\') {
+      isEscaped = !isEscaped;
       index--;
     }
-    return countEscape%2 == 0;
+    return isEscaped;
   }
 }
