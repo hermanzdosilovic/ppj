@@ -44,11 +44,7 @@ public class AnalyzerInputDefinition {
     String name;
     String value;
     while (true) {
-      try {
-        textInput = input.readLine();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+    textInput = read();
       if (textInput.startsWith("%")) {
         break;
       }
@@ -70,11 +66,7 @@ public class AnalyzerInputDefinition {
   }
 
   public void lexicalNameDefinition() throws Exception {
-    try {
-      textInput = input.readLine();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    textInput = read();
     if (!textInput.startsWith("%L")) {
       throw new Exception("Bad input: missing %L line");
     }
@@ -93,37 +85,33 @@ public class AnalyzerInputDefinition {
     String name;
     String regEx;
     while (true) {
-
-      try {
-        textInput = input.readLine();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-
+      textInput = read();
       parsedRules = textInput.split(">", 2);
       name = parsedRules[0].substring(1);
       regEx = parsedRules[1];
       
-      try {
-        textInput = input.readLine();
-        textInput = input.readLine();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      textInput = read();
+      textInput = read();
       
       while(!textInput.equals("}")){
         
         lexicalRules.add(textInput);
 
-        try {
-          textInput = input.readLine();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
+        textInput = read();
       }
 
       lexicalState.get(name).list.add(new RegexAction(regEx, lexicalRules));
 
     }
+  }
+  
+  private String read(){
+    String textInput = " ";
+    try {
+      textInput = input.readLine();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return textInput;
   }
 }
