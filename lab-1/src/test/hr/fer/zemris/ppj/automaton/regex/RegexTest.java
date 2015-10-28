@@ -11,7 +11,7 @@ import hr.fer.zemris.ppj.regex.Regex;
 public class RegexTest {
   
   @Test
-  public void isOperatorTest() {
+  public void escapedCharacterAtTest() {
     //                       012-3-456-7-8-901-2-3-4-56
     Regex regex = new Regex("a|b\\\\cd\\\\\\ef\\\\\\\\|"); // a|b\\cd\\\|f\\\\|
     assertFalse(regex.escapedCharacterAt(0)); // a
@@ -66,5 +66,12 @@ public class RegexTest {
     assertEquals(2, subExpressions.size());
     assertEquals("a\\|b\\\\", subExpressions.get(0));
     assertEquals("c", subExpressions.get(1));
+  }
+  
+  @Test
+  public void acceptsTest() {
+    Regex regex = new Regex("a|b");
+    assertEquals(true, regex.accepts("a"));
+    assertEquals(true, regex.accepts("b"));
   }
 }
