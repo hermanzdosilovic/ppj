@@ -3,6 +3,7 @@ package hr.fer.zemris.ppj;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,12 +21,10 @@ public class AnalyzerInputDefinition {
 
   private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
   private String textInput;
-  private String[] parsedRegularDefinition;
-  private String[] parsedStateDefinition;
-  private List<RegularDefinition> listOfRegDefinitions;
-  private List<LexicalUnit> lexicalName;
-  private List<String> lexicalRules;
-  private HashMap<String, LexicalAnalyzerState> lexicalState;
+  private List<RegularDefinition> listOfRegDefinitions = new ArrayList<RegularDefinition>(); 
+  private List<LexicalUnit> lexicalName = new ArrayList<LexicalUnit>();
+  private List<String> lexicalRules = new ArrayList<String>();
+  private HashMap<String, LexicalAnalyzerState> lexicalState = new HashMap<String, LexicalAnalyzerState>();
 
   public AnalyzerInputDefinition() {
     this.regularDefinitionInput();
@@ -43,6 +42,7 @@ public class AnalyzerInputDefinition {
   public void regularDefinitionInput() {
     String name;
     String value;
+    String[] parsedRegularDefinition;
     while (true) {
     textInput = read();
       if (textInput.startsWith("%")) {
@@ -50,7 +50,7 @@ public class AnalyzerInputDefinition {
       }
       parsedRegularDefinition = textInput.split(" ");
 
-      name = parsedRegularDefinition[0].substring(1, parsedRegularDefinition[0].length() - 1);
+      name = parsedRegularDefinition[0];
       value = parsedRegularDefinition[1];
       RegularDefinition regularDefinition = new RegularDefinition(name, value);
       listOfRegDefinitions.add(regularDefinition);
@@ -58,18 +58,15 @@ public class AnalyzerInputDefinition {
   }
 
   public void lexicalStateDefinition() {
-    parsedStateDefinition = textInput.split(" ");
+    String[] parsedStateDefinition = textInput.split(" ");
     for (int i = 1; i < parsedStateDefinition.length; i++) {
       LexicalAnalyzerState state = new LexicalAnalyzerState(parsedStateDefinition[i]);
       lexicalState.put(parsedStateDefinition[i], state);
     }
   }
 
-  public void lexicalNameDefinition() throws Exception {
+  public void lexicalNameDefinition() {
     textInput = read();
-    if (!textInput.startsWith("%L")) {
-      throw new Exception("Bad input: missing %L line");
-    }
 
     String[] parsedLexicalNames;
     parsedLexicalNames = textInput.split(" ");
@@ -77,7 +74,6 @@ public class AnalyzerInputDefinition {
       LexicalUnit unit = new LexicalUnit(parsedLexicalNames[i]);
       lexicalName.add(unit);
     }
-
   }
 
   public void lexicalAnalyzerRulesDefinition() {
@@ -86,6 +82,9 @@ public class AnalyzerInputDefinition {
     String regEx;
     while (true) {
       textInput = read();
+      if(textInput.isEmpty()){
+        break;
+      }
       parsedRules = textInput.split(">", 2);
       name = parsedRules[0].substring(1);
       regEx = parsedRules[1];
@@ -113,5 +112,33 @@ public class AnalyzerInputDefinition {
       e.printStackTrace();
     }
     return textInput;
+  }
+  
+  /**
+   * List of all regular definitions
+   * @return List of regular definitions
+   */
+  public List<RegularDefinition> getListOfRegularDefinitions(){
+    return listOfRegDefinitions;
+  }
+  
+  /**
+   * List of lexical unit names
+   * @return List of lexical unit names
+   */
+  public List<LexicalUnit> getLexicalNames(){
+    return lexicalName;
+  }
+  
+  /**
+   * Hash map with lexical states as key and values are LexicalAnalyzerState objects.
+   * If you want to access actions for certain regular expressions you can do it with
+   * an example 
+   *    <code>lexicalState.get(key).list.action</code>
+   * which returns List<String> of actions
+   * @return lexicalState Map<String, LexicalAnalyzerState>
+   */
+  public HashMap<String, LexicalAnalyzerState> getLexicalStae(){
+    return lexicalState;
   }
 }
