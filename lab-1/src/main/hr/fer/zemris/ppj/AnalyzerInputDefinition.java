@@ -22,8 +22,6 @@ public class AnalyzerInputDefinition {
   private String textInput;
   private String[] parsedRegularDefinition;
   private String[] parsedStateDefinition;
-  private String name;
-  private String value;
   private List<RegularDefinition> listOfRegDefinitions;
   private List<LexicalUnit> lexicalName;
   private HashMap<String, LexicalAnalyzerState> lexicalState;
@@ -42,6 +40,8 @@ public class AnalyzerInputDefinition {
   }
 
   public void regularDefinitionInput() {
+    String name;
+    String value;
     while (true) {
       try {
         textInput = input.readLine();
@@ -88,6 +88,6 @@ public class AnalyzerInputDefinition {
   }
 
   public void lexicalAnalyzerRulesDefinition() {
-
+ 
   }
 }
