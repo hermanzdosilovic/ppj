@@ -3,6 +3,8 @@ package hr.fer.zemris.ppj;
 import java.util.ArrayList;
 import java.util.List;
 
+import hr.fer.zemris.ppj.automaton.Automaton;
+
 /**
  * Class for storing lexical analyzer states with all of regular definitions related to it.
  * 
@@ -12,21 +14,27 @@ import java.util.List;
 public class LexicalAnalyzerState {
 
   private String name;
+  private List<Automaton> automatons;
   private List<RegexAction> list = new ArrayList<RegexAction>();
 
   public LexicalAnalyzerState(String name) {
     this.name = name;
+    automatons = new ArrayList<>();
   }
   
-  public String getName(){
+  public boolean addAutomaton(Automaton automaton) {
+    return automatons.add(automaton);
+  }
+  
+  public String getName() {
     return name;
   }
-  
-  public void addRegexAction(RegexAction action){
+
+  public void addRegexAction(RegexAction action) {
     list.add(action);
   }
-  
-  public List<RegexAction> getRegexActionList(){
+
+  public List<RegexAction> getRegexActionList() {
     return list;
   }
 
