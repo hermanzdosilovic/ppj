@@ -9,11 +9,19 @@ import java.util.List;
  *
  */
 public class RegexAction {
-  String definition;
-  List<String> action;
+  private String definition;
+  private List<String> action;
 
   public RegexAction(String definition, List<String> action) {
     this.definition = definition;
     this.action = action;
+  }
+  
+  public String getRegex(){
+    return definition;
+  }
+  
+  public void addAction(List<String> actionList){
+    action = actionList;
   }
 }

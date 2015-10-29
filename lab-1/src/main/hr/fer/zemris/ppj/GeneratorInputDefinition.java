@@ -26,6 +26,8 @@ public class GeneratorInputDefinition {
   private List<String> lexicalRules = new ArrayList<String>();
   private HashMap<String, LexicalAnalyzerState> lexicalState =
       new HashMap<String, LexicalAnalyzerState>();
+  private RegDefResolver resolvedDefinitions;
+  private LexicalAnalyzerState InitialAnalyzerState;
 
   public GeneratorInputDefinition() {
     this.regularDefinitionInput();
@@ -40,7 +42,7 @@ public class GeneratorInputDefinition {
     this.lexicalAnalyzerRulesDefinition();
   }
 
-  public void regularDefinitionInput() {
+  private void regularDefinitionInput() {
     String name;
     String value;
     String[] parsedRegularDefinition;
@@ -55,17 +57,20 @@ public class GeneratorInputDefinition {
       value = parsedRegularDefinition[1];
       listOfRegDefinitions.add(new RegularDefinition(name, value));
     }
+    resolvedDefinitions = new RegDefResolver(listOfRegDefinitions);
   }
 
-  public void lexicalStateDefinition() {
+  private void lexicalStateDefinition() {
     String[] parsedStateDefinition = textInput.split(" ");
+    InitialAnalyzerState = new LexicalAnalyzerState(parsedStateDefinition[1]);
+
     for (int i = 1; i < parsedStateDefinition.length; i++) {
       LexicalAnalyzerState state = new LexicalAnalyzerState(parsedStateDefinition[i]);
       lexicalState.put(parsedStateDefinition[i], state);
     }
   }
 
-  public void lexicalNameDefinition() {
+  private void lexicalNameDefinition() {
     textInput = read();
 
     String[] parsedLexicalNames;
@@ -76,7 +81,7 @@ public class GeneratorInputDefinition {
     }
   }
 
-  public void lexicalAnalyzerRulesDefinition() {
+  private void lexicalAnalyzerRulesDefinition() {
     String[] parsedRules;
     String name;
     String regEx;
@@ -99,7 +104,7 @@ public class GeneratorInputDefinition {
         textInput = read();
       }
 
-      lexicalState.get(name).list.add(new RegexAction(regEx, lexicalRules));
+      lexicalState.get(name).addRegexAction(new RegexAction(resolvedDefinitions.resolveRegex(regEx), lexicalRules));
 
     }
   }
@@ -139,7 +144,7 @@ public class GeneratorInputDefinition {
    * 
    * @return lexicalState Map<String, LexicalAnalyzerState>
    */
-  public HashMap<String, LexicalAnalyzerState> getLexicalStae() {
+  public HashMap<String, LexicalAnalyzerState> getLexicalState() {
     return lexicalState;
   }
 
@@ -149,6 +154,10 @@ public class GeneratorInputDefinition {
    * @return RegDefResolver
    */
   public RegDefResolver getResolver() {
-    return new RegDefResolver(listOfRegDefinitions);
+    return resolvedDefinitions;
+  }
+  
+  public LexicalAnalyzerState getInitialAnalyzerState(){
+    return InitialAnalyzerState;
   }
 }
