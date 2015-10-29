@@ -17,7 +17,7 @@ public class AnalyzerInputDefinitionTest {
   public void readInitialAnalyzerStateTest() {
     LexicalAnalyzerState initialLexicalAnalyzerState = new LexicalAnalyzerState("S_initial");
     List<String> inputLines = new ArrayList<>();
-    inputLines.add("%s " + initialLexicalAnalyzerState.getName());
+    inputLines.add(initialLexicalAnalyzerState.getName());
 
     AnalyzerInputDefinition analyzerInputDefinition = new AnalyzerInputDefinition(inputLines);
     assertEquals(initialLexicalAnalyzerState.getName(),
@@ -29,13 +29,10 @@ public class AnalyzerInputDefinitionTest {
     List<String> inputLines = new ArrayList<>();
     inputLines.add("S_1");
     inputLines.add("a|b|c");
-    inputLines.add(" ");
     inputLines.add("S_1");
     inputLines.add("abc|(123)*");
-    inputLines.add(" ");
     inputLines.add("S_2");
     inputLines.add("ab|c");
-    inputLines.add(" ");
     
     AnalyzerInputDefinition analyzerInputDefinition = new AnalyzerInputDefinition(inputLines);
     Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable = analyzerInputDefinition.readLexicalAnalyzerStateDefinitions();

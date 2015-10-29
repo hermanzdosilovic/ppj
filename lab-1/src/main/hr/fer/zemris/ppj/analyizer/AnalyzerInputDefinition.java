@@ -17,8 +17,7 @@ public class AnalyzerInputDefinition {
   private int readerIndex;
 
   private LexicalAnalyzerState initialLexicalAnalyzerState;;
-
-  private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
+  private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable = new HashMap<>();
 
   public AnalyzerInputDefinition(InputStream stream) throws IOException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
@@ -39,13 +38,13 @@ public class AnalyzerInputDefinition {
   }
 
   public LexicalAnalyzerState readInitialLexicalAnalyzerState() {
-    initialLexicalAnalyzerState =
-        new LexicalAnalyzerState(inputLines.get(readerIndex++).substring(3));
+    initialLexicalAnalyzerState = new LexicalAnalyzerState(inputLines.get(readerIndex++));
+    lexicalAnalyzerStateTable.put(initialLexicalAnalyzerState.getName(),
+        initialLexicalAnalyzerState);
     return initialLexicalAnalyzerState;
   }
 
   public Map<String, LexicalAnalyzerState> readLexicalAnalyzerStateDefinitions() {
-    lexicalAnalyzerStateTable = new HashMap<>();
     while (readerIndex < inputLines.size()) {
       String lexicalAnalyzerStateName = inputLines.get(readerIndex++);
       LexicalAnalyzerState lexicalAnalyzerState =
@@ -57,8 +56,6 @@ public class AnalyzerInputDefinition {
 
       Regex regex = new Regex(inputLines.get(readerIndex++));
       lexicalAnalyzerState.addAutomaton(regex.toAutomaton());
-
-      readerIndex++; // skip blank line
     }
     return lexicalAnalyzerStateTable;
   }
