@@ -26,6 +26,10 @@ public class LexicalAnalyzerState {
     return automatons.add(automaton);
   }
   
+  public List<Automaton> getAutomatons() {
+    return automatons;
+  }
+  
   public String getName() {
     return name;
   }

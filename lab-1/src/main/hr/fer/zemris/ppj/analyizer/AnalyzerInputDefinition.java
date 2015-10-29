@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,8 @@ public class AnalyzerInputDefinition {
     return initialLexicalAnalyzerState;
   }
   
-  public void readLexicalAnalyzerStateDefinitions() {
+  public Map<String, LexicalAnalyzerState> readLexicalAnalyzerStateDefinitions() {
+    lexicalAnalyzerStateTable = new HashMap<>();
     while(readerIndex < inputLines.size()) {
       String lexicalAnalyzerStateName = inputLines.get(readerIndex++);
       LexicalAnalyzerState lexicalAnalyzerState = lexicalAnalyzerStateTable.get(lexicalAnalyzerStateName);
@@ -52,7 +54,7 @@ public class AnalyzerInputDefinition {
       
       readerIndex++; // skip blank line
     }
-    
+    return lexicalAnalyzerStateTable;
   }
   
   public LexicalAnalyzerState getInitialLexicalAnalyzerState() {
