@@ -1,9 +1,11 @@
 package hr.fer.zemris.ppj;
 
 import java.util.List;
+
 /**
  * Structure for storing list of actions for certain regular expressions
- * @author truba
+ * 
+ * @author Ivan Trubić
  *
  */
 public class RegexAction {

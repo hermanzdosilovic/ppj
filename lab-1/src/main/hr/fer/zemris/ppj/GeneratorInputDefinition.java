@@ -14,19 +14,20 @@ import hr.fer.zemris.ppj.regex.RegularDefinition;
  * Class for lexical analyzer definition with a specific input format. Point of this class is to
  * just call the constructor and everything will be set to go according to the specification.
  * 
- * @author Truba
+ * @author Ivan Trubić
  *
  */
-public class AnalyzerInputDefinition {
+public class GeneratorInputDefinition {
 
   private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
   private String textInput;
-  private List<RegularDefinition> listOfRegDefinitions = new ArrayList<RegularDefinition>(); 
+  private List<RegularDefinition> listOfRegDefinitions = new ArrayList<RegularDefinition>();
   private List<LexicalUnit> lexicalName = new ArrayList<LexicalUnit>();
   private List<String> lexicalRules = new ArrayList<String>();
-  private HashMap<String, LexicalAnalyzerState> lexicalState = new HashMap<String, LexicalAnalyzerState>();
+  private HashMap<String, LexicalAnalyzerState> lexicalState =
+      new HashMap<String, LexicalAnalyzerState>();
 
-  public AnalyzerInputDefinition() {
+  public GeneratorInputDefinition() {
     this.regularDefinitionInput();
     @SuppressWarnings("unused")
     RegDefResolver resolver = new RegDefResolver(listOfRegDefinitions);
@@ -44,7 +45,7 @@ public class AnalyzerInputDefinition {
     String value;
     String[] parsedRegularDefinition;
     while (true) {
-    textInput = read();
+      textInput = read();
       if (textInput.startsWith("%")) {
         break;
       }
@@ -52,8 +53,7 @@ public class AnalyzerInputDefinition {
 
       name = parsedRegularDefinition[0].substring(1, parsedRegularDefinition[0].length() - 1);
       value = parsedRegularDefinition[1];
-      RegularDefinition regularDefinition = new RegularDefinition(name, value);
-      listOfRegDefinitions.add(regularDefinition);
+      listOfRegDefinitions.add(new RegularDefinition(name, value));
     }
   }
 
@@ -82,18 +82,18 @@ public class AnalyzerInputDefinition {
     String regEx;
     while (true) {
       textInput = read();
-      if(textInput.isEmpty()){
+      if (textInput.isEmpty()) {
         break;
       }
       parsedRules = textInput.split(">", 2);
       name = parsedRules[0].substring(1);
       regEx = parsedRules[1];
-      
+
       textInput = read();
       textInput = read();
-      
-      while(!textInput.equals("}")){
-        
+
+      while (!textInput.equals("}")) {
+
         lexicalRules.add(textInput);
 
         textInput = read();
@@ -103,8 +103,8 @@ public class AnalyzerInputDefinition {
 
     }
   }
-  
-  private String read(){
+
+  private String read() {
     String textInput = " ";
     try {
       textInput = input.readLine();
@@ -113,32 +113,42 @@ public class AnalyzerInputDefinition {
     }
     return textInput;
   }
-  
+
   /**
    * List of all regular definitions
+   * 
    * @return List of regular definitions
    */
-  public List<RegularDefinition> getListOfRegularDefinitions(){
+  public List<RegularDefinition> getListOfRegularDefinitions() {
     return listOfRegDefinitions;
   }
-  
+
   /**
    * List of lexical unit names
+   * 
    * @return List of lexical unit names
    */
-  public List<LexicalUnit> getLexicalNames(){
+  public List<LexicalUnit> getLexicalNames() {
     return lexicalName;
   }
-  
+
   /**
-   * Hash map with lexical states as key and values are LexicalAnalyzerState objects.
-   * If you want to access actions for certain regular expressions you can do it with
-   * an example 
-   *    <code>lexicalState.get(key).list.action</code>
-   * which returns List<String> of actions
+   * Hash map with lexical states as key and values are LexicalAnalyzerState objects. If you want to
+   * access actions for certain regular expressions you can do it with an example
+   * <code>lexicalState.get(key).list.action</code> which returns List<String> of actions
+   * 
    * @return lexicalState Map<String, LexicalAnalyzerState>
    */
-  public HashMap<String, LexicalAnalyzerState> getLexicalStae(){
+  public HashMap<String, LexicalAnalyzerState> getLexicalStae() {
     return lexicalState;
+  }
+
+  /**
+   * Resolved regular definitions
+   * 
+   * @return RegDefResolver
+   */
+  public RegDefResolver getResolver() {
+    return new RegDefResolver(listOfRegDefinitions);
   }
 }

@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class for storing lexical analyzer states with all of regular definitions
- * related to it.
+ * Class for storing lexical analyzer states with all of regular definitions related to it.
  * 
- * @author truba
+ * @author Ivan Trubić
  *
  */
 public class LexicalAnalyzerState {
@@ -16,7 +15,7 @@ public class LexicalAnalyzerState {
   List<RegexAction> list = new ArrayList<RegexAction>();
 
   public LexicalAnalyzerState(String name) {
-  this.name = name;
-}
+    this.name = name;
+  }
 
 }
