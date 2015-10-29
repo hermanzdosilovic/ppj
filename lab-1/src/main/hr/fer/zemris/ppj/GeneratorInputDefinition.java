@@ -87,7 +87,7 @@ public class GeneratorInputDefinition {
     String regEx;
     while (true) {
       textInput = read();
-      if (textInput.isEmpty()) {
+      if (textInput == null || textInput.isEmpty()) {
         break;
       }
       parsedRules = textInput.split(">", 2);
