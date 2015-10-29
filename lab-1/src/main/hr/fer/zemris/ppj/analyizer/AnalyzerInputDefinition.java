@@ -13,52 +13,61 @@ import hr.fer.zemris.ppj.LexicalAnalyzerState;
 import hr.fer.zemris.ppj.regex.Regex;
 
 public class AnalyzerInputDefinition {
-  
   private List<String> inputLines;
   private int readerIndex;
-  
+
   private LexicalAnalyzerState initialLexicalAnalyzerState;;
-  
+
   private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
-  
+
   public AnalyzerInputDefinition(InputStream stream) throws IOException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
     String line;
     inputLines = new ArrayList<>();
-    while((line = reader.readLine()) != null) {
+    while ((line = reader.readLine()) != null) {
       inputLines.add(line);
     }
   }
-  
+
   public AnalyzerInputDefinition(List<String> inputLines) {
     this.inputLines = inputLines;
   }
-  
+
+  public void readAnalyzerDefinition() {
+    readInitialLexicalAnalyzerState();
+    readLexicalAnalyzerStateDefinitions();
+  }
+
   public LexicalAnalyzerState readInitialLexicalAnalyzerState() {
-    initialLexicalAnalyzerState = new LexicalAnalyzerState(inputLines.get(readerIndex++).substring(3));
+    initialLexicalAnalyzerState =
+        new LexicalAnalyzerState(inputLines.get(readerIndex++).substring(3));
     return initialLexicalAnalyzerState;
   }
-  
+
   public Map<String, LexicalAnalyzerState> readLexicalAnalyzerStateDefinitions() {
     lexicalAnalyzerStateTable = new HashMap<>();
-    while(readerIndex < inputLines.size()) {
+    while (readerIndex < inputLines.size()) {
       String lexicalAnalyzerStateName = inputLines.get(readerIndex++);
-      LexicalAnalyzerState lexicalAnalyzerState = lexicalAnalyzerStateTable.get(lexicalAnalyzerStateName);
+      LexicalAnalyzerState lexicalAnalyzerState =
+          lexicalAnalyzerStateTable.get(lexicalAnalyzerStateName);
       if (lexicalAnalyzerState == null) {
         lexicalAnalyzerState = new LexicalAnalyzerState(lexicalAnalyzerStateName);
         lexicalAnalyzerStateTable.put(lexicalAnalyzerStateName, lexicalAnalyzerState);
       }
-      
+
       Regex regex = new Regex(inputLines.get(readerIndex++));
       lexicalAnalyzerState.addAutomaton(regex.toAutomaton());
-      
+
       readerIndex++; // skip blank line
     }
     return lexicalAnalyzerStateTable;
   }
-  
+
   public LexicalAnalyzerState getInitialLexicalAnalyzerState() {
     return initialLexicalAnalyzerState;
   }
 
+  public Map<String, LexicalAnalyzerState> getLexicalAnalyzerStateTable() {
+    return lexicalAnalyzerStateTable;
+  }
 }
