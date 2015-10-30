@@ -33,8 +33,8 @@ public final class GLA {
       int index = 0;
       LexicalAnalyzerState state = entry.getValue();
       for (RegexAction regex : state.getRegexActionList()) {
-        java.println("      if(analyzer.getState().equals(" + state.getName()
-            + ") && analyzer.getAutomationIndex() == " + index + ") {");
+        java.println("      if(analyzer.getState().equals(\"" + state.getName()
+            + "\") && analyzer.getAutomationIndex() == " + index + ") {");
         index++;
 
         for (String action : regex.getActionsList()) {
