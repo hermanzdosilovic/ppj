@@ -28,12 +28,12 @@ public class LexicalAnalyzerState {
   }
 
   public boolean readCharacter(char character) {
-    boolean isInAcceptableState = false;
+    boolean isAlive = false;
     for (Automaton automaton : automatons) {
       automaton.makeTransitions(character);
-      isInAcceptableState |= automaton.isInAcceptableState();
+      isAlive |= automaton.isAlive();
     }
-    return isInAcceptableState;
+    return isAlive;
   }
 
   public void reloadAndReadSequence(String sequence) {

@@ -14,6 +14,7 @@ import java.util.Map;
 import hr.fer.zemris.ppj.LexicalAnalyzerState;
 
 public final class LA {
+  
   private LexicalAnalyzerState initialLexicalAnalyzerState;
   private LexicalAnalyzerState currentLexicalAnalyzerState;
   private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
@@ -21,6 +22,12 @@ public final class LA {
   private String sourceCode;
   private int lineIndex;
   private int left, right;
+  private int lastGood;
+  private Integer lastGoodAutomatonInd;
+  
+  private String lexicalUnitName;
+  private int groupFrom;
+  private int groupTo;
 
   private List<String> output = new ArrayList<>();
 
@@ -32,49 +39,75 @@ public final class LA {
   }
 
   public void analyzeSourceCode() {
-    currentLexicalAnalyzerState.prepareForRun();
-    while (right < sourceCode.length()) {
-      char character = sourceCode.charAt(right);
-      if (currentLexicalAnalyzerState.readCharacter(character)) {
+    while (left < sourceCode.length()) {
+      currentLexicalAnalyzerState.prepareForRun();
+      lastGood = left - 1;
+      right = left;
+      lastGoodAutomatonInd = null;
+      while (right < sourceCode.length()
+          && currentLexicalAnalyzerState.readCharacter(sourceCode.charAt(right))) {
+        Integer possibleAccept = currentLexicalAnalyzerState.getAutomatonIndex();
+        if (possibleAccept != null) {
+          lastGoodAutomatonInd = possibleAccept;
+          lastGood = right;
+        }
         right++;
+      }
+      if (lastGood >= left) {
+        groupFrom = left;
+        groupTo = lastGood + 1;
+        //pozovi akcije
+        groupIntoLexicalUnit();
       } else {
-        currentLexicalAnalyzerState.reloadAndReadSequence(sourceCode.substring(left, right));
-//        Action.actions(this); // call action resolver implemented by Ivan Trubić
+        error();
       }
     }
   }
 
+  private void error() {
+    System.err.print("Error in line: " + lineIndex);
+    left++;
+  }
+  
+  private void groupIntoLexicalUnit() {
+    if (lexicalUnitName != null) {
+      output.add(lexicalUnitName + " " + lineIndex + " " + sourceCode.substring(groupFrom, groupTo));
+      left = groupTo + 1;
+    }
+  }
+  
   public void newLine() {
     lineIndex++;
   }
 
   public void reject() {
-    right++;
-    left = right;
+    lexicalUnitName = null;
+    left = lastGood + 1;
   }
-
+  
+  /*
+   * left = index
+   * grupiraj sve do index -> lg = index - 1
+   */
   public void returnTo(int index) {
-    right = index;
-    currentLexicalAnalyzerState
-        .reloadAndReadSequence(sourceCode.substring(left, right));
+    left = index;
+    groupTo = left;
   }
 
-  public LexicalAnalyzerState setState(String stateName) {
+  public void setState(String stateName) {
     currentLexicalAnalyzerState = lexicalAnalyzerStateTable.get(stateName);
-    currentLexicalAnalyzerState.prepareForRun();
-    return currentLexicalAnalyzerState;
   }
 
   public LexicalAnalyzerState getState() {
     return currentLexicalAnalyzerState;
   }
 
-  public int getAutomatonIndex() {
-    return currentLexicalAnalyzerState.getAutomatonIndex();
+  public Integer getAutomatonIndex() {
+    return lastGoodAutomatonInd;
   }
 
   public void setLexicalUnit(String lexicalUnitName) {
-    output.add(lexicalUnitName + " " + lineIndex + " " + sourceCode.charAt(right));
+    this.lexicalUnitName = lexicalUnitName;
   }
 
   public void printOutput() {
@@ -86,11 +119,11 @@ public final class LA {
   public List<String> getOutput() {
     return output;
   }
-  
+
   public String getSourceCode() {
     return sourceCode;
   }
-  
+
   public LA(InputStream definitionInputStream, InputStream sourceCodeInputStream)
       throws IOException {
     readAnalyzerDefinition(definitionInputStream);
