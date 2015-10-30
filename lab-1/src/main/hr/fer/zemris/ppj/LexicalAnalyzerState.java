@@ -28,7 +28,6 @@ public class LexicalAnalyzerState {
   }
 
   public boolean readCharacter(char character) {
-    System.out.println("Znak: " + character);
     boolean isAlive = false;
     for (Automaton automaton : automatons) {
       automaton.makeTransitions(character);

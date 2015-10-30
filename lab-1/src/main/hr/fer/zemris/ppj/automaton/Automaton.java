@@ -105,9 +105,7 @@ public class Automaton {
         newStates.addAll(getEpsilonClosure(transitions.get(transitionKey)));
       }
     }
-    System.out.println(currentStates);
     currentStates = newStates;
-    System.out.println(currentStates);
   }
 
   private Set<Integer> getEpsilonClosure(Set<Integer> states) {

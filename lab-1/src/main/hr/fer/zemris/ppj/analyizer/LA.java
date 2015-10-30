@@ -42,9 +42,8 @@ public final class LA {
 
   public void analyzeSourceCode() {
     while (left < sourceCode.length()) {
-      System.out.println(currentLexicalAnalyzerState.getName() + " " + left);
-      System.out.println(currentLexicalAnalyzerState.getAutomatons());
       currentLexicalAnalyzerState.prepareForRun();
+      System.out.println("krecem od: " + left);
       lastGood = left - 1;
       right = left;
       lastGoodAutomatonInd = null;
@@ -54,9 +53,11 @@ public final class LA {
         if (possibleAccept != null) {
           lastGoodAutomatonInd = possibleAccept;
           lastGood = right;
+          System.out.println("ac: " + left + " " + lastGood);
         }
         right++;
       }
+//      System.out.println(currentLexicalAnalyzerState.getName() + " " + lexicalUnitName + " " + groupFrom + " " + groupTo + " automat: " + lastGoodAutomatonInd);
       if (lastGood >= left) {
         groupFrom = left;
         groupTo = lastGood + 1;
@@ -75,11 +76,11 @@ public final class LA {
   
   private void groupIntoLexicalUnit() {
     if (lexicalUnitName != null) {
-      System.out.println("asdf");
       output.add(lexicalUnitName + " " + lineIndex + " " + sourceCode.substring(groupFrom, groupTo));
+      System.out.println("prihvaceno: " + groupFrom + " " + groupTo + " : " + sourceCode.substring(groupFrom, groupTo));
       left = groupTo + 1;
     } else {
-      System.out.println("bla");
+      System.out.println("odbaceno: " + groupFrom + " " + groupTo);
     }
   }
   
