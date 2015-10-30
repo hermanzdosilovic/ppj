@@ -9,14 +9,14 @@ import java.util.Map;
 public final class GLA {
   
   public static void main(String[] args) throws Exception {
-    // System.setIn(new FileInputStream("/home/truba/workspace/ppj/in.txt"));
+     System.setIn(new FileInputStream("/Users/ikrpelnik/Documents/workspace/ppj/lab-1/MinusLang.in"));
     // line above is for testing purposes
 
     GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition();
     Map<String, LexicalAnalyzerState> rules = inputDefinition.getLexicalState();
     LexicalAnalyzerState initialState = inputDefinition.getInitialAnalyzerState();
     PrintWriter writer = new PrintWriter("analyzer_definition.txt");
-    writer.println("%s " + initialState.getName());
+    writer.println(initialState.getName());
     for (Map.Entry<String, LexicalAnalyzerState> entry : rules.entrySet()) {
       LexicalAnalyzerState state = entry.getValue();
       for (RegexAction action : state.getRegexActions()) {

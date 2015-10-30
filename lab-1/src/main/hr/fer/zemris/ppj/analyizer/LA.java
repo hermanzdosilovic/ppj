@@ -33,13 +33,17 @@ public final class LA {
 
   public static void main(String[] args) throws IOException {
     LA lexicalAnalyzer =
-        new LA(new FileInputStream(new File("analyzer_definition.txt")), System.in);
+        new LA(new FileInputStream(new File("/Users/ikrpelnik/Documents/workspace/ppj/lab-1/analyzer_definition.txt")), 
+            new FileInputStream(new File("/Users/ikrpelnik/Documents/workspace/ppj/lab-1/ml.txt")));
+    System.out.println(lexicalAnalyzer.sourceCode);
     lexicalAnalyzer.analyzeSourceCode();
     lexicalAnalyzer.printOutput();
   }
 
   public void analyzeSourceCode() {
     while (left < sourceCode.length()) {
+      System.out.println(currentLexicalAnalyzerState.getName() + " " + left);
+      System.out.println(currentLexicalAnalyzerState.getAutomatons());
       currentLexicalAnalyzerState.prepareForRun();
       lastGood = left - 1;
       right = left;
@@ -56,7 +60,7 @@ public final class LA {
       if (lastGood >= left) {
         groupFrom = left;
         groupTo = lastGood + 1;
-        //pozovi akcije
+        Actions.action(this);
         groupIntoLexicalUnit();
       } else {
         error();
@@ -65,14 +69,17 @@ public final class LA {
   }
 
   private void error() {
-    System.err.print("Error in line: " + lineIndex);
+    System.out.println("Error in line: " + lineIndex);
     left++;
   }
   
   private void groupIntoLexicalUnit() {
     if (lexicalUnitName != null) {
+      System.out.println("asdf");
       output.add(lexicalUnitName + " " + lineIndex + " " + sourceCode.substring(groupFrom, groupTo));
       left = groupTo + 1;
+    } else {
+      System.out.println("bla");
     }
   }
   
@@ -135,6 +142,9 @@ public final class LA {
       sourceCodeBuilder.append((char) character);
     }
     this.sourceCode = sourceCodeBuilder.toString();
+//    System.out.println(this.sourceCode);
+//    System.out.println(initialLexicalAnalyzerState.getName());
+//    System.out.println(initialLexicalAnalyzerState.getAutomatons());
   }
 
   public LA(List<String> definitionLines, String sourceCode) {

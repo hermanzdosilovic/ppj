@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.regex.Regex;
 
 public class RegexTest {
@@ -97,5 +98,10 @@ public class RegexTest {
     regex = new Regex("(abcd)*1(2|3|4)*");
     assertTrue(regex.accepts("abcd134"));
     assertFalse(regex.accepts("1134"));
+
+    System.out.println("bitno:");
+    regex = new Regex("(\\)|a)");
+    System.out.println(regex.toAutomaton());
+    assertTrue(regex.accepts("a"));
   }
 }

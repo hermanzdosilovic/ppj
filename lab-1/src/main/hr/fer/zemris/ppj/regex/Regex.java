@@ -194,7 +194,7 @@ public class Regex {
       }
     }
     subExpressions.add(expression.substring(leftIndex));
-
+    System.out.println(subExpressions);
     return subExpressions;
   }
 
