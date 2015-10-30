@@ -21,9 +21,12 @@ public final class LA {
   private int lineIndex;
   private int left, right;
   
+  private List<String> output = new ArrayList<>();
+  
   public static void main(String[] args) throws IOException {
     LA lexicalAnalyzer = new LA(new FileInputStream(new File("analyzer_definition.txt")), System.in);
     lexicalAnalyzer.analyzeSourceCode();
+    lexicalAnalyzer.printOutput();
   }
   
   public void analyzeSourceCode() {
@@ -75,7 +78,17 @@ public final class LA {
   }
   
   public void setLexicalUnit(String lexicalUnitName) {
-    System.out.println(lexicalUnitName + " "  + lineIndex + " " + sourceCode.get(lineIndex).charAt(right));
+    output.add(lexicalUnitName + " "  + lineIndex + " " + sourceCode.get(lineIndex).charAt(right));
+  }
+  
+  public void printOutput() {
+    for (String line : output) {
+      System.out.println(line);
+    }
+  }
+  
+  public List<String> getOutput() {
+    return output;
   }
   
   public LA(InputStream definitionInputStream, InputStream sourceCodeInputStream) throws IOException {
