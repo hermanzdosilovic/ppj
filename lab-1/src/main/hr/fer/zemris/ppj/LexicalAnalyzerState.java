@@ -21,6 +21,37 @@ public class LexicalAnalyzerState {
     regexActions = new ArrayList<>();
   }
 
+  public void prepareForRun() {
+    for (Automaton automaton : automatons) {
+      automaton.prepareForRun();
+    }
+  }
+
+  public boolean readCharacter(char character) {
+    boolean isInAcceptableState = false;
+    for (Automaton automaton : automatons) {
+      automaton.makeTransitions(character);
+      isInAcceptableState |= automaton.isInAcceptableState();
+    }
+    return isInAcceptableState;
+  }
+  
+  public void reloadAndReadSequence(String sequence) {
+    prepareForRun();
+    for (char character : sequence.toCharArray()) {
+      readCharacter(character);
+    }
+  }
+  
+  public Integer getAutomatonIndex() {
+    for (int i = 0; i < automatons.size(); i++) {
+      if (automatons.get(i).isInAcceptableState()) {
+        return i;
+      }
+    }
+    return null;
+  }
+
   public boolean addAutomaton(Automaton automaton) {
     return automatons.add(automaton);
   }

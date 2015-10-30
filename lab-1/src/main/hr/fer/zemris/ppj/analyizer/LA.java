@@ -3,7 +3,6 @@ package hr.fer.zemris.ppj.analyizer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,13 +18,66 @@ public final class LA {
   private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
   
   private List<String> sourceCode = new ArrayList<>();
-  private Integer lineIndex;
-  private Integer columnIndex;
+  private int lineIndex;
+  private int left, right;
   
   public static void main(String[] args) throws IOException {
     LA lexicalAnalyzer = new LA(new FileInputStream(new File("analyzer_definition.txt")), System.in);
+    lexicalAnalyzer.analyzeSourceCode();
   }
-
+  
+  public void analyzeSourceCode() {
+    currentLexicalAnalyzerState.prepareForRun();
+    lineIndex = 0;
+    while (lineIndex < sourceCode.size()) {
+      String line = sourceCode.get(lineIndex);
+      while (right < line.length()) {
+        char character = line.charAt(right);
+        if (currentLexicalAnalyzerState.readCharacter(character)) {
+          right++;
+        } else {
+          currentLexicalAnalyzerState.reloadAndReadSequence(line.substring(left, right));
+          /*
+           * call action resolver implemented by Ivan Trubić
+           */
+        }
+      }
+      lineIndex++;
+    }
+  }
+  
+  public void newLine() {
+    lineIndex++;
+  }
+  
+  public void reject() {
+    right++;
+    left = right;
+  }
+  
+  public void returnTo(int index) {
+    right = index;
+    currentLexicalAnalyzerState.reloadAndReadSequence(sourceCode.get(lineIndex).substring(left, right));
+  }
+  
+  public LexicalAnalyzerState setState(String stateName) {
+    currentLexicalAnalyzerState = lexicalAnalyzerStateTable.get(stateName);
+    currentLexicalAnalyzerState.prepareForRun();
+    return currentLexicalAnalyzerState;
+  }
+  
+  public LexicalAnalyzerState getState() {
+    return currentLexicalAnalyzerState;
+  }
+  
+  public int getAutomatonIndex() {
+    return currentLexicalAnalyzerState.getAutomatonIndex();
+  }
+  
+  public void setLexicalUnit(String lexicalUnitName) {
+    System.out.println(lexicalUnitName + " "  + lineIndex + " " + sourceCode.get(lineIndex).charAt(right));
+  }
+  
   public LA(InputStream definitionInputStream, InputStream sourceCodeInputStream) throws IOException {
     readAnalyzerDefinition(definitionInputStream);
     BufferedReader reader = new BufferedReader(new InputStreamReader(sourceCodeInputStream));
