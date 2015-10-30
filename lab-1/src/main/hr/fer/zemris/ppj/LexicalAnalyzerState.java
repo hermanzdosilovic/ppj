@@ -35,14 +35,14 @@ public class LexicalAnalyzerState {
     }
     return isInAcceptableState;
   }
-  
+
   public void reloadAndReadSequence(String sequence) {
     prepareForRun();
     for (char character : sequence.toCharArray()) {
       readCharacter(character);
     }
   }
-  
+
   public Integer getAutomatonIndex() {
     for (int i = 0; i < automatons.size(); i++) {
       if (automatons.get(i).isInAcceptableState()) {

@@ -11,7 +11,7 @@ public class AutomatonTest {
   public void test() {
     Automaton automaton = new Automaton();
     int[] s = new int[10];
-    for(int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
       s[i] = automaton.makeNewState();
     }
     automaton.setStartState(s[1]);
@@ -28,7 +28,7 @@ public class AutomatonTest {
     automaton.addTransition(s[5], s[8], 'd');
     automaton.addTransition(s[6], s[8], 'e');
     automaton.addTransition(s[8], s[9], 'm');
-    
+
     automaton.prepareForRun();
     assertEquals(false, automaton.isInAcceptableState());
     assertEquals(true, automaton.isAlive());
@@ -44,7 +44,7 @@ public class AutomatonTest {
     automaton.makeTransitions('z');
     assertEquals(false, automaton.isInAcceptableState());
     assertEquals(false, automaton.isAlive());
-    
+
     automaton.prepareForRun();
     assertEquals(false, automaton.isInAcceptableState());
     assertEquals(true, automaton.isAlive());
@@ -57,7 +57,7 @@ public class AutomatonTest {
     automaton.makeTransitions('h');
     assertEquals(false, automaton.isInAcceptableState());
     assertEquals(false, automaton.isAlive());
-    
+
     automaton.prepareForRun();
     assertEquals(false, automaton.isInAcceptableState());
     assertEquals(true, automaton.isAlive());

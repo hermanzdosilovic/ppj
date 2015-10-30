@@ -16,14 +16,14 @@ public class RegexAction {
     this.definition = definition;
     this.actions = action;
   }
-  
+
   public boolean addActions(List<String> actions) {
     if (this.actions == null) {
       this.actions = new ArrayList<>();
     }
     return this.actions.addAll(actions);
   }
-  
+
   public String getRegex() {
     return definition;
   }

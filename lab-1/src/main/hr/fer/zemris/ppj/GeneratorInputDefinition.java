@@ -104,7 +104,8 @@ public class GeneratorInputDefinition {
         textInput = read();
       }
 
-      lexicalState.get(name).addRegexAction(new RegexAction(resolvedDefinitions.resolveRegex(regEx), lexicalRules));
+      lexicalState.get(name)
+          .addRegexAction(new RegexAction(resolvedDefinitions.resolveRegex(regEx), lexicalRules));
 
     }
   }
@@ -156,8 +157,8 @@ public class GeneratorInputDefinition {
   public RegDefResolver getResolver() {
     return resolvedDefinitions;
   }
-  
-  public LexicalAnalyzerState getInitialAnalyzerState(){
+
+  public LexicalAnalyzerState getInitialAnalyzerState() {
     return InitialAnalyzerState;
   }
 }
