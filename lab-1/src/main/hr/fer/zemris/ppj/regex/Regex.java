@@ -14,8 +14,7 @@ import hr.fer.zemris.ppj.automaton.Automaton;
  * regex.accepts("abab123cd"); // true <br>
  * regex.accepts("123"); // true <br>
  * regex.accepts("cdef"); // false
- * </code>
- * <br>
+ * </code> <br>
  * <br>
  * You can get automaton which accepts the same language as this regex by calling
  * {@link #toAutomaton()} method.
@@ -145,12 +144,20 @@ public class Regex {
             }
           } else {
             int j = i;
+            int numberOfParenthesis = 0;
+
             while (j < expression.length()) {
-              if (expression.charAt(j) == ')' && !escapedCharacterAt(expression, j)) {
-                break;
+              char expressionCharacter = expression.charAt(j);
+              if (expressionCharacter == '(' && !escapedCharacterAt(expression, j)) {
+                numberOfParenthesis++;
+              } else if (expressionCharacter == ')' && !escapedCharacterAt(expression, j)) {
+                if (--numberOfParenthesis == 0) {
+                  break;
+                }
               }
               j++;
             }
+
             Pair<Integer, Integer> statePair =
                 convertExpressionToAutomaton(expression.substring(i + 1, j));
             a = statePair.getFirst();
@@ -191,13 +198,14 @@ public class Regex {
         numberOfParenthesis++;
       } else if (character == ')' && !escapedCharacterAt(expression, i)) {
         numberOfParenthesis--;
-      } else if (numberOfParenthesis == 0 && character == '|' && !escapedCharacterAt(expression, i)) {
+      } else
+        if (numberOfParenthesis == 0 && character == '|' && !escapedCharacterAt(expression, i)) {
         subExpressions.add(expression.substring(leftIndex, i));
         leftIndex = i + 1;
       }
     }
     subExpressions.add(expression.substring(leftIndex));
-    System.out.println(subExpressions);
+//    System.out.println(subExpressions);
     return subExpressions;
   }
 
