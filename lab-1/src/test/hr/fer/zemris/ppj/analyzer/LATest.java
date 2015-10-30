@@ -32,12 +32,13 @@ public class LATest {
     definitionLines.add("S_unarni");
     definitionLines.add("-(\\n|\\t|\\_)*-");
 
-    List<String> sourceCodeLines = new ArrayList<>();
-    sourceCodeLines.add("#| ovo je primjer |#");
-    sourceCodeLines.add("3 - -0x12 - ( #| ovdje ce doci grupirane");
-    sourceCodeLines.add("   operacije |#");
-    sourceCodeLines.add("3- -");
-    sourceCodeLines.add("--076) #| 3 - ---076 = 3 - -076 = 3 + 076 |#");
+    StringBuilder sourceCodeBuilder = new StringBuilder();
+    
+    sourceCodeBuilder.append("#| ovo je primjer |#").append(System.lineSeparator());
+    sourceCodeBuilder.append("3 - -0x12 - ( #| ovdje ce doci grupirane").append(System.lineSeparator());
+    sourceCodeBuilder.append("   operacije |#").append(System.lineSeparator());
+    sourceCodeBuilder.append("3- -").append(System.lineSeparator());
+    sourceCodeBuilder.append("--076) #| 3 - ---076 = 3 - -076 = 3 + 076 |#").append(System.lineSeparator());
 
     List<String> expectedOutput = new ArrayList<>();
     expectedOutput.add("OPERAND 2 3");
@@ -54,7 +55,7 @@ public class LATest {
     expectedOutput.add("OPERAND 5 076");
     expectedOutput.add("DESNA_ZAGRADA 5 )");
 
-    LA la = new LA(definitionLines, sourceCodeLines);
+    LA la = new LA(definitionLines, sourceCodeBuilder.toString());
     la.analyzeSourceCode();
 
     assertEquals(expectedOutput, la.getOutput());

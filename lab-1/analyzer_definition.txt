@@ -1,0 +1,17 @@
+S_pocetno
+S_pocetno
+#\|
+S_komentar
+\|#
+S_komentar
+\n
+S_komentar
+\(|\)|\{|\}|\*|\$\\
+S_pocetno
+-(\n|\t|\_)*-
+S_pocetno
+\((\n|\t|\_)*-
+S_unarni
+-
+S_unarni
+-(\n|\t|\_)*-

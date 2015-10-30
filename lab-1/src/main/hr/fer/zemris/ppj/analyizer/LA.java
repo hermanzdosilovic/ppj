@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public final class LA {
   private LexicalAnalyzerState currentLexicalAnalyzerState;
   private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
 
-  private List<String> sourceCode = new ArrayList<>();
+  private String sourceCode;
   private int lineIndex;
   private int left, right;
 
@@ -32,21 +33,14 @@ public final class LA {
 
   public void analyzeSourceCode() {
     currentLexicalAnalyzerState.prepareForRun();
-    lineIndex = 0;
-    while (lineIndex < sourceCode.size()) {
-      String line = sourceCode.get(lineIndex);
-      while (right < line.length()) {
-        char character = line.charAt(right);
-        if (currentLexicalAnalyzerState.readCharacter(character)) {
-          right++;
-        } else {
-          currentLexicalAnalyzerState.reloadAndReadSequence(line.substring(left, right));
-          /*
-           * call action resolver implemented by Ivan Trubić
-           */
-        }
+    while (right < sourceCode.length()) {
+      char character = sourceCode.charAt(right);
+      if (currentLexicalAnalyzerState.readCharacter(character)) {
+        right++;
+      } else {
+        currentLexicalAnalyzerState.reloadAndReadSequence(sourceCode.substring(left, right));
+//        Action.actions(this); // call action resolver implemented by Ivan Trubić
       }
-      lineIndex++;
     }
   }
 
@@ -62,7 +56,7 @@ public final class LA {
   public void returnTo(int index) {
     right = index;
     currentLexicalAnalyzerState
-        .reloadAndReadSequence(sourceCode.get(lineIndex).substring(left, right));
+        .reloadAndReadSequence(sourceCode.substring(left, right));
   }
 
   public LexicalAnalyzerState setState(String stateName) {
@@ -80,7 +74,7 @@ public final class LA {
   }
 
   public void setLexicalUnit(String lexicalUnitName) {
-    output.add(lexicalUnitName + " " + lineIndex + " " + sourceCode.get(lineIndex).charAt(right));
+    output.add(lexicalUnitName + " " + lineIndex + " " + sourceCode.charAt(right));
   }
 
   public void printOutput() {
@@ -92,20 +86,27 @@ public final class LA {
   public List<String> getOutput() {
     return output;
   }
-
+  
+  public String getSourceCode() {
+    return sourceCode;
+  }
+  
   public LA(InputStream definitionInputStream, InputStream sourceCodeInputStream)
       throws IOException {
     readAnalyzerDefinition(definitionInputStream);
-    BufferedReader reader = new BufferedReader(new InputStreamReader(sourceCodeInputStream));
-    String line;
-    while ((line = reader.readLine()) != null) {
-      sourceCode.add(line);
+
+    StringBuilder sourceCodeBuilder = new StringBuilder();
+    Reader reader = new BufferedReader(new InputStreamReader(sourceCodeInputStream));
+    int character;
+    while ((character = reader.read()) != 1) {
+      sourceCodeBuilder.append(character);
     }
+    this.sourceCode = sourceCodeBuilder.toString();
   }
 
-  public LA(List<String> definitionLines, List<String> sourceCodeLines) {
+  public LA(List<String> definitionLines, String sourceCode) {
     readAnalyzerDefinition(definitionLines);
-    sourceCode = sourceCodeLines;
+    this.sourceCode = sourceCode;
   }
 
   public void readAnalyzerDefinition(InputStream definitionInputStream) throws IOException {
