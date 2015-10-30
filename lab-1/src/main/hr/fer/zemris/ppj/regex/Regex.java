@@ -14,7 +14,8 @@ import hr.fer.zemris.ppj.automaton.Automaton;
  * regex.accepts("abab123cd"); // true <br>
  * regex.accepts("123"); // true <br>
  * regex.accepts("cdef"); // false
- * </code> <br>
+ * </code>
+ * <br>
  * <br>
  * You can get automaton which accepts the same language as this regex by calling
  * {@link #toAutomaton()} method.
@@ -187,8 +188,7 @@ public class Regex {
         numberOfParenthesis++;
       } else if (character == ')' && !escapedCharacterAt(expression, i)) {
         numberOfParenthesis--;
-      } else
-        if (numberOfParenthesis == 0 && character == '|' && !escapedCharacterAt(expression, i)) {
+      } else if (numberOfParenthesis == 0 && character == '|' && !escapedCharacterAt(expression, i)) {
         subExpressions.add(expression.substring(leftIndex, i));
         leftIndex = i + 1;
       }
@@ -205,5 +205,9 @@ public class Regex {
       index--;
     }
     return isEscaped;
+  }
+
+  public String toString() {
+    return value;
   }
 }

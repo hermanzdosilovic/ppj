@@ -27,4 +27,8 @@ public class RegexAction {
   public String getRegex() {
     return definition;
   }
+
+  public List<String> getActionsList() {
+    return actions;
+  }
 }
