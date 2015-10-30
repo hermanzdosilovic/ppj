@@ -144,7 +144,10 @@ public class Regex {
             }
           } else {
             int j = i;
-            while (j < expression.length() && expression.charAt(j) != ')') {
+            while (j < expression.length()) {
+              if (expression.charAt(j) == ')' && !escapedCharacterAt(expression, j)) {
+                break;
+              }
               j++;
             }
             Pair<Integer, Integer> statePair =

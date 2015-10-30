@@ -97,5 +97,11 @@ public class RegexTest {
     regex = new Regex("(abcd)*1(2|3|4)*");
     assertTrue(regex.accepts("abcd134"));
     assertFalse(regex.accepts("1134"));
+    
+    regex = new Regex("(\\(|\\))");
+    assertTrue(regex.escapedCharacterAt(2));
+    assertTrue(regex.escapedCharacterAt(5));
+    assertTrue(regex.accepts("("));
+    assertTrue(regex.accepts(")"));
   }
 }
