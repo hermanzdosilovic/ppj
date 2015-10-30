@@ -117,5 +117,14 @@ public class RegexTest {
     regex = new Regex("((0|1)*)");
     System.out.println(regex.toAutomaton());
     assertTrue(regex.accepts("0"));
+    
+    regex = new Regex("((0|1|2|3|4|5|6|7|8|9)*)");
+    assertTrue(regex.accepts("0"));
+    
+    regex = new Regex("((0|1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9)*|0x((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)*)");
+    assertTrue(regex.accepts("3"));
+    
+    regex = new Regex("\"\\\"");
+    assertTrue(regex.accepts("\"\\\""));
   }
 }

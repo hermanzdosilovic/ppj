@@ -20,7 +20,7 @@ public final class LA {
   private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
 
   private String sourceCode;
-  private int lineIndex;
+  private int lineIndex = 1;
   private int left, right;
   private int lastGood;
   private Integer lastGoodAutomatonInd;
@@ -33,9 +33,8 @@ public final class LA {
 
   public static void main(String[] args) throws IOException {
     LA lexicalAnalyzer =
-        new LA(new FileInputStream(new File("/Users/ikrpelnik/Documents/workspace/ppj/lab-1/analyzer_definition.txt")), 
-            new FileInputStream(new File("/Users/ikrpelnik/Documents/workspace/ppj/lab-1/ml.txt")));
-    System.out.println(lexicalAnalyzer.sourceCode);
+        new LA(new FileInputStream(new File("analyzer_definition.txt")), 
+            new FileInputStream(new File("simplePpjLang.in")));
     lexicalAnalyzer.analyzeSourceCode();
     lexicalAnalyzer.printOutput();
   }
@@ -43,7 +42,6 @@ public final class LA {
   public void analyzeSourceCode() {
     while (left < sourceCode.length()) {
       currentLexicalAnalyzerState.prepareForRun();
-      System.out.println("krecem od: " + left);
       lastGood = left - 1;
       right = left;
       lastGoodAutomatonInd = null;
@@ -53,12 +51,10 @@ public final class LA {
         if (possibleAccept != null) {
           lastGoodAutomatonInd = possibleAccept;
           lastGood = right;
-          System.out.println("ac: " + left + " " + lastGood);
         }
         right++;
       }
-//      System.out.println(currentLexicalAnalyzerState.getName() + " " + lexicalUnitName + " " + groupFrom + " " + groupTo + " automat: " + lastGoodAutomatonInd);
-      if (lastGood >= left) {
+       if (lastGood >= left) {
         groupFrom = left;
         groupTo = lastGood + 1;
         Actions.action(this);
@@ -70,17 +66,16 @@ public final class LA {
   }
 
   private void error() {
-    System.out.println("Error in line: " + lineIndex);
+    System.err.println("Error in line: " + lineIndex);
     left++;
   }
   
   private void groupIntoLexicalUnit() {
-    if (lexicalUnitName != null) {
+     if (lexicalUnitName != null) {
       output.add(lexicalUnitName + " " + lineIndex + " " + sourceCode.substring(groupFrom, groupTo));
-      System.out.println("prihvaceno: " + groupFrom + " " + groupTo + " : " + sourceCode.substring(groupFrom, groupTo));
-      left = groupTo + 1;
+      left = groupTo;
     } else {
-      System.out.println("odbaceno: " + groupFrom + " " + groupTo);
+      left = groupTo;
     }
   }
   
@@ -90,15 +85,11 @@ public final class LA {
 
   public void reject() {
     lexicalUnitName = null;
-    left = lastGood + 1;
+    left = groupTo;
   }
   
-  /*
-   * left = index
-   * grupiraj sve do index -> lg = index - 1
-   */
   public void returnTo(int index) {
-    left = index;
+    left = left + index;
     groupTo = left;
   }
 
@@ -143,9 +134,6 @@ public final class LA {
       sourceCodeBuilder.append((char) character);
     }
     this.sourceCode = sourceCodeBuilder.toString();
-//    System.out.println(this.sourceCode);
-//    System.out.println(initialLexicalAnalyzerState.getName());
-//    System.out.println(initialLexicalAnalyzerState.getAutomatons());
   }
 
   public LA(List<String> definitionLines, String sourceCode) {

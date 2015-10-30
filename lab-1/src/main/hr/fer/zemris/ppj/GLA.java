@@ -7,9 +7,9 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 public final class GLA {
-  
+
   public static void main(String[] args) throws Exception {
-     System.setIn(new FileInputStream("/Users/ikrpelnik/Documents/workspace/ppj/lab-1/MinusLang.in"));
+    System.setIn(new FileInputStream("C_ulazna_datoteka.txt"));
     // line above is for testing purposes
 
     GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition();
@@ -26,16 +26,19 @@ public final class GLA {
 
     }
     writer.close();
-    PrintWriter java = new PrintWriter("Actions.java");
+    PrintWriter java = new PrintWriter("src/main/hr/fer/zemris/ppj/analyizer/Actions.java");
+    java.println("package hr.fer.zemris.ppj.analyizer;");
     java.println("public class Actions {");
-    java.println("  public static void action(Analyzer analyzer) {");
+    java.println("  public static void action(LA analyzer) {");
+    java.println("      String state = analyzer.getState().getName();");
+    java.println("      int automatonIndex = analyzer.getAutomatonIndex();");
 
     for (Map.Entry<String, LexicalAnalyzerState> entry : rules.entrySet()) {
       int index = 0;
       LexicalAnalyzerState state = entry.getValue();
       for (RegexAction regex : state.getRegexActions()) {
-        java.println("      if(analyzer.getState().equals(\"" + state.getName()
-            + "\") && analyzer.getAutomationIndex() == " + index + ") {");
+        java.println("      if(state.equals(\"" + state.getName()
+            + "\") && automatonIndex == " + index + ") {");
         index++;
 
         for (String action : regex.getActionsList()) {
@@ -71,5 +74,5 @@ public final class GLA {
     else
       return "          analyzer.setLexicalUnit(\"" + parsedLine[0] + "\");";
   }
-  
+
 }
