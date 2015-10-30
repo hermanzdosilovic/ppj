@@ -14,7 +14,8 @@ import hr.fer.zemris.ppj.automaton.Automaton;
  * regex.accepts("abab123cd"); // true <br>
  * regex.accepts("123"); // true <br>
  * regex.accepts("cdef"); // false
- * </code> <br>
+ * </code>
+ * <br>
  * <br>
  * You can get automaton which accepts the same language as this regex by calling
  * {@link #toAutomaton()} method.
@@ -53,9 +54,10 @@ public class Regex {
     automaton.setAcceptState(statePair.getSecond());
     return automaton;
   }
-  
+
   /**
    * Returns <code>true</code> if this regex accepts given string, <code>false</code> otherwise.
+   * 
    * @param matcher
    * @return <code>true</code> if this regex accepts given string, <code>false</code> otherwise
    */
@@ -67,7 +69,7 @@ public class Regex {
     }
     return automaton.isInAcceptableState();
   }
-  
+
   /**
    * Returns first level subexpressions of this string. Example: <br>
    * First level subexpressions of regex <code>(a|b)*123|ABCD</code> are: <br>
@@ -76,22 +78,26 @@ public class Regex {
    * <li>(a|b)*123
    * <li>ABCD
    * </code>
-   * </ul> 
+   * </ul>
+   * 
    * @return first level subexpressions of this string
    */
   public List<String> getSubExpressions() {
     return getSubExpressions(value);
   }
-  
+
   /**
-   * Returns <code>true</code> if this regex has escaped character at position <code>index</code>, <code>false</code> otherwise.
+   * Returns <code>true</code> if this regex has escaped character at position <code>index</code>,
+   * <code>false</code> otherwise.
+   * 
    * @param index
-   * @return <code>true</code> if this regex has escaped character at position <code>index</code>, <code>false</code> otherwise
+   * @return <code>true</code> if this regex has escaped character at position <code>index</code>,
+   *         <code>false</code> otherwise
    */
   public boolean escapedCharacterAt(int index) {
     return escapedCharacterAt(value, index);
   }
-  
+
   private Pair<Integer, Integer> convertExpressionToAutomaton(String expression) {
     List<String> subExpressions = getSubExpressions(expression);
 
@@ -182,8 +188,7 @@ public class Regex {
         numberOfParenthesis++;
       } else if (character == ')' && !escapedCharacterAt(expression, i)) {
         numberOfParenthesis--;
-      } else
-        if (numberOfParenthesis == 0 && character == '|' && !escapedCharacterAt(expression, i)) {
+      } else if (numberOfParenthesis == 0 && character == '|' && !escapedCharacterAt(expression, i)) {
         subExpressions.add(expression.substring(leftIndex, i));
         leftIndex = i + 1;
       }
@@ -200,5 +205,9 @@ public class Regex {
       index--;
     }
     return isEscaped;
+  }
+
+  public String toString() {
+    return value;
   }
 }

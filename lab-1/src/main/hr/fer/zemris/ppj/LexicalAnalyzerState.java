@@ -17,16 +17,16 @@ public class LexicalAnalyzerState {
   public LexicalAnalyzerState(String name) {
     this.name = name;
   }
-  
-  public String getName(){
+
+  public String getName() {
     return name;
   }
-  
-  public void addRegexAction(RegexAction action){
+
+  public void addRegexAction(RegexAction action) {
     list.add(action);
   }
-  
-  public List<RegexAction> getRegexActionList(){
+
+  public List<RegexAction> getRegexActionList() {
     return list;
   }
 

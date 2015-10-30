@@ -16,12 +16,16 @@ public class RegexAction {
     this.definition = definition;
     this.action = action;
   }
-  
-  public String getRegex(){
+
+  public String getRegex() {
     return definition;
   }
-  
-  public void addAction(List<String> actionList){
+
+  public void addAction(List<String> actionList) {
     action = actionList;
+  }
+
+  public List<String> getActionsList() {
+    return action;
   }
 }
