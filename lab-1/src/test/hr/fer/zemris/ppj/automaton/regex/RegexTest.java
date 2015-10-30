@@ -103,5 +103,11 @@ public class RegexTest {
     regex = new Regex("(\\)|a)");
     System.out.println(regex.toAutomaton());
     assertTrue(regex.accepts("a"));
+    
+    regex = new Regex("(\\(|\\))");
+    assertTrue(regex.escapedCharacterAt(2));
+    assertTrue(regex.escapedCharacterAt(5));
+    assertTrue(regex.accepts("("));
+    assertTrue(regex.accepts(")"));
   }
 }
