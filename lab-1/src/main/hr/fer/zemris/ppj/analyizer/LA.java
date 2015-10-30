@@ -98,8 +98,8 @@ public final class LA {
     StringBuilder sourceCodeBuilder = new StringBuilder();
     Reader reader = new BufferedReader(new InputStreamReader(sourceCodeInputStream));
     int character;
-    while ((character = reader.read()) != 1) {
-      sourceCodeBuilder.append(character);
+    while ((character = reader.read()) != -1) {
+      sourceCodeBuilder.append((char) character);
     }
     this.sourceCode = sourceCodeBuilder.toString();
   }
