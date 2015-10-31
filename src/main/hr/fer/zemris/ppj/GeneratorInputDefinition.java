@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import hr.fer.zemris.ppj.regex.RegDefResolver;
 import hr.fer.zemris.ppj.regex.RegularDefinition;
+import hr.fer.zemris.ppj.regex.RegularDefinitionResolver;
 
 /**
  * Class for lexical analyzer definition with a specific input format. Point of this class is to
@@ -26,13 +26,13 @@ public class GeneratorInputDefinition {
   private List<String> lexicalRules = new ArrayList<String>();
   private HashMap<String, LexicalAnalyzerState> lexicalState =
       new HashMap<String, LexicalAnalyzerState>();
-  private RegDefResolver resolvedDefinitions;
+  private RegularDefinitionResolver resolvedDefinitions;
   private LexicalAnalyzerState InitialAnalyzerState;
 
   public GeneratorInputDefinition() {
     this.regularDefinitionInput();
     @SuppressWarnings("unused")
-    RegDefResolver resolver = new RegDefResolver(listOfRegDefinitions);
+    RegularDefinitionResolver resolver = new RegularDefinitionResolver(listOfRegDefinitions);
     this.lexicalStateDefinition();
     try {
       this.lexicalNameDefinition();
@@ -57,7 +57,7 @@ public class GeneratorInputDefinition {
       value = parsedRegularDefinition[1];
       listOfRegDefinitions.add(new RegularDefinition(name, value));
     }
-    resolvedDefinitions = new RegDefResolver(listOfRegDefinitions);
+    resolvedDefinitions = new RegularDefinitionResolver(listOfRegDefinitions);
   }
 
   private void lexicalStateDefinition() {
@@ -104,9 +104,8 @@ public class GeneratorInputDefinition {
         textInput = read();
       }
 
-      lexicalState.get(name).addRegexAction(
-          new RegexAction(resolvedDefinitions.resolveRegex(regEx), new ArrayList<String>(
-              lexicalRules)));
+      lexicalState.get(name).addRegexAction(new RegexAction(resolvedDefinitions.resolveRegex(regEx),
+          new ArrayList<String>(lexicalRules)));
       lexicalRules.clear();
 
     }
@@ -156,7 +155,7 @@ public class GeneratorInputDefinition {
    * 
    * @return RegDefResolver
    */
-  public RegDefResolver getResolver() {
+  public RegularDefinitionResolver getResolver() {
     return resolvedDefinitions;
   }
 

@@ -12,14 +12,14 @@ import java.util.Map;
 import hr.fer.zemris.ppj.LexicalAnalyzerState;
 import hr.fer.zemris.ppj.regex.Regex;
 
-public class AnalyzerInputDefinition {
+public class LexicalAnalyzerInputDefinition {
   private List<String> inputLines;
   private int readerIndex;
 
   private LexicalAnalyzerState initialLexicalAnalyzerState;;
   private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable = new HashMap<>();
 
-  public AnalyzerInputDefinition(InputStream stream) throws IOException {
+  public LexicalAnalyzerInputDefinition(InputStream stream) throws IOException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
     String line;
     inputLines = new ArrayList<>();
@@ -28,7 +28,7 @@ public class AnalyzerInputDefinition {
     }
   }
 
-  public AnalyzerInputDefinition(List<String> inputLines) {
+  public LexicalAnalyzerInputDefinition(List<String> inputLines) {
     this.inputLines = inputLines;
   }
 

@@ -56,7 +56,7 @@ public final class LA {
       if (lastGood >= left) {
         groupFrom = left;
         groupTo = lastGood + 1;
-        Actions.action(this);
+        AnalyzerAction.performAction(this);
         groupIntoLexicalUnit();
       } else {
         error();
@@ -138,17 +138,17 @@ public final class LA {
   }
 
   public void readAnalyzerDefinition(InputStream definitionInputStream) throws IOException {
-    AnalyzerInputDefinition analyzerInputDefinition =
-        new AnalyzerInputDefinition(definitionInputStream);
+    LexicalAnalyzerInputDefinition analyzerInputDefinition =
+        new LexicalAnalyzerInputDefinition(definitionInputStream);
     setDefinitionObjects(analyzerInputDefinition);
   }
 
   public void readAnalyzerDefinition(List<String> definitionLines) {
-    AnalyzerInputDefinition analyzerInputDefinition = new AnalyzerInputDefinition(definitionLines);
+    LexicalAnalyzerInputDefinition analyzerInputDefinition = new LexicalAnalyzerInputDefinition(definitionLines);
     setDefinitionObjects(analyzerInputDefinition);
   }
 
-  private void setDefinitionObjects(AnalyzerInputDefinition analyzerInputDefinition) {
+  private void setDefinitionObjects(LexicalAnalyzerInputDefinition analyzerInputDefinition) {
     initialLexicalAnalyzerState = analyzerInputDefinition.readInitialLexicalAnalyzerState();
     currentLexicalAnalyzerState = initialLexicalAnalyzerState;
     lexicalAnalyzerStateTable = analyzerInputDefinition.readLexicalAnalyzerStateDefinitions();

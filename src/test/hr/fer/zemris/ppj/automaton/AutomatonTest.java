@@ -8,7 +8,7 @@ import org.junit.Test;
 public class AutomatonTest {
 
   @Test
-  public void test() {
+  public void basicAutomatonTest() {
     Automaton automaton = new Automaton();
     int[] s = new int[10];
     for (int i = 0; i < 10; i++) {

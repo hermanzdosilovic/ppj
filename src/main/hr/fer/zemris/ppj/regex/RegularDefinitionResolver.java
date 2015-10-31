@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Josipa Kelava
  *
  */
-public class RegDefResolver {
+public class RegularDefinitionResolver {
 
   private Map<String, String> resolvedRegDef = new HashMap<String, String>();
 
@@ -26,7 +26,7 @@ public class RegDefResolver {
    * 
    * @param regularDefinitions - list of regular definitions
    */
-  public RegDefResolver(List<RegularDefinition> regularDefinitions) {
+  public RegularDefinitionResolver(List<RegularDefinition> regularDefinitions) {
     resolve(regularDefinitions);
   }
 

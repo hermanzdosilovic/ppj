@@ -9,9 +9,9 @@ import java.util.Map;
 import org.junit.Test;
 
 import hr.fer.zemris.ppj.LexicalAnalyzerState;
-import hr.fer.zemris.ppj.analyizer.AnalyzerInputDefinition;
+import hr.fer.zemris.ppj.analyizer.LexicalAnalyzerInputDefinition;
 
-public class AnalyzerInputDefinitionTest {
+public class LexicalAnalyzerInputDefinitionTest {
 
   @Test
   public void readInitialAnalyzerStateTest() {
@@ -19,7 +19,7 @@ public class AnalyzerInputDefinitionTest {
     List<String> inputLines = new ArrayList<>();
     inputLines.add(initialLexicalAnalyzerState.getName());
 
-    AnalyzerInputDefinition analyzerInputDefinition = new AnalyzerInputDefinition(inputLines);
+    LexicalAnalyzerInputDefinition analyzerInputDefinition = new LexicalAnalyzerInputDefinition(inputLines);
     assertEquals(initialLexicalAnalyzerState.getName(),
         analyzerInputDefinition.readInitialLexicalAnalyzerState().getName());
   }
@@ -34,7 +34,7 @@ public class AnalyzerInputDefinitionTest {
     inputLines.add("S_2");
     inputLines.add("ab|c");
 
-    AnalyzerInputDefinition analyzerInputDefinition = new AnalyzerInputDefinition(inputLines);
+    LexicalAnalyzerInputDefinition analyzerInputDefinition = new LexicalAnalyzerInputDefinition(inputLines);
     Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable =
         analyzerInputDefinition.readLexicalAnalyzerStateDefinitions();
 
