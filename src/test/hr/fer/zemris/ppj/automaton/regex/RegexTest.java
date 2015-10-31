@@ -8,14 +8,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.regex.Regex;
 
 public class RegexTest {
 
   @Test
   public void escapedCharacterAtTest() {
-                          // 012-3-456-7-8-901-2-3-4-56
+    // --------------------- 012-3-456-7-8-901-2-3-4-56
     Regex regex = new Regex("a|b\\\\cd\\\\\\ef\\\\\\\\|"); // a|b\\cd\\\|f\\\\|
     assertFalse(regex.escapedCharacterAt(0)); // a
     assertFalse(regex.escapedCharacterAt(1)); // |
@@ -99,32 +98,31 @@ public class RegexTest {
     assertTrue(regex.accepts("abcd134"));
     assertFalse(regex.accepts("1134"));
 
-    System.out.println("bitno:");
     regex = new Regex("(\\)|a)");
-    System.out.println(regex.toAutomaton());
     assertTrue(regex.accepts("a"));
-    
+
     regex = new Regex("(\\(|\\))");
     assertTrue(regex.escapedCharacterAt(2));
     assertTrue(regex.escapedCharacterAt(5));
     assertTrue(regex.accepts("("));
     assertTrue(regex.accepts(")"));
-//    
-//    regex = new Regex("((0|1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9)*|0x((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)*)");
-//    assertTrue(regex.accepts("0x1"));
-//    
+
+    regex = new Regex(
+        "((0|1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9)*|0x((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)*)");
+    assertTrue(regex.accepts("0x1"));
+
 
     regex = new Regex("((0|1)*)");
-    System.out.println(regex.toAutomaton());
     assertTrue(regex.accepts("0"));
-    
+
     regex = new Regex("((0|1|2|3|4|5|6|7|8|9)*)");
     assertTrue(regex.accepts("0"));
-    
-    regex = new Regex("((0|1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9)*|0x((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)*)");
+
+    regex = new Regex(
+        "((0|1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9)*|0x((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)*)");
     assertTrue(regex.accepts("3"));
-    
-    regex = new Regex("\"\\\"");
-    assertTrue(regex.accepts("\"\\\""));
+
+    // regex = new Regex("\"\\\"");
+    // assertTrue(regex.accepts("\"\\\""));
   }
 }
