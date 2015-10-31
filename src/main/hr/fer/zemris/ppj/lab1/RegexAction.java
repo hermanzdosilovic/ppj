@@ -1,4 +1,4 @@
-package hr.fer.zemris.ppj;
+package hr.fer.zemris.ppj.lab1;
 
 import java.util.ArrayList;
 import java.util.List;

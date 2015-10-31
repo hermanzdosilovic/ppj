@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import hr.fer.zemris.ppj.RegexAction;
 import hr.fer.zemris.ppj.regex.Regex;
 
 public final class GLA {

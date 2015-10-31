@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import hr.fer.zemris.ppj.RegexAction;
 import hr.fer.zemris.ppj.regex.RegularDefinition;
 import hr.fer.zemris.ppj.regex.RegularDefinitionResolver;
 
