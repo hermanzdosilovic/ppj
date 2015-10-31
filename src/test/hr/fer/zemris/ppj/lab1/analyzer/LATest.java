@@ -1,12 +1,13 @@
-package hr.fer.zemris.ppj.analyzer;
+package hr.fer.zemris.ppj.lab1.analyzer;
+
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-import hr.fer.zemris.ppj.analyizer.LA;
+import hr.fer.zemris.ppj.lab1.analyizer.LA;
 
 public class LATest {
 

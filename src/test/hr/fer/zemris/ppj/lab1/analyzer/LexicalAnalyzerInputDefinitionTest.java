@@ -1,4 +1,4 @@
-package hr.fer.zemris.ppj.analyzer;
+package hr.fer.zemris.ppj.lab1.analyzer;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import hr.fer.zemris.ppj.LexicalAnalyzerState;
-import hr.fer.zemris.ppj.analyizer.LexicalAnalyzerInputDefinition;
+import hr.fer.zemris.ppj.lab1.LexicalAnalyzerState;
+import hr.fer.zemris.ppj.lab1.analyizer.LexicalAnalyzerInputDefinition;
 
 public class LexicalAnalyzerInputDefinitionTest {
 

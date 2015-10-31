@@ -1,10 +1,11 @@
-package hr.fer.zemris.ppj;
-
-import hr.fer.zemris.ppj.regex.Regex;
+package hr.fer.zemris.ppj.lab1;
 
 import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.util.Map;
+
+import hr.fer.zemris.ppj.RegexAction;
+import hr.fer.zemris.ppj.regex.Regex;
 
 public final class GLA {
 
@@ -26,8 +27,8 @@ public final class GLA {
     }
     writer.close();
 
-    PrintWriter java = new PrintWriter("src/main/hr/fer/zemris/ppj/analyizer/AnalyzerAction.java");
-    java.println("package hr.fer.zemris.ppj.analyizer;\n");
+    PrintWriter java = new PrintWriter("src/main/hr/fer/zemris/ppj/lab1/analyizer/AnalyzerAction.java");
+    java.println("package hr.fer.zemris.ppj.lab1.analyizer;\n");
     java.println("public class AnalyzerAction {");
     java.println("  public static void performAction(LA analyzer) {");
     java.println("    String state = analyzer.getState().getName();");
@@ -42,7 +43,6 @@ public final class GLA {
         for (String action : regex.getActionsList()) {
           java.println(resolveCommand(action));
         }
-        java.println("      return;");
         java.println("    }");
         index++;
       }

@@ -1,4 +1,4 @@
-package hr.fer.zemris.ppj.analyizer;
+package hr.fer.zemris.ppj.lab1.analyizer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import hr.fer.zemris.ppj.LexicalAnalyzerState;
+import hr.fer.zemris.ppj.lab1.LexicalAnalyzerState;
 import hr.fer.zemris.ppj.regex.Regex;
 
 public class LexicalAnalyzerInputDefinition {

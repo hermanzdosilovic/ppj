@@ -1,10 +1,10 @@
-package hr.fer.zemris.ppj;
+package hr.fer.zemris.ppj.lab1;
 
 /**
  * A class that represents a lexical unit. It holds a name of a lexical unit provided at
  * construction.
  * 
- * @author ikrpelnik
+ * @author Ivan Krpelnik
  *
  */
 public class LexicalUnit {
