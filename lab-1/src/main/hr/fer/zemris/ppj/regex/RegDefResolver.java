@@ -9,8 +9,8 @@ import java.util.Map;
  * definitions. Regular definitions are given while this object is constructed. Expected class for
  * regular definitions is {@link RegularDefinition}. A map of resolved definitions is built in the
  * constructor. RegDefResolver offers a method which can resolve a given regular expression using
- * the map of regular definitions. Regular expression is resolved if it doesn't contain any references to regular
- * definitions.
+ * the map of regular definitions. Regular expression is resolved if it doesn't contain any
+ * references to regular definitions.
  * 
  * @author Josipa Kelava
  *
@@ -20,17 +20,19 @@ public class RegDefResolver {
   private Map<String, String> resolvedRegDef = new HashMap<String, String>();
 
   /**
-   * Constructor takes a list of regular definitions and creates a map of resolved 
-   * regular definitions.
-   * If a regular definition R1 is using another regular definition R2,
-   * R2 must come before R1 in the given list.
+   * Constructor takes a list of regular definitions and creates a map of resolved regular
+   * definitions. If a regular definition R1 is using another regular definition R2, R2 must come
+   * before R1 in the given list.
+   * 
    * @param regularDefinitions - list of regular definitions
    */
   public RegDefResolver(List<RegularDefinition> regularDefinitions) {
     resolve(regularDefinitions);
   }
+
   /**
    * Resolves a list of regular definitions.
+   * 
    * @param regularDefinitions - list of regular definitions
    * @return map which contains resolved regular definitions
    */
@@ -42,8 +44,10 @@ public class RegDefResolver {
 
     return resolvedRegDef;
   }
+
   /**
-   * Resolves given regular expression using the map of regular defintions which was created in constructor.
+   * Resolves given regular expression using the map of regular defintions which was created in
+   * constructor.
    * 
    * @param regEx
    * @return resolved regular expression
@@ -74,9 +78,8 @@ public class RegDefResolver {
 
         String value = resolvedRegDef.get(regEx.substring(beginIndex + 1, endIndex));
 
-        regEx =
-            regEx.substring(0, beginIndex) + "(" + value + ")"
-                + regEx.substring(endIndex + 1, regEx.length());
+        regEx = regEx.substring(0, beginIndex) + "(" + value + ")"
+            + regEx.substring(endIndex + 1, regEx.length());
 
         i = beginIndex;
         beginIndex = -1;

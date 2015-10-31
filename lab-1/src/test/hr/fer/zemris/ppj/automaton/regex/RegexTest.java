@@ -8,13 +8,14 @@ import java.util.List;
 
 import org.junit.Test;
 
+import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.regex.Regex;
 
 public class RegexTest {
-  
+
   @Test
   public void escapedCharacterAtTest() {
-    //                       012-3-456-7-8-901-2-3-4-56
+                          // 012-3-456-7-8-901-2-3-4-56
     Regex regex = new Regex("a|b\\\\cd\\\\\\ef\\\\\\\\|"); // a|b\\cd\\\|f\\\\|
     assertFalse(regex.escapedCharacterAt(0)); // a
     assertFalse(regex.escapedCharacterAt(1)); // |
@@ -25,7 +26,7 @@ public class RegexTest {
     assertFalse(regex.escapedCharacterAt(11)); // f
     assertFalse(regex.escapedCharacterAt(16)); // |
   }
-  
+
   @Test
   public void getSubExpressionsTest() {
     Regex regex = new Regex("a|b");
@@ -33,69 +34,97 @@ public class RegexTest {
     assertEquals(2, subExpressions.size());
     assertEquals("a", subExpressions.get(0));
     assertEquals("b", subExpressions.get(1));
-    
+
     regex = new Regex("a");
     subExpressions = regex.getSubExpressions();
     assertEquals(1, subExpressions.size());
     assertEquals("a", subExpressions.get(0));
-    
+
     regex = new Regex("(a|b)|(cd)|ef");
     subExpressions = regex.getSubExpressions();
     assertEquals(3, subExpressions.size());
     assertEquals("(a|b)", subExpressions.get(0));
     assertEquals("(cd)", subExpressions.get(1));
     assertEquals("ef", subExpressions.get(2));
-    
+
     regex = new Regex("(a|b(cdef|))");
     subExpressions = regex.getSubExpressions();
     assertEquals(1, subExpressions.size());
     assertEquals("(a|b(cdef|))", subExpressions.get(0));
-    
+
     regex = new Regex("a||b");
     subExpressions = regex.getSubExpressions();
     assertEquals(3, subExpressions.size());
     assertEquals("a", subExpressions.get(0));
     assertEquals("", subExpressions.get(1));
     assertEquals("b", subExpressions.get(2));
-    
+
     regex = new Regex("a\\|b");
     subExpressions = regex.getSubExpressions();
     assertEquals(1, subExpressions.size());
     assertEquals("a\\|b", subExpressions.get(0));
-    
+
     regex = new Regex("a\\|b\\\\|c");
     subExpressions = regex.getSubExpressions();
     assertEquals(2, subExpressions.size());
     assertEquals("a\\|b\\\\", subExpressions.get(0));
     assertEquals("c", subExpressions.get(1));
   }
-  
+
   @Test
   public void acceptsTest() {
     Regex regex = new Regex("a");
     assertTrue(regex.accepts("a"));
     assertFalse(regex.accepts("aa"));
-    
+
     regex = new Regex("a|b");
     assertTrue(regex.accepts("a"));
     assertTrue(regex.accepts("b"));
     assertFalse(regex.accepts("aa"));
     assertFalse(regex.accepts("bb"));
-    
+
     regex = new Regex("a\\|b");
     assertTrue(regex.accepts("a|b"));
     assertFalse(regex.accepts("a"));
-    
+
     regex = new Regex("(a|b)*");
     assertTrue(regex.accepts("aaa"));
     assertTrue(regex.accepts("ababbaa"));
     assertTrue(regex.accepts(""));
-    
+
     regex = new Regex("(a|b|c|d)*");
     assertTrue(regex.accepts("abcddcba"));
-    
+
     regex = new Regex("(abcd)*1(2|3|4)*");
     assertTrue(regex.accepts("abcd134"));
     assertFalse(regex.accepts("1134"));
+
+    System.out.println("bitno:");
+    regex = new Regex("(\\)|a)");
+    System.out.println(regex.toAutomaton());
+    assertTrue(regex.accepts("a"));
+    
+    regex = new Regex("(\\(|\\))");
+    assertTrue(regex.escapedCharacterAt(2));
+    assertTrue(regex.escapedCharacterAt(5));
+    assertTrue(regex.accepts("("));
+    assertTrue(regex.accepts(")"));
+//    
+//    regex = new Regex("((0|1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9)*|0x((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)*)");
+//    assertTrue(regex.accepts("0x1"));
+//    
+
+    regex = new Regex("((0|1)*)");
+    System.out.println(regex.toAutomaton());
+    assertTrue(regex.accepts("0"));
+    
+    regex = new Regex("((0|1|2|3|4|5|6|7|8|9)*)");
+    assertTrue(regex.accepts("0"));
+    
+    regex = new Regex("((0|1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9)*|0x((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)*)");
+    assertTrue(regex.accepts("3"));
+    
+    regex = new Regex("\"\\\"");
+    assertTrue(regex.accepts("\"\\\""));
   }
 }

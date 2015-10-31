@@ -8,13 +8,11 @@ import java.util.Queue;
 import java.util.Set;
 
 /**
- * Implementation of NFA. When constructed, this automaton has 0 states if default constructor is used. 
- * States are indexed with integers from 0 to (number of states - 1) and a new state 
- * is created when {@link #makeNewState()} is called.
- * Starting state and acceptable state have to be set via setters. 
- * Automaton has to be prepared before running by calling
- * {@link #prepareForRun()}. This automaton can read one character at the time when
- * {@link #makeTransitions(char)} is called.
+ * Implementation of NFA. When constructed, this automaton has 0 states if default constructor is
+ * used. States are indexed with integers from 0 to (number of states - 1) and a new state is
+ * created when {@link #makeNewState()} is called. Starting state and acceptable state have to be
+ * set via setters. Automaton has to be prepared before running by calling {@link #prepareForRun()}.
+ * This automaton can read one character at the time when {@link #makeTransitions(char)} is called.
  * 
  * @author ikrpelnik
  *
@@ -31,6 +29,7 @@ public class Automaton {
 
   /**
    * Constructs this Automaton with given number of states.
+   * 
    * @param numberOfStates - number of initial states of this automaton.
    */
   public Automaton(int numberOfStates) {
@@ -39,7 +38,7 @@ public class Automaton {
     this.epsilonTransitions = new HashMap<>();
     this.currentStates = new HashSet<>();
   }
-  
+
   /**
    * Constructs this Automaton with 0 states.
    */
@@ -167,14 +166,14 @@ public class Automaton {
 
   /**
    * Return this Automaton as a string. The string is formatted in multiple lines. All of the states
-   * are represented by numbers indexed from 0 to (number of states - 1).
-   * The first line is the starting state, the second line is the acceptable state and the third line
-   * is the total number of states. After that, 0 or more lines follow describing the transition function (without 
-   * epsilon transitions) in the following manner: fromState,transitionalCharacter->toStates. toStates can consist
-   * of multiple states separated by commas.
-   * After that, a line with a dollar sign ('$') follows, meaning that epsilon transitions will be described.
-   * 0 or more lines follow describing epsilon transitions in the following manner: fromState->toStates. toStates
-   * can consist of multiple states separated by commas. <br>
+   * are represented by numbers indexed from 0 to (number of states - 1). The first line is the
+   * starting state, the second line is the acceptable state and the third line is the total number
+   * of states. After that, 0 or more lines follow describing the transition function (without
+   * epsilon transitions) in the following manner: fromState,transitionalCharacter->toStates.
+   * toStates can consist of multiple states separated by commas. After that, a line with a dollar
+   * sign ('$') follows, meaning that epsilon transitions will be described. 0 or more lines follow
+   * describing epsilon transitions in the following manner: fromState->toStates. toStates can
+   * consist of multiple states separated by commas. <br>
    * e.g.:<br>
    * 10<br>
    * 1<br>
@@ -190,40 +189,35 @@ public class Automaton {
    * 2->4<br>
    * 4->1<br>
    * 7->8<br>
-   * @return String - this Automaton represented by a string. 
+   * 
+   * @return String - this Automaton represented by a string.
    */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append(numberOfStates)
-      .append(System.lineSeparator())
-      .append(startState)
-      .append(System.lineSeparator())
-      .append(acceptState)
-      .append(System.lineSeparator());
-    for(Map.Entry<TransitionKey, Set<Integer>> entry : transitions.entrySet()) {
-      sb.append(entry.getKey().getState())
-        .append(',')
-        .append(entry.getKey().getTransitionalChar())
-        .append("->");
-      for(int s : entry.getValue()) {
+    sb.append(numberOfStates).append(System.lineSeparator()).append(startState)
+        .append(System.lineSeparator()).append(acceptState).append(System.lineSeparator());
+    for (Map.Entry<TransitionKey, Set<Integer>> entry : transitions.entrySet()) {
+      sb.append(entry.getKey().getState()).append(',').append(entry.getKey().getTransitionalChar())
+          .append("->");
+      for (int s : entry.getValue()) {
         sb.append(s).append(',');
       }
-      sb.deleteCharAt(sb.length()-1);
+      sb.deleteCharAt(sb.length() - 1);
       sb.append(System.lineSeparator());
     }
     sb.append('$').append(System.lineSeparator());
-    for(Map.Entry<Integer, Set<Integer>> entry : epsilonTransitions.entrySet()) {
+    for (Map.Entry<Integer, Set<Integer>> entry : epsilonTransitions.entrySet()) {
       sb.append(entry.getKey()).append("->");
-      for(int s : entry.getValue()) {
+      for (int s : entry.getValue()) {
         sb.append(s).append(',');
       }
-      sb.deleteCharAt(sb.length()-1);
+      sb.deleteCharAt(sb.length() - 1);
       sb.append(System.lineSeparator());
     }
     return sb.toString();
   }
-  
+
   /**
    * Key made of two values used as a key in Automatons transitions map.
    * 

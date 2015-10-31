@@ -53,9 +53,10 @@ public class Regex {
     automaton.setAcceptState(statePair.getSecond());
     return automaton;
   }
-  
+
   /**
    * Returns <code>true</code> if this regex accepts given string, <code>false</code> otherwise.
+   * 
    * @param matcher
    * @return <code>true</code> if this regex accepts given string, <code>false</code> otherwise
    */
@@ -67,7 +68,7 @@ public class Regex {
     }
     return automaton.isInAcceptableState();
   }
-  
+
   /**
    * Returns first level subexpressions of this string. Example: <br>
    * First level subexpressions of regex <code>(a|b)*123|ABCD</code> are: <br>
@@ -76,22 +77,26 @@ public class Regex {
    * <li>(a|b)*123
    * <li>ABCD
    * </code>
-   * </ul> 
+   * </ul>
+   * 
    * @return first level subexpressions of this string
    */
   public List<String> getSubExpressions() {
     return getSubExpressions(value);
   }
-  
+
   /**
-   * Returns <code>true</code> if this regex has escaped character at position <code>index</code>, <code>false</code> otherwise.
+   * Returns <code>true</code> if this regex has escaped character at position <code>index</code>,
+   * <code>false</code> otherwise.
+   * 
    * @param index
-   * @return <code>true</code> if this regex has escaped character at position <code>index</code>, <code>false</code> otherwise
+   * @return <code>true</code> if this regex has escaped character at position <code>index</code>,
+   *         <code>false</code> otherwise
    */
   public boolean escapedCharacterAt(int index) {
     return escapedCharacterAt(value, index);
   }
-  
+
   private Pair<Integer, Integer> convertExpressionToAutomaton(String expression) {
     List<String> subExpressions = getSubExpressions(expression);
 
@@ -139,9 +144,20 @@ public class Regex {
             }
           } else {
             int j = i;
-            while (j < expression.length() && expression.charAt(j) != ')') {
+            int numberOfParenthesis = 0;
+
+            while (j < expression.length()) {
+              char expressionCharacter = expression.charAt(j);
+              if (expressionCharacter == '(' && !escapedCharacterAt(expression, j)) {
+                numberOfParenthesis++;
+              } else if (expressionCharacter == ')' && !escapedCharacterAt(expression, j)) {
+                if (--numberOfParenthesis == 0) {
+                  break;
+                }
+              }
               j++;
             }
+
             Pair<Integer, Integer> statePair =
                 convertExpressionToAutomaton(expression.substring(i + 1, j));
             a = statePair.getFirst();
@@ -189,7 +205,6 @@ public class Regex {
       }
     }
     subExpressions.add(expression.substring(leftIndex));
-
     return subExpressions;
   }
 
@@ -200,5 +215,9 @@ public class Regex {
       index--;
     }
     return isEscaped;
+  }
+
+  public String toString() {
+    return value;
   }
 }

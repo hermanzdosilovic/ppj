@@ -1,8 +1,9 @@
 package hr.fer.zemris.ppj.regex;
 
 /**
- * A class that represents a regular definition. Regular definition is defined by a name and an expression.
- * Expression is regular expression which can contain other regular definitions written inside of an curly brackets e.g. {name}.
+ * A class that represents a regular definition. Regular definition is defined by a name and an
+ * expression. Expression is regular expression which can contain other regular definitions written
+ * inside of an curly brackets e.g. {name}.
  * 
  * @author Josipa Kelava
  *

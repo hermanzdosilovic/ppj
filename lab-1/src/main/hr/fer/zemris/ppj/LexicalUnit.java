@@ -1,8 +1,9 @@
 package hr.fer.zemris.ppj;
 
 /**
- * A class that represents a lexical unit.
- * It holds a name of a lexical unit provided at construction.
+ * A class that represents a lexical unit. It holds a name of a lexical unit provided at
+ * construction.
+ * 
  * @author ikrpelnik
  *
  */
@@ -12,6 +13,7 @@ public class LexicalUnit {
 
   /**
    * Constructor takes a name for this lexical unit
+   * 
    * @param name - name for the new lexical unit
    */
   public LexicalUnit(String name) {
@@ -20,6 +22,7 @@ public class LexicalUnit {
 
   /**
    * Returns the name of this regular unit.
+   * 
    * @return name of this regular unit
    */
   public String getName() {
