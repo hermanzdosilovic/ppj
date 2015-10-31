@@ -34,7 +34,7 @@ public final class LA {
   public static void main(String[] args) throws IOException {
     LA lexicalAnalyzer =
         new LA(new FileInputStream(new File("analyzer_definition.txt")), 
-            new FileInputStream(new File("simplePpjLang.in")));
+            System.in);
     lexicalAnalyzer.analyzeSourceCode();
     lexicalAnalyzer.printOutput();
   }
@@ -54,7 +54,7 @@ public final class LA {
         }
         right++;
       }
-       if (lastGood >= left) {
+      if (lastGood >= left) {
         groupFrom = left;
         groupTo = lastGood + 1;
         Actions.action(this);
@@ -71,12 +71,10 @@ public final class LA {
   }
   
   private void groupIntoLexicalUnit() {
-     if (lexicalUnitName != null) {
+    if (lexicalUnitName != null) {
       output.add(lexicalUnitName + " " + lineIndex + " " + sourceCode.substring(groupFrom, groupTo));
-      left = groupTo;
-    } else {
-      left = groupTo;
     }
+    left = groupTo;
   }
   
   public void newLine() {
@@ -85,12 +83,10 @@ public final class LA {
 
   public void reject() {
     lexicalUnitName = null;
-    left = groupTo;
   }
   
   public void returnTo(int index) {
-    left = left + index;
-    groupTo = left;
+    groupTo = left + index;
   }
 
   public void setState(String stateName) {
