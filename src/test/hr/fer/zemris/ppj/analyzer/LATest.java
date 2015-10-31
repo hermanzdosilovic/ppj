@@ -14,31 +14,45 @@ public class LATest {
   public void basicLATest() {
     List<String> definitionLines = new ArrayList<>();
     definitionLines.add("S_pocetno");
-    definitionLines.add("S_pocetno");
-    definitionLines.add("#\\|");
+    definitionLines.add("S_unarni");
+    definitionLines.add("\\t|\\_");
+    definitionLines.add("S_unarni");
+    definitionLines.add("\\n");
+    definitionLines.add("S_unarni");
+    definitionLines.add("-");
+    definitionLines.add("S_unarni");
+    definitionLines.add("-(\\t|\\n|\\_)*-");
     definitionLines.add("S_komentar");
     definitionLines.add("\\|#");
     definitionLines.add("S_komentar");
     definitionLines.add("\\n");
     definitionLines.add("S_komentar");
-    definitionLines.add("\\(|\\)|\\{|\\}|\\||\\*|\\$|\\\\"); // specijalni znakovi ( ) { } | * $ |
-                                                             // prefiksani znakom \
+    definitionLines.add("(\\(|\\)|\\{|\\}|\\||\\*|\\\\|\\$|\\t|\\n|\\_|!|\"|#|%|&|'|+|,|-|.|/|0|1|2|3|4|5|6|7|8|9|:|;|<|=|>|?|@|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|[|]|^|_|`|a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|~)");
     definitionLines.add("S_pocetno");
-    definitionLines.add("-(\\n|\\t|\\_)*-"); // -{bjelina}*-
+    definitionLines.add("\\t|\\_");
     definitionLines.add("S_pocetno");
-    definitionLines.add("\\((\\n|\\t|\\_)*-"); // -{bjelina}*-
-    definitionLines.add("S_unarni");
+    definitionLines.add("\\n");
+    definitionLines.add("S_pocetno");
+    definitionLines.add("#\\|");
+    definitionLines.add("S_pocetno");
+    definitionLines.add("((0|1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9)*|0x((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)((0|1|2|3|4|5|6|7|8|9)|a|b|c|d|e|f|A|B|C|D|E|F)*)");
+    definitionLines.add("S_pocetno");
+    definitionLines.add("\\(");
+    definitionLines.add("S_pocetno");
+    definitionLines.add("\\)");
+    definitionLines.add("S_pocetno");
     definitionLines.add("-");
-    definitionLines.add("S_unarni");
-    definitionLines.add("-(\\n|\\t|\\_)*-");
+    definitionLines.add("S_pocetno");
+    definitionLines.add("-(\\t|\\n|\\_)*-");
+    definitionLines.add("S_pocetno");
+    definitionLines.add("\\((\\t|\\n|\\_)*-");
 
     StringBuilder sourceCodeBuilder = new StringBuilder();
-    
-    sourceCodeBuilder.append("#| ovo je primjer |#").append(System.lineSeparator());
-    sourceCodeBuilder.append("3 - -0x12 - ( #| ovdje ce doci grupirane").append(System.lineSeparator());
-    sourceCodeBuilder.append("   operacije |#").append(System.lineSeparator());
-    sourceCodeBuilder.append("3- -").append(System.lineSeparator());
-    sourceCodeBuilder.append("--076) #| 3 - ---076 = 3 - -076 = 3 + 076 |#").append(System.lineSeparator());
+    sourceCodeBuilder.append("#| ovo je primjer |#\n");
+    sourceCodeBuilder.append("3 - -0x12 - ( #| ovdje ce doci grupirane\n");
+    sourceCodeBuilder.append("   operacije |#\n");
+    sourceCodeBuilder.append("3- -\n");
+    sourceCodeBuilder.append("--076) #| 3 - ---076 = 3 - -076 = 3 + 076 |#\n");
 
     List<String> expectedOutput = new ArrayList<>();
     expectedOutput.add("OPERAND 2 3");

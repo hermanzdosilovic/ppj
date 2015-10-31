@@ -14,7 +14,7 @@ import java.util.Map;
 import hr.fer.zemris.ppj.LexicalAnalyzerState;
 
 public final class LA {
-  
+
   private LexicalAnalyzerState initialLexicalAnalyzerState;
   private LexicalAnalyzerState currentLexicalAnalyzerState;
   private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
@@ -24,7 +24,7 @@ public final class LA {
   private int left, right;
   private int lastGood;
   private Integer lastGoodAutomatonInd;
-  
+
   private String lexicalUnitName;
   private int groupFrom;
   private int groupTo;
@@ -32,9 +32,8 @@ public final class LA {
   private List<String> output = new ArrayList<>();
 
   public static void main(String[] args) throws IOException {
-    LA lexicalAnalyzer =
-        new LA(new FileInputStream(new File("analyzer_definition.txt")), 
-            System.in);
+    LA lexicalAnalyzer = new LA(new FileInputStream(new File("analyzer_definition.txt")),
+        new FileInputStream(new File("ml.txt")));
     lexicalAnalyzer.analyzeSourceCode();
     lexicalAnalyzer.printOutput();
   }
@@ -69,14 +68,15 @@ public final class LA {
     System.err.println("Error in line: " + lineIndex);
     left++;
   }
-  
+
   private void groupIntoLexicalUnit() {
     if (lexicalUnitName != null) {
-      output.add(lexicalUnitName + " " + lineIndex + " " + sourceCode.substring(groupFrom, groupTo));
+      output
+          .add(lexicalUnitName + " " + lineIndex + " " + sourceCode.substring(groupFrom, groupTo));
     }
     left = groupTo;
   }
-  
+
   public void newLine() {
     lineIndex++;
   }
@@ -84,7 +84,7 @@ public final class LA {
   public void reject() {
     lexicalUnitName = null;
   }
-  
+
   public void returnTo(int index) {
     groupTo = left + index;
   }

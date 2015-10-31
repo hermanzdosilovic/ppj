@@ -9,7 +9,7 @@ import java.util.Map;
 public final class GLA {
 
   public static void main(String[] args) throws Exception {
-    System.setIn(new FileInputStream("C_ulazna_datoteka.txt"));
+    System.setIn(new FileInputStream("MinusLang.in"));
     // line above is for testing purposes
 
     GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition();
@@ -37,8 +37,8 @@ public final class GLA {
       int index = 0;
       LexicalAnalyzerState state = entry.getValue();
       for (RegexAction regex : state.getRegexActions()) {
-        java.println("      if(state.equals(\"" + state.getName()
-            + "\") && automatonIndex == " + index + ") {");
+        java.println("      if(state.equals(\"" + state.getName() + "\") && automatonIndex == "
+            + index + ") {");
         index++;
 
         for (String action : regex.getActionsList()) {
