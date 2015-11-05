@@ -20,7 +20,6 @@ import hr.fer.zemris.ppj.regex.RegularDefinitionResolver;
  */
 public class GeneratorInputDefinition {
 
-  private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
   private String textInput;
   private List<RegularDefinition> listOfRegDefinitions = new ArrayList<RegularDefinition>();
   private List<LexicalUnit> lexicalName = new ArrayList<LexicalUnit>();
@@ -30,17 +29,22 @@ public class GeneratorInputDefinition {
   private RegularDefinitionResolver resolvedDefinitions;
   private LexicalAnalyzerState InitialAnalyzerState;
   private List<String> inputList;
+  private int index = 0;
 
   public GeneratorInputDefinition() {
     this(System.in);
   }
 
   public GeneratorInputDefinition(InputStream stream) {
-    input = new BufferedReader(new InputStreamReader(stream));
+    BufferedReader input = new BufferedReader(new InputStreamReader(stream));
     String txt = " ";
 
     while (txt != null) {
-      txt = read();
+      try {
+        txt = input.readLine();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
       inputList.add(txt);
     }
   }
@@ -61,7 +65,7 @@ public class GeneratorInputDefinition {
     String value;
     String[] parsedRegularDefinition;
     while (true) {
-      textInput = inputList.remove(0);
+      textInput = inputList.get(index++);
       if (textInput.startsWith("%")) {
         break;
       }
@@ -85,7 +89,7 @@ public class GeneratorInputDefinition {
   }
 
   private void lexicalNameDefinition() {
-    textInput = inputList.remove(0);
+    textInput = inputList.get(index++);
 
     String[] parsedLexicalNames;
     parsedLexicalNames = textInput.split(" ");
@@ -100,7 +104,7 @@ public class GeneratorInputDefinition {
     String name;
     String regEx;
     while (true) {
-      textInput = inputList.remove(0);
+      textInput = inputList.get(index++);
       if (textInput == null || textInput.isEmpty()) {
         break;
       }
@@ -108,14 +112,14 @@ public class GeneratorInputDefinition {
       name = parsedRules[0].substring(1);
       regEx = parsedRules[1];
 
-      textInput = inputList.remove(0);
-      textInput = inputList.remove(0);
+      textInput = inputList.get(index++);
+      textInput = inputList.get(index++);
 
       while (!textInput.equals("}")) {
 
         lexicalRules.add(textInput);
 
-        textInput = inputList.remove(0);
+        textInput = inputList.get(index++);
       }
 
       lexicalState.get(name).addRegexAction(
@@ -126,15 +130,7 @@ public class GeneratorInputDefinition {
     }
   }
 
-  private String read() {
-    String textInput = " ";
-    try {
-      textInput = input.readLine();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return textInput;
-  }
+  
 
   /**
    * List of all regular definitions

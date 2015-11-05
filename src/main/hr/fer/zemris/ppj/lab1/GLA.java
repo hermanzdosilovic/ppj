@@ -1,6 +1,5 @@
 package hr.fer.zemris.ppj.lab1;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -10,13 +9,12 @@ import hr.fer.zemris.ppj.regex.Regex;
 public final class GLA {
 
   public static void main(String[] args) throws Exception {
-    System.setIn(new FileInputStream("MinusLang.in"));
 
     GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition();
+    inputDefinition.startGenerator();
     Map<String, LexicalAnalyzerState> rules = inputDefinition.getLexicalState();
     LexicalAnalyzerState initialState = inputDefinition.getInitialAnalyzerState();
 
-    inputDefinition.startGenerator();
 
     generateAnalyzerDefinition(initialState, rules);
     generateAnalyzerAction(rules);
