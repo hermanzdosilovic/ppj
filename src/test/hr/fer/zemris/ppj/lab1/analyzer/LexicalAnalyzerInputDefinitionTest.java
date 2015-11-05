@@ -9,7 +9,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import hr.fer.zemris.ppj.lab1.LexicalAnalyzerState;
-import hr.fer.zemris.ppj.lab1.analyizer.LexicalAnalyzerInputDefinition;
 
 public class LexicalAnalyzerInputDefinitionTest {
 

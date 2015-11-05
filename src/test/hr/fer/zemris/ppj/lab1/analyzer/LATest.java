@@ -7,8 +7,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import hr.fer.zemris.ppj.lab1.analyizer.LA;
-
 public class LATest {
 
   @Test

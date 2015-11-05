@@ -1,4 +1,4 @@
-package hr.fer.zemris.ppj.lab1.analyizer;
+package hr.fer.zemris.ppj.lab1.analyzer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
