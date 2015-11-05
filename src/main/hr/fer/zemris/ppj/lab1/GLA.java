@@ -15,6 +15,7 @@ public final class GLA {
     Map<String, LexicalAnalyzerState> rules = inputDefinition.getLexicalState();
     LexicalAnalyzerState initialState = inputDefinition.getInitialAnalyzerState();
 
+    inputDefinition.startGenerator();
     PrintWriter writer = new PrintWriter("analyzer_definition.txt");
     writer.println(initialState.getName());
     for (Map.Entry<String, LexicalAnalyzerState> entry : rules.entrySet()) {

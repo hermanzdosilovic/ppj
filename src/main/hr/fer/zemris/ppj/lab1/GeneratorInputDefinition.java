@@ -2,6 +2,7 @@ package hr.fer.zemris.ppj.lab1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,18 +29,31 @@ public class GeneratorInputDefinition {
       new HashMap<String, LexicalAnalyzerState>();
   private RegularDefinitionResolver resolvedDefinitions;
   private LexicalAnalyzerState InitialAnalyzerState;
+  private List<String> inputList;
 
   public GeneratorInputDefinition() {
-    this.regularDefinitionInput();
-    @SuppressWarnings("unused")
-    RegularDefinitionResolver resolver = new RegularDefinitionResolver(listOfRegDefinitions);
+	  this(System.in);
+  }
+  
+  public GeneratorInputDefinition(InputStream stream){
+	  input = new BufferedReader(new InputStreamReader(stream));
+	  String txt = " ";
+	  
+	  while(txt != null){
+		  txt = read();
+		  inputList.add(txt);
+	  }
+  }
+  
+  public GeneratorInputDefinition(List<String> inputList){
+	  this.inputList = inputList;
+  }
+
+  public void startGenerator(){
+	this.regularDefinitionInput();
     this.lexicalStateDefinition();
-    try {
-      this.lexicalNameDefinition();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    this.lexicalAnalyzerRulesDefinition();
+    this.lexicalNameDefinition();
+    this.lexicalAnalyzerRulesDefinition(); 
   }
 
   private void regularDefinitionInput() {
