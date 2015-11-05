@@ -1,6 +1,7 @@
 package hr.fer.zemris.ppj.lab1;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Map;
 
@@ -15,6 +16,15 @@ public final class GLA {
     Map<String, LexicalAnalyzerState> rules = inputDefinition.getLexicalState();
     LexicalAnalyzerState initialState = inputDefinition.getInitialAnalyzerState();
 
+    inputDefinition.startGenerator();
+
+    generateAnalyzerDefinition(initialState, rules);
+    generateAnalyzerAction(rules);
+
+  }
+
+  private static void generateAnalyzerDefinition(LexicalAnalyzerState initialState,
+      Map<String, LexicalAnalyzerState> rules) throws FileNotFoundException {
     PrintWriter writer = new PrintWriter("analyzer_definition.txt");
     writer.println(initialState.getName());
     for (Map.Entry<String, LexicalAnalyzerState> entry : rules.entrySet()) {
@@ -25,8 +35,12 @@ public final class GLA {
       }
     }
     writer.close();
+  }
 
-    PrintWriter java = new PrintWriter("src/main/hr/fer/zemris/ppj/lab1/analyizer/AnalyzerAction.java");
+  private static void generateAnalyzerAction(Map<String, LexicalAnalyzerState> rules)
+      throws FileNotFoundException {
+    PrintWriter java =
+        new PrintWriter("src/main/hr/fer/zemris/ppj/lab1/analyizer/AnalyzerAction.java");
     java.println("package hr.fer.zemris.ppj.lab1.analyizer;\n");
     java.println("public class AnalyzerAction {");
     java.println("  public static void performAction(LA analyzer) {");
@@ -49,6 +63,7 @@ public final class GLA {
     java.println("  }");
     java.println("}");
     java.close();
+
   }
 
   private static String resolveCommand(String line) {
