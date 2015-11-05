@@ -32,28 +32,28 @@ public class GeneratorInputDefinition {
   private List<String> inputList;
 
   public GeneratorInputDefinition() {
-	  this(System.in);
-  }
-  
-  public GeneratorInputDefinition(InputStream stream){
-	  input = new BufferedReader(new InputStreamReader(stream));
-	  String txt = " ";
-	  
-	  while(txt != null){
-		  txt = read();
-		  inputList.add(txt);
-	  }
-  }
-  
-  public GeneratorInputDefinition(List<String> inputList){
-	  this.inputList = inputList;
+    this(System.in);
   }
 
-  public void startGenerator(){
-	this.regularDefinitionInput();
+  public GeneratorInputDefinition(InputStream stream) {
+    input = new BufferedReader(new InputStreamReader(stream));
+    String txt = " ";
+
+    while (txt != null) {
+      txt = read();
+      inputList.add(txt);
+    }
+  }
+
+  public GeneratorInputDefinition(List<String> inputList) {
+    this.inputList = inputList;
+  }
+
+  public void startGenerator() {
+    this.regularDefinitionInput();
     this.lexicalStateDefinition();
     this.lexicalNameDefinition();
-    this.lexicalAnalyzerRulesDefinition(); 
+    this.lexicalAnalyzerRulesDefinition();
   }
 
   private void regularDefinitionInput() {
@@ -118,8 +118,9 @@ public class GeneratorInputDefinition {
         textInput = inputList.remove(0);
       }
 
-      lexicalState.get(name).addRegexAction(new RegexAction(resolvedDefinitions.resolveRegex(regEx),
-          new ArrayList<String>(lexicalRules)));
+      lexicalState.get(name).addRegexAction(
+          new RegexAction(resolvedDefinitions.resolveRegex(regEx), new ArrayList<String>(
+              lexicalRules)));
       lexicalRules.clear();
 
     }
