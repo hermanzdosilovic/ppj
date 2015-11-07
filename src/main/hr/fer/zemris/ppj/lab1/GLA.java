@@ -11,7 +11,8 @@ import hr.fer.zemris.ppj.regex.Regex;
 public final class GLA {
 
   public static void main(String[] args) throws Exception {
-    GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition(new FileInputStream(new File("MinusLang.in")));
+    GeneratorInputDefinition inputDefinition =
+        new GeneratorInputDefinition(new FileInputStream(new File("MinusLang.in")));
     inputDefinition.parseDefinition();
     Map<String, LexicalAnalyzerState> rules = inputDefinition.getLexicalAnalyzerStateTable();
     LexicalAnalyzerState initialState = inputDefinition.getInitialLexicalAnalyzerState();
