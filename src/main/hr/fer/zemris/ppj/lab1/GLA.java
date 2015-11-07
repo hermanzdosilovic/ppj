@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.lab1;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -10,17 +11,13 @@ import hr.fer.zemris.ppj.regex.Regex;
 public final class GLA {
 
   public static void main(String[] args) throws Exception {
-    System.setIn(new FileInputStream("MinusLang.in"));
-
-    GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition();
-    Map<String, LexicalAnalyzerState> rules = inputDefinition.getLexicalState();
-    LexicalAnalyzerState initialState = inputDefinition.getInitialAnalyzerState();
-
-    inputDefinition.startGenerator();
+    GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition(new FileInputStream(new File("MinusLang.in")));
+    inputDefinition.parseDefinition();
+    Map<String, LexicalAnalyzerState> rules = inputDefinition.getLexicalAnalyzerStateTable();
+    LexicalAnalyzerState initialState = inputDefinition.getInitialLexicalAnalyzerState();
 
     generateAnalyzerDefinition(initialState, rules);
     generateAnalyzerAction(rules);
-
   }
 
   private static void generateAnalyzerDefinition(LexicalAnalyzerState initialState,
@@ -40,8 +37,8 @@ public final class GLA {
   private static void generateAnalyzerAction(Map<String, LexicalAnalyzerState> rules)
       throws FileNotFoundException {
     PrintWriter java =
-        new PrintWriter("src/main/hr/fer/zemris/ppj/lab1/analyizer/AnalyzerAction.java");
-    java.println("package hr.fer.zemris.ppj.lab1.analyizer;\n");
+        new PrintWriter("src/main/hr/fer/zemris/ppj/lab1/analyzer/AnalyzerAction.java");
+    java.println("package hr.fer.zemris.ppj.lab1.analyzer;\n");
     java.println("public class AnalyzerAction {");
     java.println("  public static void performAction(LA analyzer) {");
     java.println("    String state = analyzer.getState().getName();");
@@ -63,19 +60,22 @@ public final class GLA {
     java.println("  }");
     java.println("}");
     java.close();
-
   }
 
   private static String resolveCommand(String line) {
     String[] parsedLine = line.split(" ");
-    if (parsedLine[0].equals("-"))
+    if (parsedLine[0].equals("-")) {
       return "      analyzer.reject();";
-    if (parsedLine[0].equals("NOVI_REDAK"))
+    }
+    if (parsedLine[0].equals("NOVI_REDAK")) {
       return "      analyzer.newLine();";
-    if (parsedLine[0].equals("UDJI_U_STANJE"))
+    }
+    if (parsedLine[0].equals("UDJI_U_STANJE")) {
       return "      analyzer.setState(\"" + parsedLine[1] + "\");";
-    if (parsedLine[0].equals("VRATI_SE"))
+    }
+    if (parsedLine[0].equals("VRATI_SE")) {
       return "      analyzer.returnTo(" + parsedLine[1] + ");";
+    }
     return "      analyzer.setLexicalUnit(\"" + parsedLine[0] + "\");";
   }
 }

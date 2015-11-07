@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import hr.fer.zemris.ppj.regex.RegularDefinition;
 import hr.fer.zemris.ppj.regex.RegularDefinitionResolver;
@@ -19,121 +20,94 @@ import hr.fer.zemris.ppj.regex.RegularDefinitionResolver;
  *
  */
 public class GeneratorInputDefinition {
+  private List<RegularDefinition> regularDefinitions;
+  private List<LexicalUnit> lexicalUnits;
 
-  private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-  private String textInput;
-  private List<RegularDefinition> listOfRegDefinitions = new ArrayList<RegularDefinition>();
-  private List<LexicalUnit> lexicalName = new ArrayList<LexicalUnit>();
-  private List<String> lexicalRules = new ArrayList<String>();
-  private HashMap<String, LexicalAnalyzerState> lexicalState =
-      new HashMap<String, LexicalAnalyzerState>();
-  private RegularDefinitionResolver resolvedDefinitions;
-  private LexicalAnalyzerState InitialAnalyzerState;
-  private List<String> inputList;
+  private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
 
-  public GeneratorInputDefinition() {
+  private RegularDefinitionResolver regularDefinitionResolver;
+  private LexicalAnalyzerState initialLexicalAnalyzerState;
+
+  private List<String> inputLines;
+  private int readerIndex = 0;
+
+  public GeneratorInputDefinition() throws IOException {
     this(System.in);
   }
 
-  public GeneratorInputDefinition(InputStream stream) {
-    input = new BufferedReader(new InputStreamReader(stream));
-    String txt = " ";
-
-    while (txt != null) {
-      txt = read();
-      inputList.add(txt);
+  public GeneratorInputDefinition(InputStream stream) throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+    inputLines = new ArrayList<>();
+    String line;
+    while ((line = reader.readLine()) != null) {
+      inputLines.add(line);
     }
   }
 
-  public GeneratorInputDefinition(List<String> inputList) {
-    this.inputList = inputList;
+  public GeneratorInputDefinition(List<String> inputLines) {
+    this.inputLines = inputLines;
   }
 
-  public void startGenerator() {
-    this.regularDefinitionInput();
-    this.lexicalStateDefinition();
-    this.lexicalNameDefinition();
-    this.lexicalAnalyzerRulesDefinition();
+  public void parseDefinition() {
+    parseRegularDefinitions();
+    parseLexicalStates();
+    parseLexicalUnits();
+    lexicalAnalyzerRulesDefinition();
   }
 
-  private void regularDefinitionInput() {
-    String name;
-    String value;
-    String[] parsedRegularDefinition;
+  private void parseRegularDefinitions() {
+    regularDefinitions = new ArrayList<>();
     while (true) {
-      textInput = inputList.remove(0);
-      if (textInput.startsWith("%")) {
+      String inputLine = inputLines.get(readerIndex);
+      if (inputLine.startsWith("%")) {
         break;
       }
-      parsedRegularDefinition = textInput.split(" ");
+      readerIndex++;
 
-      name = parsedRegularDefinition[0].substring(1, parsedRegularDefinition[0].length() - 1);
-      value = parsedRegularDefinition[1];
-      listOfRegDefinitions.add(new RegularDefinition(name, value));
+      String[] parsedRegularDefinition = inputLine.split(" ");
+      String name =
+          parsedRegularDefinition[0].substring(1, parsedRegularDefinition[0].length() - 1);
+      String value = parsedRegularDefinition[1];
+      regularDefinitions.add(new RegularDefinition(name, value));
     }
-    resolvedDefinitions = new RegularDefinitionResolver(listOfRegDefinitions);
+    regularDefinitionResolver = new RegularDefinitionResolver(regularDefinitions);
   }
 
-  private void lexicalStateDefinition() {
-    String[] parsedStateDefinition = textInput.split(" ");
-    InitialAnalyzerState = new LexicalAnalyzerState(parsedStateDefinition[1]);
+  private void parseLexicalStates() {
+    String[] parsedLexicalStates = inputLines.get(readerIndex++).split(" ");
 
-    for (int i = 1; i < parsedStateDefinition.length; i++) {
-      LexicalAnalyzerState state = new LexicalAnalyzerState(parsedStateDefinition[i]);
-      lexicalState.put(parsedStateDefinition[i], state);
+    lexicalAnalyzerStateTable = new HashMap<>();
+    initialLexicalAnalyzerState = new LexicalAnalyzerState(parsedLexicalStates[1]);
+    for (int i = 1; i < parsedLexicalStates.length; i++) {
+      lexicalAnalyzerStateTable.put(parsedLexicalStates[i],
+          new LexicalAnalyzerState(parsedLexicalStates[i]));
     }
   }
 
-  private void lexicalNameDefinition() {
-    textInput = inputList.remove(0);
-
-    String[] parsedLexicalNames;
-    parsedLexicalNames = textInput.split(" ");
-    for (int i = 1; i < parsedLexicalNames.length; i++) {
-      LexicalUnit unit = new LexicalUnit(parsedLexicalNames[i]);
-      lexicalName.add(unit);
+  private void parseLexicalUnits() {
+    String[] parsedLexicalUnits = inputLines.get(readerIndex++).split(" ");
+    lexicalUnits = new ArrayList<>();
+    for (int i = 1; i < parsedLexicalUnits.length; i++) {
+      lexicalUnits.add(new LexicalUnit(parsedLexicalUnits[i]));
     }
   }
 
   private void lexicalAnalyzerRulesDefinition() {
-    String[] parsedRules;
-    String name;
-    String regEx;
-    while (true) {
-      textInput = inputList.remove(0);
-      if (textInput == null || textInput.isEmpty()) {
-        break;
-      }
-      parsedRules = textInput.split(">", 2);
-      name = parsedRules[0].substring(1);
-      regEx = parsedRules[1];
+    while (readerIndex < inputLines.size()) {
+      String inputLine = inputLines.get(readerIndex++);
 
-      textInput = inputList.remove(0);
-      textInput = inputList.remove(0);
+      String[] parsedRule = inputLine.split(">", 2);
+      String lexicalAnalyzerStateName = parsedRule[0].substring(1);
+      String regex = parsedRule[1];
 
-      while (!textInput.equals("}")) {
-
-        lexicalRules.add(textInput);
-
-        textInput = inputList.remove(0);
+      List<String> lexicalRules = new ArrayList<>();
+      while (!(inputLine = inputLines.get(readerIndex++)).equals("}")) {
+        lexicalRules.add(inputLine);
       }
 
-      lexicalState.get(name).addRegexAction(
-          new RegexAction(resolvedDefinitions.resolveRegex(regEx), new ArrayList<String>(
-              lexicalRules)));
-      lexicalRules.clear();
-
+      lexicalAnalyzerStateTable.get(lexicalAnalyzerStateName).addRegexAction(new RegexAction(
+          regularDefinitionResolver.resolveRegex(regex), new ArrayList<String>(lexicalRules)));
     }
-  }
-
-  private String read() {
-    String textInput = " ";
-    try {
-      textInput = input.readLine();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return textInput;
   }
 
   /**
@@ -142,7 +116,7 @@ public class GeneratorInputDefinition {
    * @return List of regular definitions
    */
   public List<RegularDefinition> getListOfRegularDefinitions() {
-    return listOfRegDefinitions;
+    return regularDefinitions;
   }
 
   /**
@@ -150,8 +124,8 @@ public class GeneratorInputDefinition {
    * 
    * @return List of lexical unit names
    */
-  public List<LexicalUnit> getLexicalNames() {
-    return lexicalName;
+  public List<LexicalUnit> getLexicalUnits() {
+    return lexicalUnits;
   }
 
   /**
@@ -161,8 +135,8 @@ public class GeneratorInputDefinition {
    * 
    * @return lexicalState Map<String, LexicalAnalyzerState>
    */
-  public HashMap<String, LexicalAnalyzerState> getLexicalState() {
-    return lexicalState;
+  public Map<String, LexicalAnalyzerState> getLexicalAnalyzerStateTable() {
+    return lexicalAnalyzerStateTable;
   }
 
   /**
@@ -171,10 +145,10 @@ public class GeneratorInputDefinition {
    * @return RegDefResolver
    */
   public RegularDefinitionResolver getResolver() {
-    return resolvedDefinitions;
+    return regularDefinitionResolver;
   }
 
-  public LexicalAnalyzerState getInitialAnalyzerState() {
-    return InitialAnalyzerState;
+  public LexicalAnalyzerState getInitialLexicalAnalyzerState() {
+    return initialLexicalAnalyzerState;
   }
 }
