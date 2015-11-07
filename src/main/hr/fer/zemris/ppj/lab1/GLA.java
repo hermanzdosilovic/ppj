@@ -1,28 +1,46 @@
 package hr.fer.zemris.ppj.lab1;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 import hr.fer.zemris.ppj.regex.Regex;
 
 public final class GLA {
+  GeneratorInputDefinition inputDefinition;
+  Map<String, LexicalAnalyzerState> rules;
+  LexicalAnalyzerState initialState;
 
   public static void main(String[] args) throws Exception {
-    GeneratorInputDefinition inputDefinition =
-        new GeneratorInputDefinition(new FileInputStream(new File("MinusLang.in")));
-    inputDefinition.parseDefinition();
-    Map<String, LexicalAnalyzerState> rules = inputDefinition.getLexicalAnalyzerStateTable();
-    LexicalAnalyzerState initialState = inputDefinition.getInitialLexicalAnalyzerState();
-
-    generateAnalyzerDefinition(initialState, rules);
-    generateAnalyzerAction(rules);
+    GLA gla = new GLA();
+    gla.start();
   }
 
-  private static void generateAnalyzerDefinition(LexicalAnalyzerState initialState,
-      Map<String, LexicalAnalyzerState> rules) throws FileNotFoundException {
+  public GLA() throws IOException {
+    this(System.in);
+  }
+
+  public GLA(InputStream stream) throws IOException {
+    inputDefinition = new GeneratorInputDefinition(stream);
+  }
+
+  public GLA(List<String> inputLines) {
+    inputDefinition = new GeneratorInputDefinition(inputLines);
+  }
+
+  public void start() throws FileNotFoundException {
+    inputDefinition.parseDefinition();
+    rules = inputDefinition.getLexicalAnalyzerStateTable();
+    initialState = inputDefinition.getInitialLexicalAnalyzerState();
+
+    generateAnalyzerDefinition();
+    generateAnalyzerAction();
+  }
+
+  private void generateAnalyzerDefinition() throws FileNotFoundException {
     PrintWriter writer = new PrintWriter("analyzer_definition.txt");
     writer.println(initialState.getName());
     for (Map.Entry<String, LexicalAnalyzerState> entry : rules.entrySet()) {
@@ -35,8 +53,7 @@ public final class GLA {
     writer.close();
   }
 
-  private static void generateAnalyzerAction(Map<String, LexicalAnalyzerState> rules)
-      throws FileNotFoundException {
+  private void generateAnalyzerAction() throws FileNotFoundException {
     PrintWriter java =
         new PrintWriter("src/main/hr/fer/zemris/ppj/lab1/analyzer/AnalyzerAction.java");
     java.println("package hr.fer.zemris.ppj.lab1.analyzer;\n");
@@ -63,7 +80,7 @@ public final class GLA {
     java.close();
   }
 
-  private static String resolveCommand(String line) {
+  private String resolveCommand(String line) {
     String[] parsedLine = line.split(" ");
     if (parsedLine[0].equals("-")) {
       return "      analyzer.reject();";

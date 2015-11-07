@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,18 +17,14 @@ import hr.fer.zemris.ppj.regex.RegularDefinitionResolver;
  * Class for lexical analyzer definition with a specific input format. Point of this class is to
  * just call the constructor and everything will be set to go according to the specification.
  * 
- * @author Ivan Trubić
- *
+ * @author Ivan Trubic
  */
 public class GeneratorInputDefinition {
   private List<RegularDefinition> regularDefinitions;
   private List<LexicalUnit> lexicalUnits;
-
   private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
-
   private RegularDefinitionResolver regularDefinitionResolver;
   private LexicalAnalyzerState initialLexicalAnalyzerState;
-
   private List<String> inputLines;
   private int readerIndex = 0;
 
@@ -52,12 +49,12 @@ public class GeneratorInputDefinition {
     parseRegularDefinitions();
     parseLexicalStates();
     parseLexicalUnits();
-    lexicalAnalyzerRulesDefinition();
+    parseLexicalAnalyzerRules();
   }
 
-  private void parseRegularDefinitions() {
+  public void parseRegularDefinitions() {
     regularDefinitions = new ArrayList<>();
-    while (true) {
+    while (readerIndex < inputLines.size()) {
       String inputLine = inputLines.get(readerIndex);
       if (inputLine.startsWith("%")) {
         break;
@@ -73,7 +70,7 @@ public class GeneratorInputDefinition {
     regularDefinitionResolver = new RegularDefinitionResolver(regularDefinitions);
   }
 
-  private void parseLexicalStates() {
+  public void parseLexicalStates() {
     String[] parsedLexicalStates = inputLines.get(readerIndex++).split(" ");
 
     lexicalAnalyzerStateTable = new HashMap<>();
@@ -84,7 +81,7 @@ public class GeneratorInputDefinition {
     }
   }
 
-  private void parseLexicalUnits() {
+  public void parseLexicalUnits() {
     String[] parsedLexicalUnits = inputLines.get(readerIndex++).split(" ");
     lexicalUnits = new ArrayList<>();
     for (int i = 1; i < parsedLexicalUnits.length; i++) {
@@ -92,7 +89,7 @@ public class GeneratorInputDefinition {
     }
   }
 
-  private void lexicalAnalyzerRulesDefinition() {
+  public void parseLexicalAnalyzerRules() {
     while (readerIndex < inputLines.size()) {
       String inputLine = inputLines.get(readerIndex++);
 
@@ -115,7 +112,7 @@ public class GeneratorInputDefinition {
    * 
    * @return List of regular definitions
    */
-  public List<RegularDefinition> getListOfRegularDefinitions() {
+  public List<RegularDefinition> getRegularDefinitions() {
     return regularDefinitions;
   }
 
@@ -144,11 +141,15 @@ public class GeneratorInputDefinition {
    * 
    * @return RegDefResolver
    */
-  public RegularDefinitionResolver getResolver() {
+  public RegularDefinitionResolver getRegularDefinitionResolver() {
     return regularDefinitionResolver;
   }
 
   public LexicalAnalyzerState getInitialLexicalAnalyzerState() {
     return initialLexicalAnalyzerState;
+  }
+  
+  public Collection<LexicalAnalyzerState> getLexicalAnalyzerStates() {
+    return lexicalAnalyzerStateTable.values();
   }
 }
