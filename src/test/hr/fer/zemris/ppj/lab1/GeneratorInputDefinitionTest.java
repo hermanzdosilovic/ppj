@@ -40,4 +40,21 @@ public class GeneratorInputDefinitionTest {
     Collection<LexicalAnalyzerState> lexicalAnalyzerStates = generatorInputDefinition.getLexicalAnalyzerStates();
     assertEquals(3, lexicalAnalyzerStates.size());
   }
+  
+  @Test
+  public void parseLexicalUnitsTest() {
+    List<String> inputLines = new ArrayList<>();
+    inputLines.add("%L IDENTIFIKATOR brojcanaKonstanta znakovnaKonstanta OP_PLUS");
+    
+    
+    GeneratorInputDefinition generatorInputDefinition = new GeneratorInputDefinition(inputLines);
+    generatorInputDefinition.parseLexicalUnits();
+    
+    List<LexicalUnit> lexicalUnits = generatorInputDefinition.getLexicalUnits();
+    assertEquals(4, lexicalUnits.size());
+    assertEquals("IDENTIFIKATOR", lexicalUnits.get(0).getName());
+    assertEquals("brojcanaKonstanta", lexicalUnits.get(1).getName());
+    assertEquals("znakovnaKonstanta", lexicalUnits.get(2).getName());
+    assertEquals("OP_PLUS", lexicalUnits.get(3).getName());
+  }
 }
