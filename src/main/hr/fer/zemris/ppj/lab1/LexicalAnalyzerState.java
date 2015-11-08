@@ -60,18 +60,18 @@ public class LexicalAnalyzerState {
   public boolean addAutomaton(Automaton automaton) {
     return automatons.add(automaton);
   }
-  
+
   public boolean addRegex(Regex regex) {
     return regexes.add(regex);
   }
-  
+
   public boolean addRegexAction(Regex regex, String action) {
     if (!regexActionsTable.containsKey(regex)) {
       regexActionsTable.put(regex, new ArrayList<>());
     }
     return regexActionsTable.get(regex).add(action);
   }
-  
+
   public List<Automaton> getAutomatons() {
     return automatons;
   }
@@ -79,15 +79,15 @@ public class LexicalAnalyzerState {
   public String getName() {
     return name;
   }
-  
+
   public Map<Regex, List<String>> getRegexActionsTable() {
     return regexActionsTable;
   }
-  
+
   public List<Regex> getRegexes() {
     return regexes;
   }
-  
+
   @Override
   public String toString() {
     return name;

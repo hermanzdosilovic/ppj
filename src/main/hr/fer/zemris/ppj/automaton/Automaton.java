@@ -16,7 +16,6 @@ import java.util.Set;
  * 
  * @author Ivan Krpelnik
  */
-
 public class Automaton {
 
   private Integer numberOfStates;

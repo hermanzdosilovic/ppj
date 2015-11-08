@@ -60,7 +60,7 @@ public final class GLA {
     java.println("  public static void performAction(LA analyzer) {");
     java.println("    String state = analyzer.getState().getName();");
     java.println("    int automatonIndex = analyzer.getAutomatonIndex();\n");
-    
+
     for (LexicalAnalyzerState state : lexicalAnalyzerStateTable.values()) {
       int index = 0;
       Map<Regex, List<String>> regexActionsTable = state.getRegexActionsTable();
