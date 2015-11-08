@@ -1,9 +1,12 @@
 package hr.fer.zemris.ppj.lab1;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import hr.fer.zemris.ppj.automaton.Automaton;
+import hr.fer.zemris.ppj.regex.Regex;
 
 /**
  * Class for storing lexical analyzer states with all of regular definitions related to it.
@@ -13,12 +16,14 @@ import hr.fer.zemris.ppj.automaton.Automaton;
 public class LexicalAnalyzerState {
   private String name;
   private List<Automaton> automatons;
-  private List<RegexAction> regexActions;
+  private Map<Regex, List<String>> regexActionsTable;
+  private List<Regex> regexes;
 
   public LexicalAnalyzerState(String name) {
     this.name = name;
     automatons = new ArrayList<>();
-    regexActions = new ArrayList<>();
+    regexActionsTable = new HashMap<>();
+    regexes = new ArrayList<>();
   }
 
   public void prepareForRun() {
@@ -55,11 +60,18 @@ public class LexicalAnalyzerState {
   public boolean addAutomaton(Automaton automaton) {
     return automatons.add(automaton);
   }
-
-  public boolean addRegexAction(RegexAction action) {
-    return regexActions.add(action);
+  
+  public boolean addRegex(Regex regex) {
+    return regexes.add(regex);
   }
-
+  
+  public boolean addRegexAction(Regex regex, String action) {
+    if (!regexActionsTable.containsKey(regex)) {
+      regexActionsTable.put(regex, new ArrayList<>());
+    }
+    return regexActionsTable.get(regex).add(action);
+  }
+  
   public List<Automaton> getAutomatons() {
     return automatons;
   }
@@ -67,8 +79,17 @@ public class LexicalAnalyzerState {
   public String getName() {
     return name;
   }
-
-  public List<RegexAction> getRegexActions() {
-    return regexActions;
+  
+  public Map<Regex, List<String>> getRegexActionsTable() {
+    return regexActionsTable;
+  }
+  
+  public List<Regex> getRegexes() {
+    return regexes;
+  }
+  
+  @Override
+  public String toString() {
+    return name;
   }
 }

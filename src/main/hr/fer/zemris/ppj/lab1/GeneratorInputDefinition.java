@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hr.fer.zemris.ppj.regex.Regex;
 import hr.fer.zemris.ppj.regex.RegularDefinition;
 import hr.fer.zemris.ppj.regex.RegularDefinitionResolver;
 
@@ -94,16 +95,13 @@ public class GeneratorInputDefinition {
       String inputLine = inputLines.get(readerIndex++);
 
       String[] parsedRule = inputLine.split(">", 2);
-      String lexicalAnalyzerStateName = parsedRule[0].substring(1);
-      String regex = parsedRule[1];
+      LexicalAnalyzerState state = lexicalAnalyzerStateTable.get(parsedRule[0].substring(1));
+      Regex regex = new Regex(regularDefinitionResolver.resolveRegex(parsedRule[1]));
+      state.addRegex(regex);
 
-      List<String> lexicalRules = new ArrayList<>();
       while (!(inputLine = inputLines.get(readerIndex++)).equals("}")) {
-        lexicalRules.add(inputLine);
+        state.addRegexAction(regex, inputLine);
       }
-
-      lexicalAnalyzerStateTable.get(lexicalAnalyzerStateName).addRegexAction(new RegexAction(
-          regularDefinitionResolver.resolveRegex(regex), new ArrayList<String>(lexicalRules)));
     }
   }
 
@@ -148,7 +146,7 @@ public class GeneratorInputDefinition {
   public LexicalAnalyzerState getInitialLexicalAnalyzerState() {
     return initialLexicalAnalyzerState;
   }
-  
+
   public Collection<LexicalAnalyzerState> getLexicalAnalyzerStates() {
     return lexicalAnalyzerStateTable.values();
   }

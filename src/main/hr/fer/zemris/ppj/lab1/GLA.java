@@ -11,7 +11,7 @@ import hr.fer.zemris.ppj.regex.Regex;
 
 public final class GLA {
   GeneratorInputDefinition inputDefinition;
-  Map<String, LexicalAnalyzerState> rules;
+  Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
   LexicalAnalyzerState initialState;
 
   public static void main(String[] args) throws Exception {
@@ -33,7 +33,7 @@ public final class GLA {
 
   public void start() throws FileNotFoundException {
     inputDefinition.parseDefinition();
-    rules = inputDefinition.getLexicalAnalyzerStateTable();
+    lexicalAnalyzerStateTable = inputDefinition.getLexicalAnalyzerStateTable();
     initialState = inputDefinition.getInitialLexicalAnalyzerState();
 
     generateAnalyzerDefinition();
@@ -42,12 +42,11 @@ public final class GLA {
 
   private void generateAnalyzerDefinition() throws FileNotFoundException {
     PrintWriter writer = new PrintWriter("analyzer_definition.txt");
-    writer.println(initialState.getName());
-    for (Map.Entry<String, LexicalAnalyzerState> entry : rules.entrySet()) {
-      LexicalAnalyzerState state = entry.getValue();
-      for (RegexAction action : state.getRegexActions()) {
-        writer.println(state.getName());
-        writer.println((new Regex(action.getRegex())).toString());
+    writer.println(initialState);
+    for (LexicalAnalyzerState state : lexicalAnalyzerStateTable.values()) {
+      for (Regex regex : state.getRegexes()) {
+        writer.println(state);
+        writer.println(regex);
       }
     }
     writer.close();
@@ -61,14 +60,14 @@ public final class GLA {
     java.println("  public static void performAction(LA analyzer) {");
     java.println("    String state = analyzer.getState().getName();");
     java.println("    int automatonIndex = analyzer.getAutomatonIndex();\n");
-
-    for (Map.Entry<String, LexicalAnalyzerState> entry : rules.entrySet()) {
+    
+    for (LexicalAnalyzerState state : lexicalAnalyzerStateTable.values()) {
       int index = 0;
-      LexicalAnalyzerState state = entry.getValue();
-      for (RegexAction regex : state.getRegexActions()) {
+      Map<Regex, List<String>> regexActionsTable = state.getRegexActionsTable();
+      for (Regex regex : state.getRegexes()) {
         java.print("    if (state.equals(\"" + state.getName() + "\")");
-        java.println("&& automatonIndex == " + index + ") {");
-        for (String action : regex.getActionsList()) {
+        java.println(" && automatonIndex == " + index + ") {");
+        for (String action : regexActionsTable.get(regex)) {
           java.println(resolveCommand(action));
         }
         java.println("    }");
