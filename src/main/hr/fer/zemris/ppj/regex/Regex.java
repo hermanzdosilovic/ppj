@@ -19,7 +19,7 @@ import hr.fer.zemris.ppj.automaton.Automaton;
  * You can get automaton which accepts the same language as this regex by calling
  * {@link #toAutomaton()} method.
  * 
- * @author Herman Zvonimir Došilović
+ * @author Herman Zvonimir Dosilovic
  */
 public class Regex {
   private String value;

@@ -8,7 +8,7 @@ import hr.fer.zemris.ppj.automaton.Automaton;
 /**
  * Class for storing lexical analyzer states with all of regular definitions related to it.
  * 
- * @author Ivan Trubić
+ * @author Ivan Trubic
  */
 public class LexicalAnalyzerState {
   private String name;

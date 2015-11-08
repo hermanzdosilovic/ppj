@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Structure for storing list of actions for certain regular expressions
  * 
- * @author Ivan Trubić
+ * @author Ivan Trubic
  */
 public class RegexAction {
   private String definition;
