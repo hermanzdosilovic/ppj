@@ -1,45 +1,73 @@
 package hr.fer.zemris.ppj.lab1;
 
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 import hr.fer.zemris.ppj.regex.Regex;
 
 public final class GLA {
+  GeneratorInputDefinition inputDefinition;
+  Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
+  LexicalAnalyzerState initialState;
 
   public static void main(String[] args) throws Exception {
-    System.setIn(new FileInputStream("MinusLang.in"));
+    GLA gla = new GLA();
+    gla.start();
+  }
 
-    GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition();
-    Map<String, LexicalAnalyzerState> rules = inputDefinition.getLexicalState();
-    LexicalAnalyzerState initialState = inputDefinition.getInitialAnalyzerState();
+  public GLA() throws IOException {
+    this(System.in);
+  }
 
+  public GLA(InputStream stream) throws IOException {
+    inputDefinition = new GeneratorInputDefinition(stream);
+  }
+
+  public GLA(List<String> inputLines) {
+    inputDefinition = new GeneratorInputDefinition(inputLines);
+  }
+
+  public void start() throws FileNotFoundException {
+    inputDefinition.parseDefinition();
+    lexicalAnalyzerStateTable = inputDefinition.getLexicalAnalyzerStateTable();
+    initialState = inputDefinition.getInitialLexicalAnalyzerState();
+
+    generateAnalyzerDefinition();
+    generateAnalyzerAction();
+  }
+
+  private void generateAnalyzerDefinition() throws FileNotFoundException {
     PrintWriter writer = new PrintWriter("analyzer_definition.txt");
-    writer.println(initialState.getName());
-    for (Map.Entry<String, LexicalAnalyzerState> entry : rules.entrySet()) {
-      LexicalAnalyzerState state = entry.getValue();
-      for (RegexAction action : state.getRegexActions()) {
-        writer.println(state.getName());
-        writer.println((new Regex(action.getRegex())).toString());
+    writer.println(initialState);
+    for (LexicalAnalyzerState state : lexicalAnalyzerStateTable.values()) {
+      for (Regex regex : state.getRegexes()) {
+        writer.println(state);
+        writer.println(regex);
       }
     }
     writer.close();
+  }
 
-    PrintWriter java = new PrintWriter("src/main/hr/fer/zemris/ppj/lab1/analyizer/AnalyzerAction.java");
-    java.println("package hr.fer.zemris.ppj.lab1.analyizer;\n");
+  private void generateAnalyzerAction() throws FileNotFoundException {
+    PrintWriter java =
+        new PrintWriter("src/main/hr/fer/zemris/ppj/lab1/analyzer/AnalyzerAction.java");
+    java.println("package hr.fer.zemris.ppj.lab1.analyzer;\n");
     java.println("public class AnalyzerAction {");
     java.println("  public static void performAction(LA analyzer) {");
     java.println("    String state = analyzer.getState().getName();");
     java.println("    int automatonIndex = analyzer.getAutomatonIndex();\n");
 
-    for (Map.Entry<String, LexicalAnalyzerState> entry : rules.entrySet()) {
+    for (LexicalAnalyzerState state : lexicalAnalyzerStateTable.values()) {
       int index = 0;
-      LexicalAnalyzerState state = entry.getValue();
-      for (RegexAction regex : state.getRegexActions()) {
+      Map<Regex, List<String>> regexActionsTable = state.getRegexActionsTable();
+      for (Regex regex : state.getRegexes()) {
         java.print("    if (state.equals(\"" + state.getName() + "\")");
-        java.println("&& automatonIndex == " + index + ") {");
-        for (String action : regex.getActionsList()) {
+        java.println(" && automatonIndex == " + index + ") {");
+        for (String action : regexActionsTable.get(regex)) {
           java.println(resolveCommand(action));
         }
         java.println("    }");
@@ -51,16 +79,20 @@ public final class GLA {
     java.close();
   }
 
-  private static String resolveCommand(String line) {
+  private String resolveCommand(String line) {
     String[] parsedLine = line.split(" ");
-    if (parsedLine[0].equals("-"))
+    if (parsedLine[0].equals("-")) {
       return "      analyzer.reject();";
-    if (parsedLine[0].equals("NOVI_REDAK"))
+    }
+    if (parsedLine[0].equals("NOVI_REDAK")) {
       return "      analyzer.newLine();";
-    if (parsedLine[0].equals("UDJI_U_STANJE"))
+    }
+    if (parsedLine[0].equals("UDJI_U_STANJE")) {
       return "      analyzer.setState(\"" + parsedLine[1] + "\");";
-    if (parsedLine[0].equals("VRATI_SE"))
+    }
+    if (parsedLine[0].equals("VRATI_SE")) {
       return "      analyzer.returnTo(" + parsedLine[1] + ");";
+    }
     return "      analyzer.setLexicalUnit(\"" + parsedLine[0] + "\");";
   }
 }

@@ -14,10 +14,8 @@ import java.util.Set;
  * set via setters. Automaton has to be prepared before running by calling {@link #prepareForRun()}.
  * This automaton can read one character at the time when {@link #makeTransitions(char)} is called.
  * 
- * @author ikrpelnik
- *
+ * @author Ivan Krpelnik
  */
-
 public class Automaton {
 
   private Integer numberOfStates;
