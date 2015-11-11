@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import hr.fer.zemris.ppj.automaton.Automaton;
+import hr.fer.zemris.ppj.automaton.SimpleAutomaton;
 import hr.fer.zemris.ppj.regex.Regex;
 
 /**
@@ -15,7 +15,7 @@ import hr.fer.zemris.ppj.regex.Regex;
  */
 public class LexicalAnalyzerState {
   private String name;
-  private List<Automaton> automatons;
+  private List<SimpleAutomaton> automatons;
   private Map<Regex, List<String>> regexActionsTable;
   private List<Regex> regexes;
 
@@ -27,14 +27,14 @@ public class LexicalAnalyzerState {
   }
 
   public void prepareForRun() {
-    for (Automaton automaton : automatons) {
+    for (SimpleAutomaton automaton : automatons) {
       automaton.prepareForRun();
     }
   }
 
   public boolean readCharacter(char character) {
     boolean isAlive = false;
-    for (Automaton automaton : automatons) {
+    for (SimpleAutomaton automaton : automatons) {
       automaton.makeTransitions(character);
       isAlive |= automaton.isAlive();
     }
@@ -57,7 +57,7 @@ public class LexicalAnalyzerState {
     return null;
   }
 
-  public boolean addAutomaton(Automaton automaton) {
+  public boolean addAutomaton(SimpleAutomaton automaton) {
     return automatons.add(automaton);
   }
 
@@ -72,7 +72,7 @@ public class LexicalAnalyzerState {
     return regexActionsTable.get(regex).add(action);
   }
 
-  public List<Automaton> getAutomatons() {
+  public List<SimpleAutomaton> getAutomatons() {
     return automatons;
   }
 

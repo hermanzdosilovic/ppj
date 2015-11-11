@@ -1,15 +1,15 @@
 package hr.fer.zemris.ppj.automaton;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class AutomatonTest {
+public class SimpleAutomatonTest {
 
   @Test
   public void basicAutomatonTest() {
-    Automaton automaton = new Automaton();
+    SimpleAutomaton automaton = new SimpleAutomaton();
     int[] s = new int[10];
     for (int i = 0; i < 10; i++) {
       s[i] = automaton.makeNewState();

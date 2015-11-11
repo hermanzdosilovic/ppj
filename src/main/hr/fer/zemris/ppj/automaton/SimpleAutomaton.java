@@ -16,7 +16,7 @@ import java.util.Set;
  * 
  * @author Ivan Krpelnik
  */
-public class Automaton {
+public class SimpleAutomaton {
 
   private Integer numberOfStates;
   private Integer startState;
@@ -30,7 +30,7 @@ public class Automaton {
    * 
    * @param numberOfStates - number of initial states of this automaton.
    */
-  public Automaton(int numberOfStates) {
+  public SimpleAutomaton(int numberOfStates) {
     this.numberOfStates = numberOfStates;
     this.transitions = new HashMap<>();
     this.epsilonTransitions = new HashMap<>();
@@ -40,7 +40,7 @@ public class Automaton {
   /**
    * Constructs this Automaton with 0 states.
    */
-  public Automaton() {
+  public SimpleAutomaton() {
     this(0);
   }
 
@@ -268,8 +268,8 @@ public class Automaton {
       return true;
     }
 
-    private Automaton getOuterType() {
-      return Automaton.this;
+    private SimpleAutomaton getOuterType() {
+      return SimpleAutomaton.this;
     }
 
   }
