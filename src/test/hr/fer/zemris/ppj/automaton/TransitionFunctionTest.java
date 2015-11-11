@@ -47,6 +47,7 @@ public class TransitionFunctionTest {
     transitionFunction.addTransition(1, 'c', 1);
     
     assertEquals(Arrays.asList('a', 'b', 'c'), new ArrayList<>(transitionFunction.getTransitionSymbols(1)));
+    assertNull(transitionFunction.getTransitionSymbols(2));
   }
   
   @Test
