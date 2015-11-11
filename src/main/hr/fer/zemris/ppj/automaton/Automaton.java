@@ -55,4 +55,13 @@ public class Automaton<S, C extends ISymbol> {
 
     return epsilonClosure;
   }
+  
+  
+  public Collection<S> epsilonClosure(final Collection<S> states) {
+    Set<S> epsilonClosure = new HashSet<>();
+    for (S state : states) {
+      epsilonClosure.addAll(epsilonClosure(state));
+    }
+    return epsilonClosure;
+  }
 }
