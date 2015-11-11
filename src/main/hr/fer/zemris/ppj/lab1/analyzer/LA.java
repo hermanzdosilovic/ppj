@@ -14,7 +14,6 @@ import java.util.Map;
 import hr.fer.zemris.ppj.lab1.LexicalAnalyzerState;
 
 public final class LA {
-
   private LexicalAnalyzerState initialLexicalAnalyzerState;
   private LexicalAnalyzerState currentLexicalAnalyzerState;
   private Map<String, LexicalAnalyzerState> lexicalAnalyzerStateTable;
@@ -32,8 +31,8 @@ public final class LA {
   private List<String> output = new ArrayList<>();
 
   public static void main(String[] args) throws IOException {
-    LA lexicalAnalyzer = new LA(new FileInputStream(new File("analyzer_definition.txt")),
-        new FileInputStream(new File("ml.txt")));
+    LA lexicalAnalyzer =
+        new LA(new FileInputStream(new File("analyzer_definition.txt")), System.in);
     lexicalAnalyzer.analyzeSourceCode();
     lexicalAnalyzer.printOutput();
   }
@@ -144,7 +143,8 @@ public final class LA {
   }
 
   public void readAnalyzerDefinition(List<String> definitionLines) {
-    LexicalAnalyzerInputDefinition analyzerInputDefinition = new LexicalAnalyzerInputDefinition(definitionLines);
+    LexicalAnalyzerInputDefinition analyzerInputDefinition =
+        new LexicalAnalyzerInputDefinition(definitionLines);
     setDefinitionObjects(analyzerInputDefinition);
   }
 
