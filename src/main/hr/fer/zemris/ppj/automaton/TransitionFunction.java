@@ -8,7 +8,6 @@ import java.util.Map;
 import hr.fer.zemris.ppj.Pair;
 
 /**
- * 
  * @author Herman Zvonimir Dosilovic
  *
  * @param <S> source/destination
