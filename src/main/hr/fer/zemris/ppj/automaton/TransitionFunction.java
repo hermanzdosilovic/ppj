@@ -40,9 +40,6 @@ public class TransitionFunction<S, C> {
 
   public Collection<S> getTransitionStates(S source, C input) {
     Pair<S, C> pair = new Pair<>(source, input);
-    if (!transitionTable.containsKey(pair)) {
-      return null;
-    }
     return transitionTable.get(pair);
   }
 
