@@ -2,9 +2,9 @@ package hr.fer.zemris.ppj.automaton;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author Herman Zvonimir Dosilovic
@@ -31,7 +31,7 @@ public class Automaton<S, C extends ISymbol> {
 
   public Collection<S> epsilonClosure(final S state) {
     Set<S> epsilonClosure = new HashSet<>();
-    Queue<S> queue = new LinkedBlockingQueue<>();
+    Queue<S> queue = new LinkedList<>();
 
     queue.add(state);
     while (!queue.isEmpty()) {
