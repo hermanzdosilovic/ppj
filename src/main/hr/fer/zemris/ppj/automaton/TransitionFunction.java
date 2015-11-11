@@ -27,20 +27,14 @@ public class TransitionFunction<S, C> {
   public boolean addTransition(S source, C input, S destination) {
     Pair<S, C> pair = new Pair<>(source, input);
     if (!transitionTable.containsKey(pair)) {
-      transitionTable.put(pair, new ArrayList<>());
+      transitionTable.put(pair, new HashSet<>());
     }
-    
     addSymbolForSource(source, input);
-
-    if (transitionTable.get(pair).contains(destination)) {
-      return false;
-    }
     return transitionTable.get(pair).add(destination);
   }
 
   public Collection<S> getTransitionStates(S source, C input) {
-    Pair<S, C> pair = new Pair<>(source, input);
-    return transitionTable.get(pair);
+    return transitionTable.get(new Pair<>(source, input));
   }
 
   public Collection<C> getTransitionSymbols(S source) {

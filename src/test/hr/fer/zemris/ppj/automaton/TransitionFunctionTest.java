@@ -33,7 +33,7 @@ public class TransitionFunctionTest {
     transitionFunction.addTransition(1, 'a', 3);
     transitionFunction.addTransition(1, 'a', 1);
 
-    assertEquals(Arrays.asList(2, 3, 1), new ArrayList<>(transitionFunction.getTransitionStates(1, 'a')));
+    assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(transitionFunction.getTransitionStates(1, 'a')));
     assertNull(transitionFunction.getTransitionStates(1, 'b'));
   }
 
