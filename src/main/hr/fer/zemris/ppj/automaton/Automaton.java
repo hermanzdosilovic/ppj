@@ -32,11 +32,11 @@ public class Automaton<S, C extends ISymbol> {
   public Collection<S> epsilonClosure(final S state) {
     Set<S> epsilonClosure = new HashSet<>();
     Queue<S> queue = new LinkedList<>();
-
+    
+    epsilonClosure.add(state);
     queue.add(state);
     while (!queue.isEmpty()) {
       S head = queue.poll();
-      epsilonClosure.add(head);
       if (transitionFunction.getTransitionSymbols(head) == null) {
         continue;
       }
@@ -47,6 +47,7 @@ public class Automaton<S, C extends ISymbol> {
         for (S neighbour : transitionFunction.getTransitionStates(head, symbol)) {
           if (!epsilonClosure.contains(neighbour)) {
             queue.add(neighbour);
+            epsilonClosure.add(neighbour);
           }
         }
       }
