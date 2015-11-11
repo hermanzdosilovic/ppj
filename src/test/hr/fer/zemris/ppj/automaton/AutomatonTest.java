@@ -85,6 +85,21 @@ public class AutomatonTest {
     assertEquals(Arrays.asList(1), new ArrayList<>(automaton.epsilonClosure(1)));
   }
   
+  @Test
+  public void epsilonClosureOfCycledGraphWithEpsilonTransitions() {
+    TransitionFunction<Integer, BasicSymbol> transitionFunction = new TransitionFunction<>();
+    BasicSymbol epsilonSymbol = new BasicSymbol(BasicSymbol.EPSILON_SYMBOL_VALUE);
+    
+    transitionFunction.addTransition(1, epsilonSymbol, 2);
+    transitionFunction.addTransition(2, epsilonSymbol, 3);
+    transitionFunction.addTransition(3, epsilonSymbol, 1);
+    
+    Automaton<Integer, BasicSymbol> automaton = new Automaton<>(Arrays.asList(1, 2, 3), transitionFunction, 1, Arrays.asList(1));
+    assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(1)));
+    assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(2)));
+    assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(3)));
+  }
+  
   private class BasicSymbol implements ISymbol {
 
     public static final String EPSILON_SYMBOL_VALUE = "<epsilon>";
