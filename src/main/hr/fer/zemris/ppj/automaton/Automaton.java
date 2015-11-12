@@ -29,10 +29,14 @@ public class Automaton<S, C> {
     this.currentStates = new HashSet<>(epsilonClosure(initialState));
   }
   
+  public Collection<S> getCurrentStates() {
+    return currentStates;
+  }
+  
   public Collection<S> read(final C symbol) {
     Set<S> newStates = new HashSet<>();
     for (S currentState : currentStates) {
-      states.addAll(epsilonClosure(transitionFunction.getTransitionResult(currentState, symbol)));
+      newStates.addAll(epsilonClosure(transitionFunction.getTransitionResult(currentState, symbol)));
     }
     currentStates = new HashSet<>(newStates);
     return currentStates;
