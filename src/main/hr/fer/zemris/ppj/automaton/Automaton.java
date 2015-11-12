@@ -108,4 +108,10 @@ public class Automaton<S, C> {
     
     return reachableStates;
   }
+  
+  public Collection<S> getUnreachableStates() {
+    Set<S> unreachableStates = new HashSet<>(states);
+    unreachableStates.removeAll(getReachableStates());
+    return unreachableStates;
+  }
 }

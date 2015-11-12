@@ -223,4 +223,21 @@ public class AutomatonTest {
         new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.getReachableStates()));
   }
+  
+  @Test
+  public void getUneachableStatesTest() {
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
+    transitionFunction.addTransition(1, 'a', 2);
+    transitionFunction.addTransition(1, 'b', 3);
+    transitionFunction.addTransition(2, 'c', 3);
+    transitionFunction.addEpsilonTransition(2, 1);
+
+    transitionFunction.addTransition(4, 'd', 3);
+    transitionFunction.addTransition(5, 'e', 4);
+    transitionFunction.addEpsilonTransition(5, 2);
+
+    Automaton<Integer, Character> automaton =
+        new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), transitionFunction, 1, Arrays.asList(1));
+    assertEquals(Arrays.asList(4, 5), new ArrayList<>(automaton.getUnreachableStates()));
+  }
 }
