@@ -81,4 +81,8 @@ public class Automaton<S, C> {
     }
     return epsilonClosure;
   }
+  
+  public TransitionFunction<S, C> getTransitionFunction() {
+    return transitionFunction;
+  }
 }
