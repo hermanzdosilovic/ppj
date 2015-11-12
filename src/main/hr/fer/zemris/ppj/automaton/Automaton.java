@@ -33,6 +33,13 @@ public class Automaton<S, C> {
     return currentStates;
   }
   
+  public Collection<S> read(final Collection<C> symbols) {
+    for (C symbol : symbols) {
+      read(symbol);
+    }
+    return currentStates;
+  }
+  
   public Collection<S> read(final C symbol) {
     Set<S> newStates = new HashSet<>();
     for (S currentState : currentStates) {
