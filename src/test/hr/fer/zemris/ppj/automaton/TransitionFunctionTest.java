@@ -1,9 +1,8 @@
 package hr.fer.zemris.ppj.automaton;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,29 +26,16 @@ public class TransitionFunctionTest {
   }
 
   @Test
-  public void getTransitionStatesTest() {
+  public void addEpsilonTransitionTest() {
     TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
-    transitionFunction.addTransition(1, 'a', 2);
-    transitionFunction.addTransition(1, 'a', 3);
-    transitionFunction.addTransition(1, 'a', 1);
 
-    assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(transitionFunction.getTransitionStates(1, 'a')));
-    assertNull(transitionFunction.getTransitionStates(1, 'b'));
+    assertTrue(transitionFunction.addEpsilonTransition(1, 2));
+    assertFalse(transitionFunction.addEpsilonTransition(1, 2));
+
+    assertTrue(transitionFunction.addEpsilonTransition(1, 3));
+    assertFalse(transitionFunction.addEpsilonTransition(1, 3));
   }
 
-  @Test
-  public void getTransitionSymbolsTest() {
-    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
-    transitionFunction.addTransition(1, 'b', 2);
-    transitionFunction.addTransition(1, 'a', 4);
-    transitionFunction.addTransition(1, 'c', 3);
-    transitionFunction.addTransition(1, 'b', 5);
-    transitionFunction.addTransition(1, 'c', 1);
-    
-    assertEquals(Arrays.asList('a', 'b', 'c'), new ArrayList<>(transitionFunction.getTransitionSymbols(1)));
-    assertNull(transitionFunction.getTransitionSymbols(2));
-  }
-  
   @Test
   public void existsTransitionTest() {
     TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
@@ -59,5 +45,40 @@ public class TransitionFunctionTest {
 
     assertTrue(transitionFunction.existsTransition(1, 'a'));
     assertFalse(transitionFunction.existsTransition(1, 'b'));
+  }
+
+  @Test
+  public void existsEpsilonTransition() {
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
+    transitionFunction.addEpsilonTransition(1, 1);
+    transitionFunction.addEpsilonTransition(1, 2);
+    transitionFunction.addEpsilonTransition(1, 4);
+    transitionFunction.addEpsilonTransition(2, 3);
+    transitionFunction.addEpsilonTransition(3, 1);
+
+    assertTrue(transitionFunction.existsEpsilonTransition(1, 1));
+    assertTrue(transitionFunction.existsEpsilonTransition(1, 2));
+    assertTrue(transitionFunction.existsEpsilonTransition(1, 4));
+    assertTrue(transitionFunction.existsEpsilonTransition(2, 3));
+    assertTrue(transitionFunction.existsEpsilonTransition(3, 1));
+
+    assertFalse(transitionFunction.existsEpsilonTransition(4, 1));
+    assertFalse(transitionFunction.existsEpsilonTransition(2, 1));
+    assertFalse(transitionFunction.existsEpsilonTransition(3, 2));
+    assertFalse(transitionFunction.existsEpsilonTransition(1, 3));
+  }
+
+  @Test
+  public void getEpsilonNeighboursTest() {
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
+    transitionFunction.addEpsilonTransition(1, 2);
+    transitionFunction.addTransition(1, 'a', 3);
+    transitionFunction.addEpsilonTransition(1, 4);
+    transitionFunction.addTransition(2, 'b', 3);
+    transitionFunction.addTransition(3, 'c', 1);
+
+    assertEquals(Arrays.asList(2, 4), new ArrayList<>(transitionFunction.getEpsilonNeighbours(1)));
+    assertEquals(Arrays.asList(), new ArrayList<>(transitionFunction.getEpsilonNeighbours(2)));
+    assertEquals(Arrays.asList(), new ArrayList<>(transitionFunction.getEpsilonNeighbours(3)));
   }
 }

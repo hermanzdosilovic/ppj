@@ -11,17 +11,16 @@ public class AutomatonTest {
   
   @Test
   public void epsilonClosureOfOneStateBasicTest() {
-    TransitionFunction<Integer, BasicSymbol> transitionFunction = new TransitionFunction<>();
-    BasicSymbol epsilonSymbol = new BasicSymbol(BasicSymbol.EPSILON_SYMBOL_VALUE);
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
     
-    transitionFunction.addTransition(1, epsilonSymbol, 2);
-    transitionFunction.addTransition(1, new BasicSymbol("a"), 3);
-    transitionFunction.addTransition(2, new BasicSymbol("b"), 3);
-    transitionFunction.addTransition(2, epsilonSymbol, 5);
-    transitionFunction.addTransition(3, epsilonSymbol, 4);
-    transitionFunction.addTransition(4, epsilonSymbol, 2);
+    transitionFunction.addEpsilonTransition(1, 2);
+    transitionFunction.addTransition(1, 'a', 3);
+    transitionFunction.addTransition(2, 'b', 3);
+    transitionFunction.addEpsilonTransition(2, 5);
+    transitionFunction.addEpsilonTransition(3, 4);
+    transitionFunction.addEpsilonTransition(4, 2);
     
-    Automaton<Integer, BasicSymbol> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), transitionFunction, 1, Arrays.asList(1));
+    Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2, 5), new ArrayList<>(automaton.epsilonClosure(1)));
     assertEquals(Arrays.asList(2, 5), new ArrayList<>(automaton.epsilonClosure(2)));
     assertEquals(Arrays.asList(2, 3, 4, 5), new ArrayList<>(automaton.epsilonClosure(3)));
@@ -31,16 +30,15 @@ public class AutomatonTest {
   
   @Test
   public void epsilonClosureOfOneStateAdvancedTest() {
-    TransitionFunction<Integer, BasicSymbol> transitionFunction = new TransitionFunction<>();
-    BasicSymbol epsilonSymbol = new BasicSymbol(BasicSymbol.EPSILON_SYMBOL_VALUE);
+    TransitionFunction<Integer, String> transitionFunction = new TransitionFunction<>();
     
-    transitionFunction.addTransition(1, epsilonSymbol, 1);
-    transitionFunction.addTransition(1, new BasicSymbol("b"), 2);
-    transitionFunction.addTransition(2, epsilonSymbol, 1);
-    transitionFunction.addTransition(2, new BasicSymbol("c"), 3);
-    transitionFunction.addTransition(3, epsilonSymbol, 2);
+    transitionFunction.addEpsilonTransition(1, 1);
+    transitionFunction.addTransition(1, "b", 2);
+    transitionFunction.addEpsilonTransition(2, 1);
+    transitionFunction.addTransition(2, "c", 3);
+    transitionFunction.addEpsilonTransition(3, 2);
     
-    Automaton<Integer, BasicSymbol> automaton = new Automaton<>(Arrays.asList(1, 2, 3), transitionFunction, 1, Arrays.asList(1));
+    Automaton<Integer, String> automaton = new Automaton<>(Arrays.asList(1, 2, 3), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1), new ArrayList<>(automaton.epsilonClosure(1)));
     assertEquals(Arrays.asList(1, 2), new ArrayList<>(automaton.epsilonClosure(2)));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(3)));
@@ -48,17 +46,16 @@ public class AutomatonTest {
   
   @Test
   public void epsilonClosureOfMultipleStatesTest() {
-    TransitionFunction<Integer, BasicSymbol> transitionFunction = new TransitionFunction<>();
-    BasicSymbol epsilonSymbol = new BasicSymbol(BasicSymbol.EPSILON_SYMBOL_VALUE);
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
     
-    transitionFunction.addTransition(1, epsilonSymbol, 2);
-    transitionFunction.addTransition(1, new BasicSymbol("a"), 3);
-    transitionFunction.addTransition(2, new BasicSymbol("b"), 3);
-    transitionFunction.addTransition(2, epsilonSymbol, 5);
-    transitionFunction.addTransition(3, epsilonSymbol, 4);
-    transitionFunction.addTransition(4, epsilonSymbol, 2);
+    transitionFunction.addEpsilonTransition(1, 2);
+    transitionFunction.addTransition(1, 'a', 3);
+    transitionFunction.addTransition(2, 'b', 3);
+    transitionFunction.addEpsilonTransition(2, 5);
+    transitionFunction.addEpsilonTransition(3, 4);
+    transitionFunction.addEpsilonTransition(4, 2);
     
-    Automaton<Integer, BasicSymbol> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), transitionFunction, 1, Arrays.asList(1));
+    Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2, 5), new ArrayList<>(automaton.epsilonClosure(Arrays.asList(1, 2))));
     assertEquals(Arrays.asList(1, 2, 3, 4, 5), new ArrayList<>(automaton.epsilonClosure(Arrays.asList(1, 3))));
     assertEquals(Arrays.asList(1, 2, 4, 5), new ArrayList<>(automaton.epsilonClosure(Arrays.asList(1, 4))));
@@ -76,74 +73,26 @@ public class AutomatonTest {
   
   @Test
   public void epsilonClosureOfOneStateWithNoEpsilonTransitions() {
-    TransitionFunction<Integer, BasicSymbol> transitionFunction = new TransitionFunction<>();
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
     
-    transitionFunction.addTransition(1, new BasicSymbol("b"), 2);
-    transitionFunction.addTransition(1, new BasicSymbol("c"), 3);
+    transitionFunction.addTransition(1, 'b', 2);
+    transitionFunction.addTransition(1, 'c', 3);
     
-    Automaton<Integer, BasicSymbol> automaton = new Automaton<>(Arrays.asList(1, 2, 3), transitionFunction, 1, Arrays.asList(1));
+    Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1), new ArrayList<>(automaton.epsilonClosure(1)));
   }
   
   @Test
   public void epsilonClosureOfCycledGraphWithEpsilonTransitions() {
-    TransitionFunction<Integer, BasicSymbol> transitionFunction = new TransitionFunction<>();
-    BasicSymbol epsilonSymbol = new BasicSymbol(BasicSymbol.EPSILON_SYMBOL_VALUE);
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
     
-    transitionFunction.addTransition(1, epsilonSymbol, 2);
-    transitionFunction.addTransition(2, epsilonSymbol, 3);
-    transitionFunction.addTransition(3, epsilonSymbol, 1);
+    transitionFunction.addEpsilonTransition(1, 2);
+    transitionFunction.addEpsilonTransition(2, 3);
+    transitionFunction.addEpsilonTransition(3, 1);
     
-    Automaton<Integer, BasicSymbol> automaton = new Automaton<>(Arrays.asList(1, 2, 3), transitionFunction, 1, Arrays.asList(1));
+    Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(1)));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(2)));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(3)));
-  }
-  
-  private class BasicSymbol implements ISymbol {
-
-    public static final String EPSILON_SYMBOL_VALUE = "<epsilon>";
-    private String value;
-
-    public BasicSymbol(final String value) {
-      this.value = value;
-    }
-
-    @Override
-    public boolean isEpsilonSymbol() {
-      return value.equals(EPSILON_SYMBOL_VALUE);
-    }
-
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + getOuterType().hashCode();
-      result = prime * result + ((value == null) ? 0 : value.hashCode());
-      return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      BasicSymbol other = (BasicSymbol) obj;
-      if (!getOuterType().equals(other.getOuterType()))
-        return false;
-      if (value == null) {
-        if (other.value != null)
-          return false;
-      } else if (!value.equals(other.value))
-        return false;
-      return true;
-    }
-
-    private AutomatonTest getOuterType() {
-      return AutomatonTest.this;
-    }
   }
 }
