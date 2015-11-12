@@ -10,7 +10,7 @@ import java.util.Set;
  * @author Herman Zvonimir Dosilovic
  *
  * @param <S> the type of states of this automaton
- * @param <C>
+ * @param <C> the type of input symbols which this automaton reads
  */
 public class Automaton<S, C> {
   private Set<S> states;
@@ -19,9 +19,8 @@ public class Automaton<S, C> {
   private Set<S> currentStates;
   private Set<S> acceptableStates;
 
-  public Automaton(final Collection<S> states,
-      final TransitionFunction<S, C> transitionFunction, final S initialState,
-      final Collection<S> acceptableStates) {
+  public Automaton(final Collection<S> states, final TransitionFunction<S, C> transitionFunction,
+      final S initialState, final Collection<S> acceptableStates) {
     this.states = new HashSet<>(states);
     this.transitionFunction = transitionFunction;
     this.initialState = initialState;
@@ -29,7 +28,16 @@ public class Automaton<S, C> {
 
     this.currentStates = new HashSet<>(epsilonClosure(initialState));
   }
-
+  
+  public Collection<S> read(final C symbol) {
+    Set<S> newStates = new HashSet<>();
+    for (S currentState : currentStates) {
+      states.addAll(epsilonClosure(transitionFunction.getTransitionResult(currentState, symbol)));
+    }
+    currentStates = new HashSet<>(newStates);
+    return currentStates;
+  }
+  
   public Collection<S> epsilonClosure(final S state) {
     Set<S> epsilonClosure = new HashSet<>();
     Queue<S> queue = new LinkedList<>();
@@ -38,7 +46,7 @@ public class Automaton<S, C> {
     queue.add(state);
     while (!queue.isEmpty()) {
       S head = queue.poll();
-      for (S neighbour : transitionFunction.getEpsilonNeighbours(head)) {
+      for (S neighbour : transitionFunction.getEpsilonTransitionResult(head)) {
         if (!epsilonClosure.contains(neighbour)) {
           queue.add(neighbour);
           epsilonClosure.add(neighbour);
@@ -48,7 +56,6 @@ public class Automaton<S, C> {
 
     return epsilonClosure;
   }
-
 
   public Collection<S> epsilonClosure(final Collection<S> states) {
     Set<S> epsilonClosure = new HashSet<>();

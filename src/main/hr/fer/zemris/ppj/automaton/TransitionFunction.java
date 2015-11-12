@@ -38,21 +38,26 @@ public class TransitionFunction<S, C> {
     return epsilonTransitionTable.get(source).add(destination);
   }
 
-  public boolean existsTransition(S source, C input) {
-    return transitionTable.get(new Pair<>(source, input)) != null;
-  }
-  
-  public boolean existsEpsilonTransition(S source, S destination) {
-    if (!epsilonTransitionTable.containsKey(source)) {
-      return false;
+  public Collection<S> getTransitionResult(S source, C input) {
+    Pair<S, C> pair = new Pair<>(source, input);
+    if (!transitionTable.containsKey(pair)) {
+      return new HashSet<>();
     }
-    return epsilonTransitionTable.get(source).contains(destination);
+    return transitionTable.get(pair);
   }
   
-  public Collection<S> getEpsilonNeighbours(S source) {
+  public Collection<S> getEpsilonTransitionResult(S source) {
     if (!epsilonTransitionTable.containsKey(source)) {
       return new HashSet<>();
     }
     return epsilonTransitionTable.get(source);
+  }
+
+  public boolean existsTransition(S source, C input) {
+    return !getTransitionResult(source, input).isEmpty();
+  }
+
+  public boolean existsEpsilonTransition(S source, S destination) {
+    return getEpsilonTransitionResult(source).contains(destination);
   }
 }

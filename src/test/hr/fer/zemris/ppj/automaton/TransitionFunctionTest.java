@@ -68,8 +68,7 @@ public class TransitionFunctionTest {
     assertFalse(transitionFunction.existsEpsilonTransition(1, 3));
   }
 
-  @Test
-  public void getEpsilonNeighboursTest() {
+  public void getTransitionResultTest() {
     TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
     transitionFunction.addEpsilonTransition(1, 2);
     transitionFunction.addTransition(1, 'a', 3);
@@ -77,8 +76,32 @@ public class TransitionFunctionTest {
     transitionFunction.addTransition(2, 'b', 3);
     transitionFunction.addTransition(3, 'c', 1);
 
-    assertEquals(Arrays.asList(2, 4), new ArrayList<>(transitionFunction.getEpsilonNeighbours(1)));
-    assertEquals(Arrays.asList(), new ArrayList<>(transitionFunction.getEpsilonNeighbours(2)));
-    assertEquals(Arrays.asList(), new ArrayList<>(transitionFunction.getEpsilonNeighbours(3)));
+    assertEquals(Arrays.asList(3),
+        new ArrayList<>(transitionFunction.getTransitionResult(1, 'a')));
+    assertEquals(Arrays.asList(3),
+        new ArrayList<>(transitionFunction.getTransitionResult(2, 'b')));
+    assertEquals(Arrays.asList(1),
+        new ArrayList<>(transitionFunction.getTransitionResult(3, 'c')));
+    
+    transitionFunction.addTransition(1, 'a', 2);
+    assertEquals(Arrays.asList(2, 3),
+        new ArrayList<>(transitionFunction.getTransitionResult(1, 'a')));
+  }
+
+  @Test
+  public void getEpsilonTransitionResultTest() {
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
+    transitionFunction.addEpsilonTransition(1, 2);
+    transitionFunction.addTransition(1, 'a', 3);
+    transitionFunction.addEpsilonTransition(1, 4);
+    transitionFunction.addTransition(2, 'b', 3);
+    transitionFunction.addTransition(3, 'c', 1);
+
+    assertEquals(Arrays.asList(2, 4),
+        new ArrayList<>(transitionFunction.getEpsilonTransitionResult(1)));
+    assertEquals(Arrays.asList(),
+        new ArrayList<>(transitionFunction.getEpsilonTransitionResult(2)));
+    assertEquals(Arrays.asList(),
+        new ArrayList<>(transitionFunction.getEpsilonTransitionResult(3)));
   }
 }
