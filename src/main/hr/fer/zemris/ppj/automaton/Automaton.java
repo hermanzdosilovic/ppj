@@ -28,27 +28,33 @@ public class Automaton<S, C> {
 
     this.currentStates = new HashSet<>(epsilonClosure(initialState));
   }
-  
+
+  public Collection<S> reload() {
+    currentStates = new HashSet<>(epsilonClosure(initialState));
+    return currentStates;
+  }
+
   public Collection<S> getCurrentStates() {
     return currentStates;
   }
-  
+
   public Collection<S> read(final Collection<C> symbols) {
     for (C symbol : symbols) {
       read(symbol);
     }
     return currentStates;
   }
-  
+
   public Collection<S> read(final C symbol) {
     Set<S> newStates = new HashSet<>();
     for (S currentState : currentStates) {
-      newStates.addAll(epsilonClosure(transitionFunction.getTransitionResult(currentState, symbol)));
+      newStates
+          .addAll(epsilonClosure(transitionFunction.getTransitionResult(currentState, symbol)));
     }
     currentStates = new HashSet<>(newStates);
     return currentStates;
   }
-  
+
   public Collection<S> epsilonClosure(final S state) {
     Set<S> epsilonClosure = new HashSet<>();
     Queue<S> queue = new LinkedList<>();

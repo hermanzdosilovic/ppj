@@ -169,7 +169,7 @@ public class AutomatonTest {
         new Automaton<>(Arrays.asList(1, 2), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2), new ArrayList<>(automaton.read('a')));
   }
-  
+
   @Test
   public void readOneSymbolCycleWithNoEpsilonClosureTest() {
     TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
@@ -182,16 +182,28 @@ public class AutomatonTest {
     assertEquals(Arrays.asList(2, 3), new ArrayList<>(automaton.read('a')));
     assertEquals(Arrays.asList(1), new ArrayList<>(automaton.read('a')));
   }
-  
+
   @Test
   public void readSequenceBasicTest() {
     TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
     transitionFunction.addTransition(1, 'a', 2);
     transitionFunction.addEpsilonTransition(2, 3);
     transitionFunction.addTransition(2, 'b', 4);
-    
+
     Automaton<Integer, Character> automaton =
         new Automaton<>(Arrays.asList(1, 2, 3, 4), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(4), new ArrayList<>(automaton.read(Arrays.asList('a', 'b'))));
+  }
+
+  @Test
+  public void reloadTest() {
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
+    transitionFunction.addTransition(1, 'a', 2);
+
+    Automaton<Integer, Character> automaton =
+        new Automaton<>(Arrays.asList(1, 2), transitionFunction, 1, Arrays.asList(1));
+    automaton.read('a');
+    automaton.reload();
+    assertEquals(Arrays.asList(1), new ArrayList<>(automaton.getCurrentStates()));
   }
 }
