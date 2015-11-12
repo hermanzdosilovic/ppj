@@ -81,4 +81,19 @@ public class GeneratorInputDefinition {
     }
   }
 
+  public List<String> getNonterminalSymbols(){
+    return nonterminalSymbols;
+  }
+  
+  public List<String> getTerminalSymbols(){
+    return terminalSymbols;
+  }
+  
+  public List<String> getSynchronousTerminalSymbols(){
+    return synchronousTerminalSymbols;
+  }
+  
+  public HashMap<String, List<String>> getProductions(){
+    return productions;
+  }
 }
