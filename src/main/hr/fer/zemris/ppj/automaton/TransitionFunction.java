@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.automaton;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,5 +78,35 @@ public class TransitionFunction<S, C> {
       neighbourTable.put(source, new HashSet<>());
     }
     neighbourTable.get(source).add(destination);
+  }
+
+  public TransitionFunction<S, C> remove(final S source) {
+    return remove(Arrays.asList(source));
+  }
+
+  public TransitionFunction<S, C> remove(final Collection<S> sources) {
+    TransitionFunction<S, C> newTransitionFunction = new TransitionFunction<>();
+    for (Pair<S, C> pair : transitionTable.keySet()) {
+      S source = pair.getFirst();
+      C input = pair.getSecond();
+      for (S destination : transitionTable.get(pair)) {
+        if (!sources.contains(source) && !sources.contains(destination)) {
+          newTransitionFunction.addTransition(source, input, destination);
+        }
+      }
+    }
+
+    for (S source : epsilonTransitionTable.keySet()) {
+      for (S destination : epsilonTransitionTable.get(source)) {
+        if (!sources.contains(source) && !sources.contains(destination)) {
+          newTransitionFunction.addEpsilonTransition(source, destination);
+        }
+      }
+    }
+    return newTransitionFunction;
+  }
+
+  public TransitionFunction<S, C> copy() {
+    return remove(Arrays.asList());
   }
 }
