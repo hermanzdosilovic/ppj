@@ -223,7 +223,7 @@ public class AutomatonTest {
         new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.getReachableStates()));
   }
-  
+
   @Test
   public void getUneachableStatesTest() {
     TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();

@@ -109,4 +109,42 @@ public class TransitionFunction<S, C> {
   public TransitionFunction<S, C> copy() {
     return remove(Arrays.asList());
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result =
+        prime * result + ((epsilonTransitionTable == null) ? 0 : epsilonTransitionTable.hashCode());
+    result = prime * result + ((neighbourTable == null) ? 0 : neighbourTable.hashCode());
+    result = prime * result + ((transitionTable == null) ? 0 : transitionTable.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    TransitionFunction other = (TransitionFunction) obj;
+    if (epsilonTransitionTable == null) {
+      if (other.epsilonTransitionTable != null)
+        return false;
+    } else if (!epsilonTransitionTable.equals(other.epsilonTransitionTable))
+      return false;
+    if (neighbourTable == null) {
+      if (other.neighbourTable != null)
+        return false;
+    } else if (!neighbourTable.equals(other.neighbourTable))
+      return false;
+    if (transitionTable == null) {
+      if (other.transitionTable != null)
+        return false;
+    } else if (!transitionTable.equals(other.transitionTable))
+      return false;
+    return true;
+  }
 }

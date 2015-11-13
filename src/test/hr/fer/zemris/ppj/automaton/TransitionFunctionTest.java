@@ -1,15 +1,13 @@
 package hr.fer.zemris.ppj.automaton;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.Test;
-
-import com.sun.xml.internal.ws.policy.spi.AssertionCreationException;
 
 /**
  * @author Herman Zvonimir Dosilovic

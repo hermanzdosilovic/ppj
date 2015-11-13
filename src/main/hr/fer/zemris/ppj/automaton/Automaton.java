@@ -19,7 +19,7 @@ public class Automaton<S, C> {
   private Set<S> currentStates;
   private Set<S> acceptableStates;
   private Set<S> reachableStates;
-  
+
   public Automaton(final Collection<S> states, final TransitionFunction<S, C> transitionFunction,
       final S initialState, final Collection<S> acceptableStates) {
     this.states = new HashSet<>(states);
@@ -82,7 +82,7 @@ public class Automaton<S, C> {
     }
     return epsilonClosure;
   }
-  
+
   public TransitionFunction<S, C> getTransitionFunction() {
     return transitionFunction;
   }
@@ -91,7 +91,7 @@ public class Automaton<S, C> {
     if (reachableStates != null) {
       return reachableStates;
     }
-    
+
     reachableStates = new HashSet<>();
     Queue<S> queue = new LinkedList<>();
     queue.add(initialState);
@@ -105,13 +105,21 @@ public class Automaton<S, C> {
         }
       }
     }
-    
+
     return reachableStates;
   }
-  
+
   public Collection<S> getUnreachableStates() {
     Set<S> unreachableStates = new HashSet<>(states);
     unreachableStates.removeAll(getReachableStates());
     return unreachableStates;
+  }
+
+  public Collection<S> getAcceptableStates() {
+    return acceptableStates;
+  }
+
+  public S getInitialState() {
+    return initialState;
   }
 }
