@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GeneratorInputDefinition {
   
@@ -14,12 +15,11 @@ public class GeneratorInputDefinition {
   private List<String> nonterminalSymbols = new ArrayList<String>();
   private List<String> terminalSymbols = new ArrayList<String>();
   private List<String> synchronousTerminalSymbols = new ArrayList<String>();
-  private HashMap<String, List<String>> productions = new HashMap<String, List<String>>();
+  private Map<String, List<String>> productions = new HashMap<String, List<String>>();
   private int index = 0;
   
   public GeneratorInputDefinition() throws IOException{
     this(System.in);
-    
   }
   
   public GeneratorInputDefinition(InputStream stream) throws IOException{
@@ -29,7 +29,10 @@ public class GeneratorInputDefinition {
       line = input.readLine();
       inputLines.add(line);
     }
-    
+  }
+  
+  public GeneratorInputDefinition(List<String> inputLines){
+    this.inputLines = inputLines;
   }
   
   public void runGenerator(){
@@ -75,6 +78,8 @@ public class GeneratorInputDefinition {
         line = inputLines.get(index++);
         while(line != null && line.startsWith(" ")){
           productions.get(leftSide).add(line.substring(1));
+          if(index == inputLines.size())
+            break;
           line = inputLines.get(index++);
         }
       }
@@ -93,7 +98,7 @@ public class GeneratorInputDefinition {
     return synchronousTerminalSymbols;
   }
   
-  public HashMap<String, List<String>> getProductions(){
+  public Map<String, List<String>> getProductions(){
     return productions;
   }
 }
