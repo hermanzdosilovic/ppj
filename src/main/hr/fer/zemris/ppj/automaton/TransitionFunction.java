@@ -129,7 +129,7 @@ public class TransitionFunction<S, C> {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    TransitionFunction other = (TransitionFunction) obj;
+    TransitionFunction<?, ?> other = (TransitionFunction<?, ?>) obj;
     if (epsilonTransitionTable == null) {
       if (other.epsilonTransitionTable != null)
         return false;

@@ -122,4 +122,47 @@ public class Automaton<S, C> {
   public S getInitialState() {
     return initialState;
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((acceptableStates == null) ? 0 : acceptableStates.hashCode());
+    result = prime * result + ((initialState == null) ? 0 : initialState.hashCode());
+    result = prime * result + ((states == null) ? 0 : states.hashCode());
+    result = prime * result + ((transitionFunction == null) ? 0 : transitionFunction.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Automaton<?, ?> other = (Automaton<?, ?>) obj;
+    if (acceptableStates == null) {
+      if (other.acceptableStates != null)
+        return false;
+    } else if (!acceptableStates.equals(other.acceptableStates))
+      return false;
+    if (initialState == null) {
+      if (other.initialState != null)
+        return false;
+    } else if (!initialState.equals(other.initialState))
+      return false;
+    if (states == null) {
+      if (other.states != null)
+        return false;
+    } else if (!states.equals(other.states))
+      return false;
+    if (transitionFunction == null) {
+      if (other.transitionFunction != null)
+        return false;
+    } else if (!transitionFunction.equals(other.transitionFunction))
+      return false;
+    return true;
+  }
 }
