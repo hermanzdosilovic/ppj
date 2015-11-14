@@ -145,4 +145,41 @@ public class DFAMinimizerTest {
     assertEquals(expectedGroups, DFAMinimizer.getNewGroupedStates(states,
         DFAMinimizer.getGroupedEqualStates(states, unequalStates)));
   }
+
+  @Test
+  public void createNewTransitionFunction() {
+    TransitionFunction<Integer, Character> oldTransitionFunction = new TransitionFunction<>();
+    oldTransitionFunction.addTransition(1, 'a', 1);
+    oldTransitionFunction.addTransition(1, 'b', 2);
+    oldTransitionFunction.addTransition(2, 'a', 2);
+    oldTransitionFunction.addTransition(2, 'b', 3);
+    oldTransitionFunction.addTransition(3, 'a', 1);
+    oldTransitionFunction.addTransition(3, 'b', 3);
+    oldTransitionFunction.addTransition(4, 'a', 1);
+    oldTransitionFunction.addTransition(4, 'b', 3);
+
+    TransitionFunction<Set<Integer>, Character> newTransitionFunction = new TransitionFunction<>();
+    newTransitionFunction.addTransition(new HashSet<>(Arrays.asList(1)), 'a',
+        new HashSet<>(Arrays.asList(1)));
+    newTransitionFunction.addTransition(new HashSet<>(Arrays.asList(1)), 'b',
+        new HashSet<>(Arrays.asList(2)));
+    newTransitionFunction.addTransition(new HashSet<>(Arrays.asList(2)), 'a',
+        new HashSet<>(Arrays.asList(2)));
+    newTransitionFunction.addTransition(new HashSet<>(Arrays.asList(2)), 'b',
+        new HashSet<>(Arrays.asList(3, 4)));
+    newTransitionFunction.addTransition(new HashSet<>(Arrays.asList(3, 4)), 'a',
+        new HashSet<>(Arrays.asList(1)));
+    newTransitionFunction.addTransition(new HashSet<>(Arrays.asList(3, 4)), 'b',
+        new HashSet<>(Arrays.asList(3, 4)));
+
+    Set<Set<Integer>> groupedStates = new HashSet<>();
+    groupedStates.add(new HashSet<>(Arrays.asList(1)));
+    groupedStates.add(new HashSet<>(Arrays.asList(2)));
+    groupedStates.add(new HashSet<>(Arrays.asList(3, 4)));
+
+    assertEquals(newTransitionFunction,
+        DFAMinimizer.createNewTransitionFunction(groupedStates,
+            new HashSet<>(Arrays.asList(1, 2, 3, 4)), new HashSet<>(Arrays.asList('a', 'b')),
+            oldTransitionFunction));
+  }
 }

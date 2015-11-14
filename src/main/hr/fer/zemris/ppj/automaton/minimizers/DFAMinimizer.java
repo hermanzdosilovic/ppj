@@ -20,10 +20,15 @@ public final class DFAMinimizer {
 
   public static <S, C> Automaton<S, C> minimize(final Automaton<S, C> automaton) {
     Automaton<S, C> minAutomaton = removeUnreachableStates(automaton);
+
+    Set<S> states = minAutomaton.getStates();
+    Set<C> alphabet = minAutomaton.getAlphabet();
+
     Set<Pair<S, S>> unequalStates = getUnequalStates(minAutomaton);
-    Set<Set<S>> groupedEqualStates = getGroupedEqualStates(minAutomaton.getStates(), unequalStates);
-    Set<Set<S>> newGroupedStates =
-        getNewGroupedStates(minAutomaton.getStates(), groupedEqualStates);
+    Set<Set<S>> groupedEqualStates = getGroupedEqualStates(states, unequalStates);
+    Set<Set<S>> newGroupedStates = getNewGroupedStates(states, groupedEqualStates);
+    TransitionFunction<Set<S>, C> newTransitionFunction = createNewTransitionFunction(
+        newGroupedStates, states, alphabet, automaton.getTransitionFunction());
     return minAutomaton;
   }
 
@@ -143,7 +148,8 @@ public final class DFAMinimizer {
     }
   }
 
-  static <S> Set<Set<S>> getGroupedEqualStates(Set<S> states, Set<Pair<S, S>> unequalStates) {
+  static <S> Set<Set<S>> getGroupedEqualStates(final Set<S> states,
+      final Set<Pair<S, S>> unequalStates) {
     Set<Set<S>> groupedStates = new HashSet<>();
     Map<S, Set<S>> groupedStatesTable = new HashMap<>();
     for (S first : states) {
@@ -166,7 +172,7 @@ public final class DFAMinimizer {
     return groupedStates;
   }
 
-  static <S> Set<Set<S>> getNewGroupedStates(Set<S> states, Set<Set<S>> groupedEqualStates) {
+  static <S> Set<Set<S>> getNewGroupedStates(final Set<S> states, Set<Set<S>> groupedEqualStates) {
     Set<Set<S>> newGroupedStates = new HashSet<>(groupedEqualStates);
     for (S state : states) {
       boolean inEqualStates = false;
@@ -181,5 +187,28 @@ public final class DFAMinimizer {
       }
     }
     return newGroupedStates;
+  }
+
+  static <S, C> TransitionFunction<Set<S>, C> createNewTransitionFunction(Set<Set<S>> groupedStates,
+      Set<S> states, Set<C> alphabet, TransitionFunction<S, C> transitionFunction) {
+    Map<S, Set<S>> swapTable = new HashMap<>();
+    for (Set<S> group : groupedStates) {
+      for (S state : group) {
+        swapTable.put(state, group);
+      }
+    }
+
+    TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<>();
+    for (S state : states) {
+      for (C symbol : alphabet) {
+        if (transitionFunction.existsTransition(state, symbol)) {
+          S nextState =
+              new ArrayList<>(transitionFunction.getTransitionResult(state, symbol)).get(0);
+          newTransitionFunction.addTransition(swapTable.get(state), symbol,
+              swapTable.get(nextState));
+        }
+      }
+    }
+    return newTransitionFunction;
   }
 }
