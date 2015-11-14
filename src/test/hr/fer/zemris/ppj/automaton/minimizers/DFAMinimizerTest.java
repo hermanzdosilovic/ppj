@@ -1,6 +1,7 @@
 package hr.fer.zemris.ppj.automaton.minimizers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,7 +51,30 @@ public class DFAMinimizerTest {
     dependencyTable.put(new Pair<>(3, 4), new HashSet<>(Arrays.asList(new Pair<>(2, 3))));
     
     Set<Pair<Integer, Integer>> expectedResult = new HashSet<>(Arrays.asList(new Pair<>(1, 2), new Pair<>(3, 4), new Pair<>(1, 3), new Pair<>(2, 3)));
-    DFAMinimizer.markAsUnequal(1, 2, unequalStates, dependencyTable);
+    DFAMinimizer.markDependenciesAsUnequal(1, 2, unequalStates, dependencyTable);
     assertEquals(expectedResult, unequalStates);
+  }
+  
+  @Test
+  public void addToDependencyTableTest() {
+    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
+    transitionFunction.addTransition(1, 'a', 1);
+    transitionFunction.addTransition(1, 'b', 3);
+    transitionFunction.addTransition(2, 'a', 2);
+    transitionFunction.addTransition(2, 'b', 1);
+    transitionFunction.addTransition(3, 'a', 2);
+    transitionFunction.addTransition(3, 'b', 3);
+    
+    Map<Pair<Integer, Integer>, Set<Pair<Integer, Integer>>> dependencyTable = new HashMap<>();
+    Set<Character> alphabet = new HashSet<>(Arrays.asList('a', 'b'));
+    DFAMinimizer.addToDependencyTable(1, 2, dependencyTable, transitionFunction, alphabet);
+    
+    assertTrue(dependencyTable.containsKey(new Pair<>(1, 2)));
+    assertEquals(1, dependencyTable.get(new Pair<>(1, 2)).size());
+    assertTrue(dependencyTable.get(new Pair<>(1, 2)).contains(new Pair<>(1, 2)));
+    
+    assertTrue(dependencyTable.containsKey(new Pair<>(3, 1)));
+    assertEquals(1, dependencyTable.get(new Pair<>(3, 1)).size());
+    assertTrue(dependencyTable.get(new Pair<>(3, 1)).contains(new Pair<>(1, 2)));
   }
 }

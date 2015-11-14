@@ -61,7 +61,7 @@ public final class DFAMinimizer {
         boolean markedAsUnequal = false;
         for (C symbol : alphabet) {
           if (!transitionFunction.existsTransition(first, symbol)
-              || transitionFunction.existsTransition(second, symbol)) {
+              || !transitionFunction.existsTransition(second, symbol)) {
             continue;
           }
 
@@ -72,12 +72,15 @@ public final class DFAMinimizer {
           if (unequalStates.contains(new Pair<>(nextFirst, nextSecond))
               && unequalStates.contains(new Pair<>(nextSecond, nextFirst))) {
             markedAsUnequal = true;
-            markAsUnequal(nextFirst, nextSecond, unequalStates, dependencyTable);
-            markAsUnequal(nextSecond, nextFirst, unequalStates, dependencyTable);
+            markDependenciesAsUnequal(nextFirst, nextSecond, unequalStates, dependencyTable);
+            markDependenciesAsUnequal(nextSecond, nextFirst, unequalStates, dependencyTable);
             break;
           }
+        }
 
-
+        if (!markedAsUnequal) {
+          addToDependencyTable(first, second, dependencyTable, transitionFunction, alphabet);
+          addToDependencyTable(second, first, dependencyTable, transitionFunction, alphabet);
         }
       }
     }
@@ -98,16 +101,38 @@ public final class DFAMinimizer {
     return unequalByMatchingRequirement;
   }
 
-  static <S> void markAsUnequal(S first, S second, Set<Pair<S, S>> unequalStates,
+  static <S> void markDependenciesAsUnequal(S first, S second, Set<Pair<S, S>> unequalStates,
       Map<Pair<S, S>, Set<Pair<S, S>>> dependencyTable) {
     Pair<S, S> pair = new Pair<>(first, second);
-    unequalStates.add(pair);
     if (!dependencyTable.containsKey(pair)) {
       return;
     }
     for (Pair<S, S> dependencyPair : dependencyTable.get(pair)) {
-      markAsUnequal(dependencyPair.getFirst(), dependencyPair.getSecond(), unequalStates,
-          dependencyTable);
+      unequalStates.add(dependencyPair);
+      markDependenciesAsUnequal(dependencyPair.getFirst(), dependencyPair.getSecond(),
+          unequalStates, dependencyTable);
+    }
+  }
+
+  static <S, C> void addToDependencyTable(S first, S second,
+      Map<Pair<S, S>, Set<Pair<S, S>>> dependencyTable, TransitionFunction<S, C> transitionFunction,
+      Set<C> alphabet) {
+    Pair<S, S> pair = new Pair<>(first, second);
+    for (C symbol : alphabet) {
+      if (!transitionFunction.existsTransition(first, symbol)
+          || !transitionFunction.existsTransition(second, symbol)) {
+        continue;
+      }
+
+      S nextFirst = new ArrayList<>(transitionFunction.getTransitionResult(first, symbol)).get(0);
+      S nextSecond = new ArrayList<>(transitionFunction.getTransitionResult(second, symbol)).get(0);
+      if (!nextFirst.equals(nextSecond)) {
+        Pair<S, S> nextPair = new Pair<>(nextFirst, nextSecond);
+        if (!dependencyTable.containsKey(nextPair)) {
+          dependencyTable.put(nextPair, new HashSet<>());
+        }
+        dependencyTable.get(nextPair).add(pair);
+      }
     }
   }
 }
