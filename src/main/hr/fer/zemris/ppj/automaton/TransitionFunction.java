@@ -112,18 +112,6 @@ public class TransitionFunction<S, C> {
     return remove(Arrays.asList());
   }
   
-  public Collection<C> getAlphabet() {
-    if (alphabet != null) {
-      return alphabet;
-    }
-    
-    alphabet = new HashSet<>();
-    for (Pair<S, C> pair : transitionTable.keySet()) {
-      alphabet.add(pair.getSecond());
-    }
-    return alphabet;
-  }
-  
   @Override
   public int hashCode() {
     final int prime = 31;

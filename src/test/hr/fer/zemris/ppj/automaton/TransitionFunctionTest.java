@@ -174,15 +174,4 @@ public class TransitionFunctionTest {
     assertEquals(Arrays.asList(2, 3), new ArrayList<>(transitionFunction.getDestinations(1)));
     assertEquals(Arrays.asList(2), new ArrayList<>(copy.getDestinations(1)));
   }
-  
-  @Test
-  public void getAlphabetTest() {
-    TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
-    transitionFunction.addTransition(1, 'a', 2);
-    transitionFunction.addTransition(2, 'b', 4);
-    transitionFunction.addTransition(3, 'c', 1);
-    transitionFunction.addEpsilonTransition(2, 3);
-    
-    assertEquals(Arrays.asList('a', 'b', 'c'), new ArrayList<>(transitionFunction.getAlphabet()));
-  }
 }

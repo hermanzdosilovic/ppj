@@ -14,15 +14,17 @@ import java.util.Set;
  */
 public class Automaton<S, C> {
   private Set<S> states;
+  private Set<C> alphabet;
   private TransitionFunction<S, C> transitionFunction;
   private S initialState;
   private Set<S> currentStates;
   private Set<S> acceptableStates;
   private Set<S> reachableStates;
 
-  public Automaton(final Collection<S> states, final TransitionFunction<S, C> transitionFunction,
+  public Automaton(final Collection<S> states, final Collection<C> alphabet, final TransitionFunction<S, C> transitionFunction,
       final S initialState, final Collection<S> acceptableStates) {
     this.states = new HashSet<>(states);
+    this.alphabet = new HashSet<>(alphabet);
     this.transitionFunction = transitionFunction;
     this.initialState = initialState;
     this.acceptableStates = new HashSet<>(states);
@@ -122,7 +124,11 @@ public class Automaton<S, C> {
   public S getInitialState() {
     return initialState;
   }
-
+  
+  public Collection<C> getAlphabet() {
+    return alphabet;
+  }
+  
   @Override
   public int hashCode() {
     final int prime = 31;

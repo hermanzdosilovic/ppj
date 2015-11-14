@@ -27,6 +27,6 @@ public final class DFAMinimizer {
     Set<S> acceptableStates = new HashSet<>(automaton.getAcceptableStates());
     acceptableStates.removeAll(automaton.getUnreachableStates());
 
-    return new Automaton<>(states, transitionFunction, initialState, acceptableStates);
+    return new Automaton<>(states, automaton.getAlphabet(), transitionFunction, initialState, acceptableStates);
   }
 }

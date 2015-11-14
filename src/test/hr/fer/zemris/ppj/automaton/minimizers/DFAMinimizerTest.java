@@ -18,11 +18,12 @@ public class DFAMinimizerTest {
     transitionFunction.addTransition(2, 'b', 3);
     transitionFunction.addTransition(4, 'b', 5);
 
-    Automaton<Integer, Character> automaton =
-        new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), transitionFunction, 1, Arrays.asList(1));
+    Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4, 5),
+        Arrays.asList('a', 'b'), transitionFunction, 1, Arrays.asList(1));
 
-    Automaton<Integer, Character> expectedAutomaton = new Automaton<>(Arrays.asList(1, 2, 3),
-        transitionFunction.remove(Arrays.asList(4, 5)), 1, Arrays.asList(1));
+    Automaton<Integer, Character> expectedAutomaton =
+        new Automaton<>(Arrays.asList(1, 2, 3), Arrays.asList('a', 'b'),
+            transitionFunction.remove(Arrays.asList(4, 5)), 1, Arrays.asList(1));
 
     assertEquals(expectedAutomaton, DFAMinimizer.removeUnreachableStates(automaton));
   }
