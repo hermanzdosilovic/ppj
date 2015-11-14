@@ -67,14 +67,14 @@ public class SA {
       Node node = new Node(a);
 
       Action action = actions.get(pair);
-
+    
       if (action instanceof MoveAction) {
         stackValue.push(node);
        
         stackState.push(((MoveAction) action).getState());
         index++;
       } else if (action instanceof ReduceAction) {
-
+        
         int reduceNumber = ((ReduceAction) action).getHowMany();
         String leftSide = ((ReduceAction) action).getLeftHandSide();
 
@@ -82,22 +82,27 @@ public class SA {
         if (reduceNumber == 0) {
           parent.addChild(new Node(epsilon));
         }
+        
+        Deque<Node> reversedChildren = new ArrayDeque<Node>();
         for (int i = 0; i < reduceNumber; i++) {
           stackState.pop();
-          parent.addChild(stackValue.pop());
+          reversedChildren.push(stackValue.pop());
         }
-     
-        Pair<Integer, String> pairNewState = new Pair<Integer, String>(stackState.peek(), leftSide);
-        MoveAction actionNewState = newState.get(pairNewState);
-        stackState.add(actionNewState.getState());
-        stackValue.add(parent);
+        while (!reversedChildren.isEmpty()) {
+          parent.addChild(reversedChildren.pop());
+        }
 
+        MoveAction moveAction = newState.get(
+            new Pair<Integer, String>(stackState.peek(), leftSide)    
+        );
+
+        stackState.push(moveAction.getState());
+        stackValue.push(parent);
       } else if (action instanceof AcceptAction) {
         index++;
         root = stackValue.pop();
-
       } else {
-        errorOutput(stackState, podjela);
+        errorOutput(stackState.peek(), podjela);
       
         for (; index < input.size(); index++) {
         
@@ -122,13 +127,13 @@ public class SA {
     }
     return root;
   }
-  private void errorOutput( Deque<Integer> stackState, String[] podjela) {
+  private void errorOutput( Integer state, String[] podjela) {
     System.err.println("Broj retka: " + podjela[1]);
     
 
     System.err.print("Znakovi koji ne bi izazvali pogresku:");
     for (Map.Entry<Pair<Integer, String>, Action> entry : actions.entrySet()) {
-      if (entry.getKey().getFirst().equals(stackState.peek())
+      if (entry.getKey().getFirst().equals(state)
           && !(entry.getValue() instanceof RejectAction)) {
         System.err.print(" " + entry.getKey().getSecond());
       }
