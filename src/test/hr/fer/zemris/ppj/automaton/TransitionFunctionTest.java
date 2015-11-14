@@ -160,12 +160,12 @@ public class TransitionFunctionTest {
   }
 
   @Test
-  public void copyTest() {
+  public void removeMultipleSourcesWithEmptySourceListTest() {
     TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
     transitionFunction.addTransition(1, 'a', 2);
     transitionFunction.addEpsilonTransition(2, 3);
 
-    TransitionFunction<Integer, Character> copy = transitionFunction.copy();
+    TransitionFunction<Integer, Character> copy = new TransitionFunction(transitionFunction);
     transitionFunction.addTransition(1, 'b', 3);
 
     assertTrue(transitionFunction.existsTransition(1, 'b'));
