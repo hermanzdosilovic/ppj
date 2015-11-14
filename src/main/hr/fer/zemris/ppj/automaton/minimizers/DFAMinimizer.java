@@ -1,6 +1,7 @@
 package hr.fer.zemris.ppj.automaton.minimizers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,6 +22,8 @@ public final class DFAMinimizer {
     Automaton<S, C> minAutomaton = removeUnreachableStates(automaton);
     Set<Pair<S, S>> unequalStates = getUnequalStates(minAutomaton);
     Set<Set<S>> groupedEqualStates = getGroupedEqualStates(minAutomaton.getStates(), unequalStates);
+    Set<Set<S>> newGroupedStates =
+        getNewGroupedStates(minAutomaton.getStates(), groupedEqualStates);
     return minAutomaton;
   }
 
@@ -161,5 +164,22 @@ public final class DFAMinimizer {
       groupedStates.add(group);
     }
     return groupedStates;
+  }
+
+  static <S> Set<Set<S>> getNewGroupedStates(Set<S> states, Set<Set<S>> groupedEqualStates) {
+    Set<Set<S>> newGroupedStates = new HashSet<>(groupedEqualStates);
+    for (S state : states) {
+      boolean inEqualStates = false;
+      for (Set<S> group : groupedEqualStates) {
+        if (group.contains(state)) {
+          inEqualStates = true;
+          break;
+        }
+      }
+      if (!inEqualStates) {
+        newGroupedStates.add(new HashSet<>(Arrays.asList(state)));
+      }
+    }
+    return newGroupedStates;
   }
 }

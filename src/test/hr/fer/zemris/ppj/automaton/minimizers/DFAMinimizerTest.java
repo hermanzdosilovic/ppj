@@ -99,7 +99,7 @@ public class DFAMinimizerTest {
         new Pair<>(1, 3), new Pair<>(3, 1), new Pair<>(1, 4), new Pair<>(4, 1)));
     assertEquals(expectedResult, DFAMinimizer.getUnequalStatesByAdvancement(automaton));
   }
-  
+
   @Test
   public void getGroupedEqualStatesTest() {
     Set<Pair<Integer, Integer>> unequalStates = new HashSet<>(Arrays.asList(new Pair<>(1, 2),
@@ -109,5 +109,40 @@ public class DFAMinimizerTest {
     Set<Set<Integer>> expectedEqualGroups = new HashSet<>();
     expectedEqualGroups.add(new HashSet<>(Arrays.asList(3, 4)));
     assertEquals(expectedEqualGroups, DFAMinimizer.getGroupedEqualStates(states, unequalStates));
+  }
+
+  @Test
+  public void getGroupedEqualStatesMergeTest() {
+    Set<Pair<Integer, Integer>> unequalStates =
+        new HashSet<>(Arrays.asList(new Pair<>(1, 2), new Pair<>(1, 3), new Pair<>(1, 4)));
+    Set<Integer> states = new HashSet<>(Arrays.asList(1, 2, 3, 4));
+    Set<Set<Integer>> expectedEqualGroups = new HashSet<>();
+    expectedEqualGroups.add(new HashSet<>(Arrays.asList(2, 3, 4)));
+    assertEquals(expectedEqualGroups, DFAMinimizer.getGroupedEqualStates(states, unequalStates));
+  }
+
+  @Test
+  public void getGroupedEqualStatesMultiMergeTest() {
+    Set<Pair<Integer, Integer>> unequalStates = new HashSet<>(
+        Arrays.asList(new Pair<>(1, 4), new Pair<>(1, 5), new Pair<>(1, 6), new Pair<>(1, 7),
+            new Pair<>(2, 4), new Pair<>(2, 5), new Pair<>(2, 6), new Pair<>(2, 7),
+            new Pair<>(3, 4), new Pair<>(3, 5), new Pair<>(3, 6), new Pair<>(3, 7)));
+    Set<Integer> states = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+    Set<Set<Integer>> expectedEqualGroups = new HashSet<>();
+    expectedEqualGroups.add(new HashSet<>(Arrays.asList(1, 2, 3)));
+    expectedEqualGroups.add(new HashSet<>(Arrays.asList(4, 5, 6, 7)));
+    assertEquals(expectedEqualGroups, DFAMinimizer.getGroupedEqualStates(states, unequalStates));
+  }
+
+  @Test
+  public void getNewGroupedStatesTest() {
+    Set<Pair<Integer, Integer>> unequalStates =
+        new HashSet<>(Arrays.asList(new Pair<>(1, 2), new Pair<>(1, 3), new Pair<>(1, 4)));
+    Set<Integer> states = new HashSet<>(Arrays.asList(1, 2, 3, 4));
+    Set<Set<Integer>> expectedGroups = new HashSet<>();
+    expectedGroups.add(new HashSet<>(Arrays.asList(2, 3, 4)));
+    expectedGroups.add(new HashSet<>(Arrays.asList(1)));
+    assertEquals(expectedGroups, DFAMinimizer.getNewGroupedStates(states,
+        DFAMinimizer.getGroupedEqualStates(states, unequalStates)));
   }
 }
