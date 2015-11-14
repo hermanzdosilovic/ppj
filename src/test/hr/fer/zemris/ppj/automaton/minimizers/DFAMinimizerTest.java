@@ -99,4 +99,15 @@ public class DFAMinimizerTest {
         new Pair<>(1, 3), new Pair<>(3, 1), new Pair<>(1, 4), new Pair<>(4, 1)));
     assertEquals(expectedResult, DFAMinimizer.getUnequalStatesByAdvancement(automaton));
   }
+  
+  @Test
+  public void getGroupedEqualStatesTest() {
+    Set<Pair<Integer, Integer>> unequalStates = new HashSet<>(Arrays.asList(new Pair<>(1, 2),
+        new Pair<>(2, 1), new Pair<>(2, 3), new Pair<>(3, 2), new Pair<>(2, 4), new Pair<>(4, 2),
+        new Pair<>(1, 3), new Pair<>(3, 1), new Pair<>(1, 4), new Pair<>(4, 1)));
+    Set<Integer> states = new HashSet<>(Arrays.asList(1, 2, 3, 4));
+    Set<Set<Integer>> expectedEqualGroups = new HashSet<>();
+    expectedEqualGroups.add(new HashSet<>(Arrays.asList(3, 4)));
+    assertEquals(expectedEqualGroups, DFAMinimizer.getGroupedEqualStates(states, unequalStates));
+  }
 }

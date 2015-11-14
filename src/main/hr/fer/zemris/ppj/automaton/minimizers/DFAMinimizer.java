@@ -17,13 +17,14 @@ public final class DFAMinimizer {
 
   private DFAMinimizer() {}
 
-  public static <S, C> Automaton<S, C> minimize(Automaton<S, C> automaton) {
+  public static <S, C> Automaton<S, C> minimize(final Automaton<S, C> automaton) {
     Automaton<S, C> minAutomaton = removeUnreachableStates(automaton);
-
+    Set<Pair<S, S>> unequalStates = getUnequalStates(minAutomaton);
+    Set<Set<S>> groupedEqualStates = getGroupedEqualStates(minAutomaton.getStates(), unequalStates);
     return minAutomaton;
   }
 
-  static <S, C> Automaton<S, C> removeUnreachableStates(Automaton<S, C> automaton) {
+  static <S, C> Automaton<S, C> removeUnreachableStates(final Automaton<S, C> automaton) {
     TransitionFunction<S, C> transitionFunction =
         automaton.getTransitionFunction().remove(automaton.getUnreachableStates());
     Set<S> states = automaton.getReachableStates();
@@ -36,11 +37,11 @@ public final class DFAMinimizer {
         acceptableStates);
   }
 
-  static <S, C> Set<Pair<S, S>> getUnequalStates(Automaton<S, C> automaton) {
+  static <S, C> Set<Pair<S, S>> getUnequalStates(final Automaton<S, C> automaton) {
     return getUnequalStatesByAdvancement(automaton);
   }
 
-  static <S, C> Set<Pair<S, S>> getUnequalStatesByAdvancement(Automaton<S, C> automaton) {
+  static <S, C> Set<Pair<S, S>> getUnequalStatesByAdvancement(final Automaton<S, C> automaton) {
     Set<Pair<S, S>> unequalStates = getUnequalStatesByIdentity(automaton);
 
     Set<S> states = automaton.getStates();
@@ -71,7 +72,7 @@ public final class DFAMinimizer {
     return unequalStates;
   }
 
-  static <S, C> Set<Pair<S, S>> getUnequalStatesByIdentity(Automaton<S, C> automaton) {
+  static <S, C> Set<Pair<S, S>> getUnequalStatesByIdentity(final Automaton<S, C> automaton) {
     Set<Pair<S, S>> unequalByMatchingRequirement = new HashSet<>();
     Set<S> states = automaton.getStates();
     for (S first : states) {
@@ -85,8 +86,9 @@ public final class DFAMinimizer {
     return unequalByMatchingRequirement;
   }
 
-  static <S, C> boolean statesCanMarkedAsUnequal(S first, S second,
-      TransitionFunction<S, C> transitionFunction, Set<C> alphabet, Set<Pair<S, S>> unequalStates) {
+  static <S, C> boolean statesCanMarkedAsUnequal(final S first, final S second,
+      final TransitionFunction<S, C> transitionFunction, final Set<C> alphabet,
+      final Set<Pair<S, S>> unequalStates) {
     for (C symbol : alphabet) {
       if (!transitionFunction.existsTransition(first, symbol)
           || !transitionFunction.existsTransition(second, symbol)) {
@@ -103,8 +105,8 @@ public final class DFAMinimizer {
     return false;
   }
 
-  static <S> void markDependenciesAsUnequal(S first, S second, Set<Pair<S, S>> unequalStates,
-      Map<Pair<S, S>, Set<Pair<S, S>>> dependencyTable) {
+  static <S> void markDependenciesAsUnequal(final S first, final S second,
+      final Set<Pair<S, S>> unequalStates, final Map<Pair<S, S>, Set<Pair<S, S>>> dependencyTable) {
     Pair<S, S> pair = new Pair<>(first, second);
     if (!dependencyTable.containsKey(pair)) {
       return;
@@ -116,9 +118,9 @@ public final class DFAMinimizer {
     }
   }
 
-  static <S, C> void addToDependencyTable(S first, S second,
-      Map<Pair<S, S>, Set<Pair<S, S>>> dependencyTable, TransitionFunction<S, C> transitionFunction,
-      Set<C> alphabet) {
+  static <S, C> void addToDependencyTable(final S first, final S second,
+      final Map<Pair<S, S>, Set<Pair<S, S>>> dependencyTable,
+      final TransitionFunction<S, C> transitionFunction, final Set<C> alphabet) {
     Pair<S, S> pair = new Pair<>(first, second);
     for (C symbol : alphabet) {
       if (!transitionFunction.existsTransition(first, symbol)
@@ -136,5 +138,28 @@ public final class DFAMinimizer {
         dependencyTable.get(nextPair).add(pair);
       }
     }
+  }
+
+  static <S> Set<Set<S>> getGroupedEqualStates(Set<S> states, Set<Pair<S, S>> unequalStates) {
+    Set<Set<S>> groupedStates = new HashSet<>();
+    Map<S, Set<S>> groupedStatesTable = new HashMap<>();
+    for (S first : states) {
+      for (S second : states) {
+        if (unequalStates.contains(new Pair<>(first, second))
+            || unequalStates.contains(new Pair<>(second, first)) || first.equals(second)) {
+          continue;
+        }
+        if (!groupedStatesTable.containsKey(first)) {
+          groupedStatesTable.put(first, new HashSet<>());
+        }
+        groupedStatesTable.get(first).add(second);
+      }
+    }
+    for (S state : groupedStatesTable.keySet()) {
+      Set<S> group = new HashSet<>(groupedStatesTable.get(state));
+      group.add(state);
+      groupedStates.add(group);
+    }
+    return groupedStates;
   }
 }
