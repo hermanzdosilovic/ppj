@@ -18,6 +18,70 @@ import hr.fer.zemris.ppj.automaton.TransitionFunction;
 public class DFAMinimizerTest {
 
   @Test
+  public void minimizeTest() {
+    TransitionFunction<Integer, Character> firstTransitionFunction = new TransitionFunction<>();
+    firstTransitionFunction.addTransition(1, 'a', 2);
+    firstTransitionFunction.addTransition(1, 'b', 6);
+    firstTransitionFunction.addTransition(2, 'a', 7);
+    firstTransitionFunction.addTransition(2, 'b', 3);
+    firstTransitionFunction.addTransition(3, 'a', 1);
+    firstTransitionFunction.addTransition(3, 'b', 3);
+    firstTransitionFunction.addTransition(4, 'a', 3);
+    firstTransitionFunction.addTransition(4, 'b', 7);
+    firstTransitionFunction.addTransition(5, 'a', 8);
+    firstTransitionFunction.addTransition(5, 'b', 6);
+    firstTransitionFunction.addTransition(6, 'a', 3);
+    firstTransitionFunction.addTransition(6, 'b', 7);
+    firstTransitionFunction.addTransition(7, 'a', 7);
+    firstTransitionFunction.addTransition(7, 'b', 5);
+    firstTransitionFunction.addTransition(8, 'a', 7);
+    firstTransitionFunction.addTransition(8, 'b', 3);
+
+    TransitionFunction<Set<Integer>, Character> secondTransitionFunction =
+        new TransitionFunction<>();
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(1, 5)), 'a',
+        new HashSet<>(Arrays.asList(2, 8)));
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(1, 5)), 'b',
+        new HashSet<>(Arrays.asList(6)));
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(2, 8)), 'a',
+        new HashSet<>(Arrays.asList(7)));
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(2, 8)), 'b',
+        new HashSet<>(Arrays.asList(3)));
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(3)), 'a',
+        new HashSet<>(Arrays.asList(1, 5)));
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(3)), 'b',
+        new HashSet<>(Arrays.asList(3)));
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(6)), 'a',
+        new HashSet<>(Arrays.asList(3)));
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(6)), 'b',
+        new HashSet<>(Arrays.asList(7)));
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(7)), 'a',
+        new HashSet<>(Arrays.asList(7)));
+    secondTransitionFunction.addTransition(new HashSet<>(Arrays.asList(7)), 'b',
+        new HashSet<>(Arrays.asList(1, 5)));
+
+    Set<Integer> firstStates = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8));
+    Set<Set<Integer>> secondStates = new HashSet<>();
+    secondStates.add(new HashSet<>(Arrays.asList(1, 5)));
+    secondStates.add(new HashSet<>(Arrays.asList(2, 8)));
+    secondStates.add(new HashSet<>(Arrays.asList(6)));
+    secondStates.add(new HashSet<>(Arrays.asList(7)));
+    secondStates.add(new HashSet<>(Arrays.asList(3)));
+
+    Set<Set<Integer>> secondAcceptableStates = new HashSet<>();
+    secondAcceptableStates.add(new HashSet<>(Arrays.asList(3)));
+
+    Automaton<Integer, Character> automaton = new Automaton<>(firstStates, Arrays.asList('a', 'b'),
+        firstTransitionFunction, 1, Arrays.asList(3));
+    Automaton<Set<Integer>, Character> expectedAutomaton =
+        new Automaton<>(secondStates, Arrays.asList('a', 'b'), secondTransitionFunction,
+            new HashSet<>(Arrays.asList(1, 5)), secondAcceptableStates);
+
+    Automaton<Set<Integer>, Character> actualAutomaton = DFAMinimizer.minimize(automaton);
+    assertEquals(expectedAutomaton, actualAutomaton);
+  }
+
+  @Test
   public void removeUnreachableStatesTest() {
     TransitionFunction<Integer, Character> transitionFunction = new TransitionFunction<>();
     transitionFunction.addTransition(1, 'a', 2);
@@ -197,14 +261,14 @@ public class DFAMinimizerTest {
     assertEquals(expectedAcceptableStates,
         DFAMinimizer.getNewAcceptableStates(groups, new HashSet<>(Arrays.asList(1, 6))));
   }
-  
+
   @Test
   public void getNewInitialStateTest() {
     Set<Set<Integer>> groups = new HashSet<>();
     groups.add(new HashSet<>(Arrays.asList(2, 3, 4)));
     groups.add(new HashSet<>(Arrays.asList(1)));
     groups.add(new HashSet<>(Arrays.asList(6, 7)));
-    
+
     assertEquals(new HashSet<>(Arrays.asList(6, 7)), DFAMinimizer.getNewInitialState(groups, 6));
     assertEquals(new HashSet<>(Arrays.asList(1)), DFAMinimizer.getNewInitialState(groups, 1));
   }

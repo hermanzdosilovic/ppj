@@ -25,12 +25,13 @@ public final class DFAMinimizer {
     Set<C> alphabet = minAutomaton.getAlphabet();
     
     Set<Pair<S, S>> unequalStates = getUnequalStates(minAutomaton);
-    Set<Set<S>> newStates = getGroupedEqualStates(states, unequalStates);
-    Set<Set<S>> newGroupedStates = getNewGroupedStates(states, newStates);
+    Set<Set<S>> gruopedEqualStates = getGroupedEqualStates(states, unequalStates);
+    Set<Set<S>> newGroupedStates = getNewGroupedStates(states, gruopedEqualStates);
     TransitionFunction<Set<S>, C> newTransitionFunction = createNewTransitionFunction(
         newGroupedStates, states, alphabet, automaton.getTransitionFunction());
-    Set<Set<S>> newAcceptableStates = getNewAcceptableStates(newStates, automaton.getAcceptableStates());
+    Set<Set<S>> newAcceptableStates = getNewAcceptableStates(newGroupedStates, automaton.getAcceptableStates());
     Set<S> newInitialState = getNewInitialState(newGroupedStates, automaton.getInitialState());
+    
     return new Automaton<Set<S>, C>(newGroupedStates, alphabet, newTransitionFunction, newInitialState, newAcceptableStates);
   }
 
