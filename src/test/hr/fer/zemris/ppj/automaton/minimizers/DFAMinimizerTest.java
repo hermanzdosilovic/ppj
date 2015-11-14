@@ -197,4 +197,15 @@ public class DFAMinimizerTest {
     assertEquals(expectedAcceptableStates,
         DFAMinimizer.getNewAcceptableStates(groups, new HashSet<>(Arrays.asList(1, 6))));
   }
+  
+  @Test
+  public void getNewInitialStateTest() {
+    Set<Set<Integer>> groups = new HashSet<>();
+    groups.add(new HashSet<>(Arrays.asList(2, 3, 4)));
+    groups.add(new HashSet<>(Arrays.asList(1)));
+    groups.add(new HashSet<>(Arrays.asList(6, 7)));
+    
+    assertEquals(new HashSet<>(Arrays.asList(6, 7)), DFAMinimizer.getNewInitialState(groups, 6));
+    assertEquals(new HashSet<>(Arrays.asList(1)), DFAMinimizer.getNewInitialState(groups, 1));
+  }
 }
