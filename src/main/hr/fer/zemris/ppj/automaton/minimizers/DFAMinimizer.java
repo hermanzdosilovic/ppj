@@ -19,7 +19,6 @@ public final class DFAMinimizer {
 
   public static <S, C> Automaton<S, C> minimize(Automaton<S, C> automaton) {
     Automaton<S, C> minAutomaton = removeUnreachableStates(automaton);
-    Set<Pair<S, S>> unequalStates = new HashSet<>(getUnequalStates(automaton));
 
     return minAutomaton;
   }
@@ -38,47 +37,32 @@ public final class DFAMinimizer {
   }
 
   static <S, C> Set<Pair<S, S>> getUnequalStates(Automaton<S, C> automaton) {
-    Set<Pair<S, S>> unequalStates = getUnequalStatesByAdvancement(automaton);
-    return unequalStates;
+    return getUnequalStatesByAdvancement(automaton);
   }
 
   static <S, C> Set<Pair<S, S>> getUnequalStatesByAdvancement(Automaton<S, C> automaton) {
     Set<Pair<S, S>> unequalStates = getUnequalStatesByIdentity(automaton);
+
     Set<S> states = automaton.getStates();
     Set<C> alphabet = automaton.getAlphabet();
     TransitionFunction<S, C> transitionFunction = automaton.getTransitionFunction();
     Map<Pair<S, S>, Set<Pair<S, S>>> dependencyTable = new HashMap<>();
-
     for (S first : states) {
       for (S second : states) {
         Pair<S, S> pair = new Pair<>(first, second);
         Pair<S, S> reversedPair = new Pair<>(second, first);
+
         if (unequalStates.contains(pair) || unequalStates.contains(reversedPair)
             || first.equals(second)) {
           continue;
         }
 
-        boolean markedAsUnequal = false;
-        for (C symbol : alphabet) {
-          if (!transitionFunction.existsTransition(first, symbol)
-              || !transitionFunction.existsTransition(second, symbol)) {
-            continue;
-          }
-
-          S nextFirst =
-              new ArrayList<>(transitionFunction.getTransitionResult(first, symbol)).get(0);
-          S nextSecond =
-              new ArrayList<>(transitionFunction.getTransitionResult(second, symbol)).get(0);
-          if (unequalStates.contains(new Pair<>(nextFirst, nextSecond))
-              && unequalStates.contains(new Pair<>(nextSecond, nextFirst))) {
-            markedAsUnequal = true;
-            markDependenciesAsUnequal(nextFirst, nextSecond, unequalStates, dependencyTable);
-            markDependenciesAsUnequal(nextSecond, nextFirst, unequalStates, dependencyTable);
-            break;
-          }
-        }
-
-        if (!markedAsUnequal) {
+        if (statesCanMarkedAsUnequal(first, second, transitionFunction, alphabet, unequalStates)) {
+          unequalStates.add(new Pair<>(first, second));
+          unequalStates.add(new Pair<>(second, first));
+          markDependenciesAsUnequal(first, second, unequalStates, dependencyTable);
+          markDependenciesAsUnequal(second, first, unequalStates, dependencyTable);
+        } else {
           addToDependencyTable(first, second, dependencyTable, transitionFunction, alphabet);
           addToDependencyTable(second, first, dependencyTable, transitionFunction, alphabet);
         }
@@ -99,6 +83,24 @@ public final class DFAMinimizer {
       }
     }
     return unequalByMatchingRequirement;
+  }
+
+  static <S, C> boolean statesCanMarkedAsUnequal(S first, S second,
+      TransitionFunction<S, C> transitionFunction, Set<C> alphabet, Set<Pair<S, S>> unequalStates) {
+    for (C symbol : alphabet) {
+      if (!transitionFunction.existsTransition(first, symbol)
+          || !transitionFunction.existsTransition(second, symbol)) {
+        continue;
+      }
+
+      S nextFirst = new ArrayList<>(transitionFunction.getTransitionResult(first, symbol)).get(0);
+      S nextSecond = new ArrayList<>(transitionFunction.getTransitionResult(second, symbol)).get(0);
+      if (unequalStates.contains(new Pair<>(nextFirst, nextSecond))
+          && unequalStates.contains(new Pair<>(nextSecond, nextFirst))) {
+        return true;
+      }
+    }
+    return false;
   }
 
   static <S> void markDependenciesAsUnequal(S first, S second, Set<Pair<S, S>> unequalStates,
