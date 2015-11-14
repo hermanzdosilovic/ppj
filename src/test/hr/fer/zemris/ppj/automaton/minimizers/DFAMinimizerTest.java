@@ -3,7 +3,9 @@ package hr.fer.zemris.ppj.automaton.minimizers;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
@@ -37,6 +39,18 @@ public class DFAMinimizerTest {
         new TransitionFunction<>(), 1, Arrays.asList(1, 3));
     Set<Pair<Integer, Integer>> expectedResult =
         new HashSet<>(Arrays.asList(new Pair<>(1, 2), new Pair<>(2, 1), new Pair<>(2, 3), new Pair<>(3, 2)));
-    assertEquals(expectedResult, DFAMinimizer.getUnequalStatesByMatchingRequirement(automaton));
+    assertEquals(expectedResult, DFAMinimizer.getUnequalStatesByIdentity(automaton));
+  }
+  
+  @Test
+  public void markAsUnequalTest() {
+    Set<Pair<Integer, Integer>> unequalStates = new HashSet<>(Arrays.asList(new Pair<>(1, 2)));
+    Map<Pair<Integer, Integer>, Set<Pair<Integer, Integer>>> dependencyTable = new HashMap<>();
+    dependencyTable.put(new Pair<>(1, 2), new HashSet<>(Arrays.asList(new Pair<>(3, 4), new Pair<>(1, 3))));
+    dependencyTable.put(new Pair<>(3, 4), new HashSet<>(Arrays.asList(new Pair<>(2, 3))));
+    
+    Set<Pair<Integer, Integer>> expectedResult = new HashSet<>(Arrays.asList(new Pair<>(1, 2), new Pair<>(3, 4), new Pair<>(1, 3), new Pair<>(2, 3)));
+    DFAMinimizer.markAsUnequal(1, 2, unequalStates, dependencyTable);
+    assertEquals(expectedResult, unequalStates);
   }
 }
