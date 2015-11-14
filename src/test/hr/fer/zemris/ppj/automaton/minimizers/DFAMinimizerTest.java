@@ -182,4 +182,19 @@ public class DFAMinimizerTest {
             new HashSet<>(Arrays.asList(1, 2, 3, 4)), new HashSet<>(Arrays.asList('a', 'b')),
             oldTransitionFunction));
   }
+
+  @Test
+  public void getNewAcceptableStatesTest() {
+    Set<Set<Integer>> groups = new HashSet<>();
+    groups.add(new HashSet<>(Arrays.asList(2, 3, 4)));
+    groups.add(new HashSet<>(Arrays.asList(1)));
+    groups.add(new HashSet<>(Arrays.asList(6, 7)));
+
+    Set<Set<Integer>> expectedAcceptableStates = new HashSet<>();
+    expectedAcceptableStates.add(new HashSet<>(Arrays.asList(1)));
+    expectedAcceptableStates.add(new HashSet<>(Arrays.asList(6, 7)));
+
+    assertEquals(expectedAcceptableStates,
+        DFAMinimizer.getNewAcceptableStates(groups, new HashSet<>(Arrays.asList(1, 6))));
+  }
 }

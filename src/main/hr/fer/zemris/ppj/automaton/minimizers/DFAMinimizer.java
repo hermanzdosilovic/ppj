@@ -29,6 +29,7 @@ public final class DFAMinimizer {
     Set<Set<S>> newGroupedStates = getNewGroupedStates(states, groupedEqualStates);
     TransitionFunction<Set<S>, C> newTransitionFunction = createNewTransitionFunction(
         newGroupedStates, states, alphabet, automaton.getTransitionFunction());
+    Set<Set<S>> acceptableStates = getNewAcceptableStates(groupedEqualStates, automaton.getAcceptableStates());
     return minAutomaton;
   }
 
@@ -210,5 +211,17 @@ public final class DFAMinimizer {
       }
     }
     return newTransitionFunction;
+  }
+  
+  static <S> Set<Set<S>> getNewAcceptableStates(Set<Set<S>> groupedStates, Set<S> acceptableStates) {
+    Set<Set<S>> newAcceptableStates = new HashSet<>();
+    for (Set<S> group : groupedStates) {
+      for (S state : group) {
+        if (acceptableStates.contains(state)) {
+          newAcceptableStates.add(group);
+        }
+      }
+    }
+    return newAcceptableStates;
   }
 }
