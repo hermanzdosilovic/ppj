@@ -10,75 +10,75 @@ import java.util.List;
 import java.util.Map;
 
 public class GeneratorInputDefinition {
-  
+
   private List<String> inputLines = new ArrayList<String>();
   private List<String> nonterminalSymbols = new ArrayList<String>();
   private List<String> terminalSymbols = new ArrayList<String>();
   private List<String> synchronousTerminalSymbols = new ArrayList<String>();
   private Map<String, List<String>> productions = new HashMap<String, List<String>>();
   private int index = 0;
-  
-  public GeneratorInputDefinition() throws IOException{
+
+  public GeneratorInputDefinition() throws IOException {
     this(System.in);
   }
-  
-  public GeneratorInputDefinition(InputStream stream) throws IOException{
+
+  public GeneratorInputDefinition(InputStream stream) throws IOException {
     BufferedReader input = new BufferedReader(new InputStreamReader(stream));
     String line = " ";
-    while(line != null){
+    while (line != null) {
       line = input.readLine();
       inputLines.add(line);
     }
   }
-  
-  public GeneratorInputDefinition(List<String> inputLines){
+
+  public GeneratorInputDefinition(List<String> inputLines) {
     this.inputLines = inputLines;
   }
-  
-  public void runGenerator(){
+
+  public void runGenerator() {
     parseNonterminalSymbols();
     parseTerminalSymbols();
     parseSynchronousTerminalSymbols();
     parseProductions();
   }
-  
-  private void parseNonterminalSymbols(){
+
+  void parseNonterminalSymbols() {
     String[] line = inputLines.get(index++).split(" ");
-    for(int i = 1; i < line.length; i++){
+    for (int i = 1; i < line.length; i++) {
       nonterminalSymbols.add(line[i]);
     }
   }
-  
-  private void parseTerminalSymbols(){
+
+  void parseTerminalSymbols() {
     String[] line = inputLines.get(index++).split(" ");
-    for(int i = 1; i < line.length; i++){
+    for (int i = 1; i < line.length; i++) {
       terminalSymbols.add(line[i]);
     }
-    
+
   }
-  
-  private void parseSynchronousTerminalSymbols(){
+
+  void parseSynchronousTerminalSymbols() {
     String[] line = inputLines.get(index++).split(" ");
-    for(int i = 1; i < line.length; i++){
+    for (int i = 1; i < line.length; i++) {
       synchronousTerminalSymbols.add(line[i]);
     }
   }
-  
-  private void parseProductions(){
-    for(String simbol : nonterminalSymbols){
+
+  void parseProductions() {
+    for (String simbol : nonterminalSymbols) {
       productions.put(simbol, new ArrayList<String>());
     }
-    
+
     String line = " ";
     String leftSide = " ";
     line = inputLines.get(index++);
-    while(line != null){
-      if(!line.startsWith(" ")){
+    while (line != null && index != inputLines.size()) {
+      if (!line.startsWith(" ")) {
         leftSide = line;
         line = inputLines.get(index++);
-        while(line != null && line.startsWith(" ")){
+        while (line != null && line.startsWith(" ")) {
           productions.get(leftSide).add(line.substring(1));
-          if(index == inputLines.size())
+          if (index == inputLines.size())
             break;
           line = inputLines.get(index++);
         }
@@ -86,19 +86,19 @@ public class GeneratorInputDefinition {
     }
   }
 
-  public List<String> getNonterminalSymbols(){
+  public List<String> getNonterminalSymbols() {
     return nonterminalSymbols;
   }
-  
-  public List<String> getTerminalSymbols(){
+
+  public List<String> getTerminalSymbols() {
     return terminalSymbols;
   }
-  
-  public List<String> getSynchronousTerminalSymbols(){
+
+  public List<String> getSynchronousTerminalSymbols() {
     return synchronousTerminalSymbols;
   }
-  
-  public Map<String, List<String>> getProductions(){
+
+  public Map<String, List<String>> getProductions() {
     return productions;
   }
 }
