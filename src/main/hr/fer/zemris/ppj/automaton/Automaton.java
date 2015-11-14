@@ -21,44 +21,48 @@ public class Automaton<S, C> {
   private Set<S> acceptableStates;
   private Set<S> reachableStates;
 
-  public Automaton(final Collection<S> states, final Collection<C> alphabet, final TransitionFunction<S, C> transitionFunction,
-      final S initialState, final Collection<S> acceptableStates) {
+  public Automaton(final Collection<S> states, final Collection<C> alphabet,
+      final TransitionFunction<S, C> transitionFunction, final S initialState,
+      final Collection<S> acceptableStates) {
+    if (states == null || alphabet == null || transitionFunction == null || initialState == null
+        || acceptableStates == null) {
+      throw new IllegalArgumentException("Invalid automaton definition");
+    }
     this.states = new HashSet<>(states);
     this.alphabet = new HashSet<>(alphabet);
-    this.transitionFunction = transitionFunction;
+    this.transitionFunction = new TransitionFunction<S, C>(transitionFunction);
     this.initialState = initialState;
-    this.acceptableStates = new HashSet<>(states);
-
+    this.acceptableStates = new HashSet<>(acceptableStates);
     this.currentStates = new HashSet<>(epsilonClosure(initialState));
   }
 
-  public Collection<S> reload() {
+  public Set<S> reload() {
     currentStates = new HashSet<>(epsilonClosure(initialState));
-    return currentStates;
+    return new HashSet<>(currentStates);
   }
 
-  public Collection<S> getCurrentStates() {
-    return currentStates;
+  public Set<S> getCurrentStates() {
+    return new HashSet<>(currentStates);
   }
 
-  public Collection<S> read(final Collection<C> symbols) {
+  public Set<S> read(final Collection<C> symbols) {
     for (C symbol : symbols) {
       read(symbol);
     }
-    return currentStates;
+    return new HashSet<>(currentStates);
   }
 
-  public Collection<S> read(final C symbol) {
+  public Set<S> read(final C symbol) {
     Set<S> newStates = new HashSet<>();
     for (S currentState : currentStates) {
       newStates
           .addAll(epsilonClosure(transitionFunction.getTransitionResult(currentState, symbol)));
     }
     currentStates = new HashSet<>(newStates);
-    return currentStates;
+    return new HashSet<>(currentStates);
   }
 
-  public Collection<S> epsilonClosure(final S state) {
+  public Set<S> epsilonClosure(final S state) {
     Set<S> epsilonClosure = new HashSet<>();
     Queue<S> queue = new LinkedList<>();
 
@@ -74,22 +78,22 @@ public class Automaton<S, C> {
       }
     }
 
-    return epsilonClosure;
+    return new HashSet<>(epsilonClosure);
   }
 
-  public Collection<S> epsilonClosure(final Collection<S> states) {
+  public Set<S> epsilonClosure(final Collection<S> states) {
     Set<S> epsilonClosure = new HashSet<>();
     for (S state : states) {
       epsilonClosure.addAll(epsilonClosure(state));
     }
-    return epsilonClosure;
+    return new HashSet<>(epsilonClosure);
   }
 
   public TransitionFunction<S, C> getTransitionFunction() {
-    return transitionFunction;
+    return new TransitionFunction<S, C>(transitionFunction); 
   }
 
-  public Collection<S> getReachableStates() {
+  public Set<S> getReachableStates() {
     if (reachableStates != null) {
       return reachableStates;
     }
@@ -111,24 +115,32 @@ public class Automaton<S, C> {
     return reachableStates;
   }
 
-  public Collection<S> getUnreachableStates() {
+  public Set<S> getUnreachableStates() {
     Set<S> unreachableStates = new HashSet<>(states);
     unreachableStates.removeAll(getReachableStates());
     return unreachableStates;
   }
 
-  public Collection<S> getAcceptableStates() {
+  public Set<S> getStates() {
+    return states;
+  }
+
+  public Set<S> getAcceptableStates() {
     return acceptableStates;
   }
 
   public S getInitialState() {
     return initialState;
   }
-  
-  public Collection<C> getAlphabet() {
+
+  public Set<C> getAlphabet() {
     return alphabet;
   }
-  
+
+  public boolean hasAcceptableState(S state) {
+    return acceptableStates.contains(state);
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;

@@ -165,7 +165,8 @@ public class TransitionFunctionTest {
     transitionFunction.addTransition(1, 'a', 2);
     transitionFunction.addEpsilonTransition(2, 3);
 
-    TransitionFunction<Integer, Character> copy = new TransitionFunction(transitionFunction);
+    TransitionFunction<Integer, Character> copy =
+        new TransitionFunction<Integer, Character>(transitionFunction);
     transitionFunction.addTransition(1, 'b', 3);
 
     assertTrue(transitionFunction.existsTransition(1, 'b'));

@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import hr.fer.zemris.ppj.Pair;
 
@@ -20,14 +19,14 @@ public class TransitionFunction<S, C> {
   private Map<Pair<S, C>, Collection<S>> transitionTable;
   private Map<S, Collection<S>> epsilonTransitionTable;
   private Map<S, Collection<S>> neighbourTable;
-  
-  public TransitionFunction(TransitionFunction<S,C> transitionFunction) {
+
+  public TransitionFunction(TransitionFunction<S, C> transitionFunction) {
     TransitionFunction<S, C> copy = transitionFunction.remove(Arrays.asList());
     this.transitionTable = copy.transitionTable;
     this.epsilonTransitionTable = copy.epsilonTransitionTable;
     this.neighbourTable = copy.neighbourTable;
   }
-  
+
   public TransitionFunction() {
     this.transitionTable = new HashMap<>();
     this.epsilonTransitionTable = new HashMap<>();
@@ -113,7 +112,7 @@ public class TransitionFunction<S, C> {
     }
     return newTransitionFunction;
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;
