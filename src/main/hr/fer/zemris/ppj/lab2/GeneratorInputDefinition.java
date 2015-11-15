@@ -68,23 +68,14 @@ public class GeneratorInputDefinition {
 
   void parseProductions() {
     productions = new HashMap<String, List<String>>();
-    for (String simbol : nonterminalSymbols) {
-      productions.put(simbol, new ArrayList<String>());
-    }
-
-    String line = " ";
-    String leftSide = " ";
-    line = inputLines.get(index++);
-    while (line != null && index != inputLines.size()) {
-      if (!line.startsWith(" ")) {
-        leftSide = line;
-        line = inputLines.get(index++);
-        while (line != null && line.startsWith(" ")) {
-          productions.get(leftSide).add(line.substring(1));
-          if (index == inputLines.size())
-            break;
-          line = inputLines.get(index++);
-        }
+    while (index < inputLines.size()) {
+      String leftSide = inputLines.get(index++);
+      if (!productions.containsKey(leftSide)) {
+        productions.put(leftSide, new ArrayList<>());
+      }      
+      while (index < inputLines.size() && inputLines.get(index).charAt(0) == ' ') {
+        String rightSide = inputLines.get(index++);
+        productions.get(leftSide).add(rightSide.substring(1));
       }
     }
   }

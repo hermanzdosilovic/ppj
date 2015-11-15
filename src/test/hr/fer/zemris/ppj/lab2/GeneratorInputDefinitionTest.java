@@ -51,7 +51,6 @@ public class GeneratorInputDefinitionTest {
   @Test
   public void parseProductionsTest() {
     List<String> inputLines = new ArrayList<String>();
-    inputLines.add("%V <znak> <drugi_znak>");
     inputLines.add("<znak>");
     inputLines.add(" $");
     inputLines.add(" neki znakovi");
@@ -60,12 +59,12 @@ public class GeneratorInputDefinitionTest {
 
     GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition(inputLines);
 
-    inputDefinition.parseNonterminalSymbols();
     inputDefinition.parseProductions();
 
-    assertEquals(inputDefinition.getProductions().get("<znak>"), Arrays.asList("$", "neki znakovi"));
-    assertEquals(inputDefinition.getProductions().get("<drugi_znak>"),
-        Arrays.asList("jos malo znakova"));
+    assertEquals(Arrays.asList("$", "neki znakovi"),
+        inputDefinition.getProductions().get("<znak>"));
+    assertEquals(Arrays.asList("jos malo znakova"),
+        inputDefinition.getProductions().get("<drugi_znak>"));
   }
 
   @Test
