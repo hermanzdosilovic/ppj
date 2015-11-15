@@ -11,11 +11,11 @@ import java.util.Map;
 
 public class GeneratorInputDefinition {
 
-  private List<String> inputLines = new ArrayList<String>();
-  private List<String> nonterminalSymbols = new ArrayList<String>();
-  private List<String> terminalSymbols = new ArrayList<String>();
-  private List<String> synchronousTerminalSymbols = new ArrayList<String>();
-  private Map<String, List<String>> productions = new HashMap<String, List<String>>();
+  private List<String> inputLines;
+  private List<String> nonterminalSymbols;
+  private List<String> terminalSymbols;
+  private List<String> synchronousTerminalSymbols;
+  private Map<String, List<String>> productions;
   private int index = 0;
 
   public GeneratorInputDefinition() throws IOException {
@@ -23,10 +23,10 @@ public class GeneratorInputDefinition {
   }
 
   public GeneratorInputDefinition(InputStream stream) throws IOException {
+    inputLines = new ArrayList<String>();
     BufferedReader input = new BufferedReader(new InputStreamReader(stream));
-    String line = " ";
-    while (line != null) {
-      line = input.readLine();
+    String line;
+    while ((line = input.readLine()) != null) {
       inputLines.add(line);
     }
   }
@@ -43,6 +43,7 @@ public class GeneratorInputDefinition {
   }
 
   void parseNonterminalSymbols() {
+    nonterminalSymbols = new ArrayList<String>();
     String[] line = inputLines.get(index++).split(" ");
     for (int i = 1; i < line.length; i++) {
       nonterminalSymbols.add(line[i]);
@@ -50,14 +51,15 @@ public class GeneratorInputDefinition {
   }
 
   void parseTerminalSymbols() {
+    terminalSymbols = new ArrayList<String>();
     String[] line = inputLines.get(index++).split(" ");
     for (int i = 1; i < line.length; i++) {
       terminalSymbols.add(line[i]);
     }
-
   }
 
   void parseSynchronousTerminalSymbols() {
+    synchronousTerminalSymbols = new ArrayList<String>();
     String[] line = inputLines.get(index++).split(" ");
     for (int i = 1; i < line.length; i++) {
       synchronousTerminalSymbols.add(line[i]);
@@ -65,6 +67,7 @@ public class GeneratorInputDefinition {
   }
 
   void parseProductions() {
+    productions = new HashMap<String, List<String>>();
     for (String simbol : nonterminalSymbols) {
       productions.put(simbol, new ArrayList<String>());
     }
