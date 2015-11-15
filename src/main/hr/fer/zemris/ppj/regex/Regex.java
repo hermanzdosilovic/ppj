@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hr.fer.zemris.ppj.Pair;
-import hr.fer.zemris.ppj.automaton.Automaton;
+import hr.fer.zemris.ppj.automaton.SimpleAutomaton;
 
 /**
  * Represents regular expression. Usage example:<br>
@@ -23,7 +23,7 @@ import hr.fer.zemris.ppj.automaton.Automaton;
  */
 public class Regex {
   private String value;
-  private Automaton automaton;
+  private SimpleAutomaton automaton;
 
   public Regex(final String value) {
     this.value = value;
@@ -43,11 +43,11 @@ public class Regex {
    * 
    * @return automaton which accepts the same language as this regex
    */
-  public Automaton toAutomaton() {
+  public SimpleAutomaton toAutomaton() {
     if (automaton != null) {
       return automaton;
     }
-    automaton = new Automaton();
+    automaton = new SimpleAutomaton();
     Pair<Integer, Integer> statePair = convertExpressionToAutomaton(value);
     automaton.setStartState(statePair.getFirst());
     automaton.setAcceptState(statePair.getSecond());
