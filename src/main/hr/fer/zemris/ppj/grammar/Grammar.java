@@ -12,13 +12,13 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
  *
  * @param <T> type of productions
  */
-public class Grammar<T> {
-  private List<Production<T>> productions;
-  private Map<NonTerminalSymbol<T>, Collection<Production<T>>> productionsTable;
+public class Grammar {
+  private List<Production> productions;
+  private Map<NonTerminalSymbol<?>, List<Production>> productionsTable;
 
-  public Grammar(Collection<Production<T>> productions) {
+  public Grammar(Collection<Production> productions) {
     this.productions = new ArrayList<>(productions);
-    for (Production<T> production : productions) {
+    for (Production production : productions) {
       if (!productionsTable.containsKey(production.getLeftSide())) {
         productionsTable.put(production.getLeftSide(), new ArrayList<>());
       }
@@ -26,8 +26,15 @@ public class Grammar<T> {
     }
   }
 
-  public List<Production<T>> getProductions() {
+  public List<Production> getProductions() {
     return productions;
+  }
+
+  public List<Production> getSymbolProductions(NonTerminalSymbol<?> symbol) {
+    if (!productionsTable.containsKey(symbol)) {
+      return new ArrayList<>();
+    }
+    return productionsTable.get(symbol);
   }
 
   @Override
@@ -46,7 +53,7 @@ public class Grammar<T> {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Grammar<?> other = (Grammar<?>) obj;
+    Grammar other = (Grammar) obj;
     if (productions == null) {
       if (other.productions != null)
         return false;

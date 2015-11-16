@@ -12,20 +12,20 @@ import hr.fer.zemris.ppj.symbol.Symbol;
  *
  * @param <T> type of symbols
  */
-public class Production<T> {
-  private NonTerminalSymbol<T> leftSide;
-  private List<Symbol<T>> rightSide;
+public class Production {
+  private NonTerminalSymbol<?> leftSide;
+  private List<Symbol<?>> rightSide;
 
-  public Production(NonTerminalSymbol<T> leftSide, Collection<Symbol<T>> rightSide) {
+  public Production(NonTerminalSymbol<?> leftSide, Collection<Symbol<?>> rightSide) {
     this.leftSide = leftSide;
     this.rightSide = new ArrayList<>(rightSide);
   }
 
-  public NonTerminalSymbol<T> getLeftSide() {
+  public NonTerminalSymbol<?> getLeftSide() {
     return leftSide;
   }
 
-  public List<Symbol<T>> getRightSide() {
+  public List<Symbol<?>> getRightSide() {
     return rightSide;
   }
 
@@ -46,7 +46,7 @@ public class Production<T> {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Production<?> other = (Production<?>) obj;
+    Production other = (Production) obj;
     if (leftSide == null) {
       if (other.leftSide != null)
         return false;
