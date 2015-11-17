@@ -2,6 +2,7 @@ package hr.fer.zemris.ppj.automaton;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,18 +13,6 @@ public class EpsilonNFAConverterTest {
 
   @Test
   public void basicTest() {
-    Set<String> states = new HashSet<String>();
-    Set<String> alphabet = new HashSet<String>();
-    String initialState = "1";
-    Set<String> acceptableStates = new HashSet<String>();
-
-    states.add("1");
-    states.add("2");
-    states.add("3");
-
-    alphabet.add("a");
-
-    acceptableStates.add("2");
 
     TransitionFunction<String, String> transitionFunction =
         new TransitionFunction<String, String>();
@@ -33,16 +22,19 @@ public class EpsilonNFAConverterTest {
 
 
     Automaton<String, String> enka =
-        new Automaton<String, String>(states, alphabet, transitionFunction, initialState,
-            acceptableStates);
+        new Automaton<String, String>(Arrays.asList("1", "2", "3"), Arrays.asList("a"),
+            transitionFunction, "1", Arrays.asList("2"));
     Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
+    
+    TransitionFunction<String, String> expectedTransitionFunction = new TransitionFunction<String, String>();
+    
+    expectedTransitionFunction.addTransition("1", "a", "3");
+    expectedTransitionFunction.addTransition("2", "a", "3");
+    
+    assertEquals(expectedTransitionFunction, nka.getTransitionFunction());
 
-    Set<String> newAcceptableStates = new HashSet<String>();
-    newAcceptableStates.add("1");
-    newAcceptableStates.add("2");
-
-    assertEquals(nka.getAcceptableStates(), newAcceptableStates);
-    assertEquals(nka.getStates(), states);
+    assertEquals(Arrays.asList("1", "2"), new ArrayList<>(nka.getAcceptableStates()));
+    assertEquals(Arrays.asList("1", "2", "3"), new ArrayList<>(nka.getStates()));
 
     assertTrue(nka.getTransitionFunction().existsTransition("1", "a"));
     assertTrue(nka.getTransitionFunction().existsTransition("2", "a"));
@@ -51,19 +43,10 @@ public class EpsilonNFAConverterTest {
   @Test
   public void bookExample() {
     Set<String> states = new HashSet<String>();
-    Set<String> alphabet = new HashSet<String>();
-    String initialState = "q0";
-    Set<String> acceptableStates = new HashSet<String>();
 
     states.add("q0");
     states.add("q1");
     states.add("q2");
-
-    alphabet.add("0");
-    alphabet.add("1");
-    alphabet.add("2");
-
-    acceptableStates.add("q2");
 
     TransitionFunction<String, String> transitionFunction =
         new TransitionFunction<String, String>();
@@ -75,16 +58,29 @@ public class EpsilonNFAConverterTest {
     transitionFunction.addEpsilonTransition("q1", "q2");
 
     Automaton<String, String> enka =
-        new Automaton<String, String>(states, alphabet, transitionFunction, initialState,
-            acceptableStates);
+        new Automaton<String, String>(Arrays.asList("q0", "q1", "q2"),
+            Arrays.asList("0", "1", "2"), transitionFunction, "q0", Arrays.asList("q2"));
     Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
+    
+    TransitionFunction<String, String> expectedTransitionFunction = new TransitionFunction<String, String>();
+    
+    expectedTransitionFunction.addTransition("q0", "0", "q0");
+    expectedTransitionFunction.addTransition("q0", "0", "q1");
+    expectedTransitionFunction.addTransition("q0", "0", "q2");
+    expectedTransitionFunction.addTransition("q0", "1", "q1");
+    expectedTransitionFunction.addTransition("q0", "1", "q2");
+    expectedTransitionFunction.addTransition("q0", "2", "q2");
+
+    expectedTransitionFunction.addTransition("q1", "1", "q1");
+    expectedTransitionFunction.addTransition("q1", "1", "q2");
+    expectedTransitionFunction.addTransition("q1", "2", "q2");
+
+    expectedTransitionFunction.addTransition("q2", "2", "q2");
 
     assertEquals(nka.getStates(), states);
     assertEquals(nka.getInitialState(), "q0");
-    Set<String> newAcceptableStates = new HashSet<String>();
-    newAcceptableStates.add("q2");
-    newAcceptableStates.add("q0");
-    assertEquals(nka.getAcceptableStates(), newAcceptableStates);
+    assertEquals(Arrays.asList("q2", "q0"), new ArrayList<>(nka.getAcceptableStates()));
+    assertEquals(expectedTransitionFunction, nka.getTransitionFunction());
 
     Set<String> newTransitionResults = new HashSet<String>();
 
@@ -140,63 +136,32 @@ public class EpsilonNFAConverterTest {
 
   @Test
   public void oneState() {
-    Set<String> states = new HashSet<String>();
-    Set<String> alphabet = new HashSet<String>();
-    String initialState = "q0";
-    Set<String> acceptableStates = new HashSet<String>();
-
-    states.add("q0");
-
-    acceptableStates.add("q0");
 
     TransitionFunction<String, String> transitionFunction =
         new TransitionFunction<String, String>();
 
     Automaton<String, String> enka =
-        new Automaton<String, String>(states, alphabet, transitionFunction, initialState,
-            acceptableStates);
+        new Automaton<String, String>(Arrays.asList("q0"), new HashSet<String>(),
+            transitionFunction, "q0", Arrays.asList("q0"));
     Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
 
-    assertEquals(states, nka.getStates());
-    assertEquals(acceptableStates, nka.getAcceptableStates());
+    assertEquals(Arrays.asList("q0"), new ArrayList<>(nka.getStates()));
+    assertEquals(Arrays.asList("q0"), new ArrayList<>(nka.getAcceptableStates()));
   }
 
   @Test
   public void noStates() {
-    Set<String> states = new HashSet<String>();
-    Set<String> alphabet = new HashSet<String>();
-    String initialState = "q0";
-    Set<String> acceptableStates = new HashSet<String>();
-
-    TransitionFunction<String, String> transitionFunction =
-        new TransitionFunction<String, String>();
 
     Automaton<String, String> enka =
-        new Automaton<String, String>(states, alphabet, transitionFunction, initialState,
-            acceptableStates);
+        new Automaton<String, String>(new HashSet<>(), new HashSet<>(),
+            new TransitionFunction<String, String>(), "q0", new HashSet<>());
     Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
 
-
-    assertEquals(states, nka.getStates());
+    assertEquals(Arrays.asList(), new ArrayList<>(nka.getStates()));
   }
 
   @Test
   public void auditorne() {
-    Set<String> states = new HashSet<String>();
-    Set<String> alphabet = new HashSet<String>();
-    String initialState = "q0";
-    Set<String> acceptableStates = new HashSet<String>();
-
-    states.add("q0");
-    states.add("q1");
-    states.add("q2");
-    states.add("q3");
-
-    alphabet.add("a");
-    alphabet.add("b");
-    alphabet.add("c");
-
-    acceptableStates.add("q2");
 
     TransitionFunction<String, String> transitionFunction =
         new TransitionFunction<String, String>();
@@ -222,13 +187,38 @@ public class EpsilonNFAConverterTest {
 
 
     Automaton<String, String> enka =
-        new Automaton<String, String>(states, alphabet, transitionFunction, initialState,
-            acceptableStates);
+        new Automaton<String, String>(Arrays.asList("q0", "q1", "q2", "q3"), Arrays.asList("a",
+            "b", "c"), transitionFunction, "q0", Arrays.asList("q2"));
     Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
 
-    assertEquals(states, nka.getStates());
-    assertEquals(alphabet, nka.getAlphabet());
-    assertEquals(initialState, nka.getInitialState());
+    TransitionFunction<String, String> expectedTransitionFunction = new TransitionFunction<String, String>();
+    
+    expectedTransitionFunction.addTransition("q0", "a", "q1");
+    expectedTransitionFunction.addTransition("q0", "a", "q2");
+    expectedTransitionFunction.addTransition("q0", "b", "q1");
+    expectedTransitionFunction.addTransition("q0", "b", "q2");
+    expectedTransitionFunction.addTransition("q0", "c", "q1");
+    expectedTransitionFunction.addTransition("q0", "c", "q2");
+    expectedTransitionFunction.addTransition("q0", "c", "q3");
+
+    expectedTransitionFunction.addTransition("q1", "a", "q1");
+    expectedTransitionFunction.addTransition("q1", "a", "q2");
+    expectedTransitionFunction.addTransition("q1", "b", "q1");
+    expectedTransitionFunction.addTransition("q1", "b", "q2");
+    expectedTransitionFunction.addTransition("q1", "c", "q3");
+
+    expectedTransitionFunction.addTransition("q2", "a", "q2");
+    expectedTransitionFunction.addTransition("q2", "b", "q1");
+    expectedTransitionFunction.addTransition("q2", "b", "q2");
+    expectedTransitionFunction.addTransition("q2", "c", "q3");
+
+    expectedTransitionFunction.addTransition("q3", "a", "q2");
+
+    assertEquals(Arrays.asList("q1", "q2", "q3", "q0"), new ArrayList<>(nka.getStates()));
+    assertEquals(Arrays.asList("a", "b", "c"), new ArrayList<>(nka.getAlphabet()));
+    assertEquals("q0", nka.getInitialState());
+    TransitionFunction<String, String> newTransitionFunction = nka.getTransitionFunction();
+    assertEquals(expectedTransitionFunction, newTransitionFunction);
 
     Set<String> newTransitionResults = new HashSet<String>();
 
@@ -291,8 +281,6 @@ public class EpsilonNFAConverterTest {
     newTransitionResults.clear();
     newTransitionResults.add("q2");
     assertEquals(newTransitionResults, nka.getTransitionFunction().getTransitionResult("q3", "a"));
-
-
   }
 
 }

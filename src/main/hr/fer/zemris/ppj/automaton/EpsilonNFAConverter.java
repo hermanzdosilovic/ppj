@@ -15,6 +15,7 @@ public class EpsilonNFAConverter {
     for (S state : automata.epsilonClosure(initialState)) {
       if (automata.hasAcceptableState(state)) {
         acceptableStates.add(initialState);
+        break;
       }
     }
 
@@ -22,14 +23,15 @@ public class EpsilonNFAConverter {
 
     for (S state : states) {
 
-      for (C input : alphabet) {
+      for (C symbol : alphabet) {
 
-        for (S epsilonTtransition : automata.epsilonClosure(state)) {
+        for (S epsilonTransition : automata.epsilonClosure(state)) {
 
-          for (S nextTransition : oldTransitionFunction.getTransitionResult(epsilonTtransition, input)) {
+          for (S nextState : oldTransitionFunction.getTransitionResult(epsilonTransition,
+              symbol)) {
 
-            for (S nextEpsilonTransition : automata.epsilonClosure(nextTransition)) {
-              newTransitionFunction.addTransition(state, input, nextEpsilonTransition);
+            for (S nextEpsilonClosureState : automata.epsilonClosure(nextState)) {
+              newTransitionFunction.addTransition(state, symbol, nextEpsilonClosureState);
             }
           }
         }
