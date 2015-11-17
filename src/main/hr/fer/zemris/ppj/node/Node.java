@@ -38,11 +38,14 @@ public class Node {
   /**
    * Makes a string which contains preorder output of this tree. Every child is written in a new line.
    * Child is indrawn for one space more than a parent. 
-   * 
+   * If the provided root is null, returns an empty string.
    * @param root - root of a tree
    * @return Returns a string that represents this tree.
    */
   public static String printTree(Node root) {
+    if (root == null) {
+      return "";
+    }
     StringBuilder output = new StringBuilder();
     buildOutputTree(root, 0, output);
     return output.toString();
