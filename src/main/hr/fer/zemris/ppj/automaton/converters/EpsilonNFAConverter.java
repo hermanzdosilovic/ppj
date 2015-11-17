@@ -1,7 +1,13 @@
-package hr.fer.zemris.ppj.automaton;
+package hr.fer.zemris.ppj.automaton.converters;
+
+import hr.fer.zemris.ppj.automaton.Automaton;
+import hr.fer.zemris.ppj.automaton.TransitionFunction;
 
 import java.util.Set;
 
+/**
+ * @author Ivan Trubic
+ */
 public class EpsilonNFAConverter {
 
   public static <S, C> Automaton<S, C> convertToNFA(Automaton<S, C> automata) {
@@ -20,16 +26,10 @@ public class EpsilonNFAConverter {
     }
 
     TransitionFunction<S, C> newTransitionFunction = new TransitionFunction<S, C>();
-
     for (S state : states) {
-
       for (C symbol : alphabet) {
-
         for (S epsilonTransition : automata.epsilonClosure(state)) {
-
-          for (S nextState : oldTransitionFunction.getTransitionResult(epsilonTransition,
-              symbol)) {
-
+          for (S nextState : oldTransitionFunction.getTransitionResult(epsilonTransition, symbol)) {
             for (S nextEpsilonClosureState : automata.epsilonClosure(nextState)) {
               newTransitionFunction.addTransition(state, symbol, nextEpsilonClosureState);
             }
@@ -37,8 +37,6 @@ public class EpsilonNFAConverter {
         }
       }
     }
-
-
 
     Automaton<S, C> nfaAutomata =
         new Automaton<S, C>(states, alphabet, newTransitionFunction, initialState, acceptableStates);
