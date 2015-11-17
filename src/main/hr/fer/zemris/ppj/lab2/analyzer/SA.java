@@ -6,6 +6,7 @@ import hr.fer.zemris.ppj.lab2.parser.action.Action;
 import hr.fer.zemris.ppj.lab2.parser.action.MoveAction;
 import hr.fer.zemris.ppj.lab2.parser.action.ReduceAction;
 import hr.fer.zemris.ppj.lab2.parser.action.RejectAction;
+import hr.fer.zemris.ppj.lab2.parser.deserializer.ParserDeserializer;
 import hr.fer.zemris.ppj.node.Node;
 
 import java.io.BufferedReader;
@@ -42,17 +43,22 @@ public class SA {
   private Integer startState;
   public static final String EPSILON = "$";
   public static final String END_STRING = "<posljednji_znakic>";
-  
+
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     List<String> input = readInput(System.in);
     input.add(END_STRING + " kraj T");
+    ParserDeserializer deserializer = new ParserDeserializer();
+    deserializer.deserializeParserStructures();
+    SA sa = new SA(deserializer.deserializeActions(), deserializer.deserializeNewState(),
+        deserializer.deserializeSynStrings(), deserializer.deserializeStartState());
+    System.out.println(sa.LR(input));
   }
-  
+
   public static List<String> readInput(InputStream inputStream) throws IOException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
     String line = "";
     List<String> input = new ArrayList<>();
-    while((line = reader.readLine()) != null) {
+    while ((line = reader.readLine()) != null) {
       input.add(line);
     }
     return input;
@@ -68,7 +74,8 @@ public class SA {
    * @param startState
    */
   public SA(Map<Pair<Integer, String>, Action> actions,
-      Map<Pair<Integer, String>, MoveAction> newState, List<String> synStrings, Integer startState) {
+      Map<Pair<Integer, String>, MoveAction> newState, List<String> synStrings,
+      Integer startState) {
     this.actions = actions;
     this.newState = newState;
     this.synStrings = synStrings;
