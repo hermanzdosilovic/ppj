@@ -1,5 +1,12 @@
 package hr.fer.zemris.ppj.lab2.parser.action;
 
+/**
+ * Represents a reduce action for LR parser. It should be able to answer how
+ * many characters should the LR parser take off it's stack and what's the left hand side
+ * of the production that is being used for this reduction.
+ * @author ikrpelnik
+ *
+ */
 public class ReduceAction implements Action {
 
   private static final long serialVersionUID = -6928861363927054533L;
