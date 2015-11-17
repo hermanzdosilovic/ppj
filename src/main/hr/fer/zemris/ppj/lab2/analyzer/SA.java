@@ -8,8 +8,13 @@ import hr.fer.zemris.ppj.lab2.parser.action.ReduceAction;
 import hr.fer.zemris.ppj.lab2.parser.action.RejectAction;
 import hr.fer.zemris.ppj.node.Node;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.Reader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -35,17 +40,22 @@ public class SA {
   private Map<Pair<Integer, String>, MoveAction> newState;
   private List<String> synStrings;
   private Integer startState;
-  public static String epsilon = "$";
-
-  public static void main(String[] args) {
-
-    // FileInputStream fileIn = new FileInputStream("  ");
-    // ObjectInputStream in = new ObjectInputStream(fileIn);
-    // Map<Pair<Integer, String>, Action> actions =
-    // (Map<Pair<Integer, String>, Action>) in.readObject();
-    //
-    //
-    //
+  public static final String EPSILON = "$";
+  public static final String END_STRING = "<posljednji_znakic>";
+  
+  public static void main(String[] args) throws IOException, ClassNotFoundException {
+    List<String> input = readInput(System.in);
+    input.add(END_STRING + " kraj T");
+  }
+  
+  public static List<String> readInput(InputStream inputStream) throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+    String line = "";
+    List<String> input = new ArrayList<>();
+    while((line = reader.readLine()) != null) {
+      input.add(line);
+    }
+    return input;
   }
 
   /**
@@ -110,7 +120,7 @@ public class SA {
 
         Node parent = new Node(leftSide);
         if (reduceNumber == 0) {
-          parent.addChild(new Node(epsilon));
+          parent.addChild(new Node(EPSILON));
         }
 
         Deque<Node> reversedChildren = new ArrayDeque<Node>();
