@@ -3,18 +3,19 @@ package hr.fer.zemris.ppj.lab2.parser;
 import java.util.List;
 
 import hr.fer.zemris.ppj.grammar.Production;
+import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class LRItem {
   private Production production;
   private Integer dotIndex;
-  private List<TerminalSymbol<?>> nextTerminalSymbols;
+  private List<TerminalSymbol<?>> terminalSymbols;
 
   public LRItem(Production production, Integer dotIndex,
-      List<TerminalSymbol<?>> nextTerminalSymbols) {
+      List<TerminalSymbol<?>> terminalSymbols) {
     this.production = production;
     this.dotIndex = dotIndex;
-    this.nextTerminalSymbols = nextTerminalSymbols;
+    this.terminalSymbols = terminalSymbols;
   }
 
   public Production getProduction() {
@@ -25,16 +26,28 @@ public class LRItem {
     return dotIndex;
   }
 
-  public List<TerminalSymbol<?>> getNextTerminalSymbols() {
-    return nextTerminalSymbols;
+  public List<TerminalSymbol<?>> getTerminalSymbols() {
+    return terminalSymbols;
   }
-
+  
+  public boolean isComplete() {
+    return dotIndex == production.getRightSide().size();
+  }
+  
+  public Symbol<?> getDotSymbol() {
+    return production.getRightSide().get(dotIndex);
+  }
+  
+  public LRItem createNextItem() {
+    return new LRItem(production, (dotIndex + 1)%(production.getRightSide().size() + 1), terminalSymbols);
+  }
+  
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((dotIndex == null) ? 0 : dotIndex.hashCode());
-    result = prime * result + ((nextTerminalSymbols == null) ? 0 : nextTerminalSymbols.hashCode());
+    result = prime * result + ((terminalSymbols == null) ? 0 : terminalSymbols.hashCode());
     result = prime * result + ((production == null) ? 0 : production.hashCode());
     return result;
   }
@@ -53,10 +66,10 @@ public class LRItem {
         return false;
     } else if (!dotIndex.equals(other.dotIndex))
       return false;
-    if (nextTerminalSymbols == null) {
-      if (other.nextTerminalSymbols != null)
+    if (terminalSymbols == null) {
+      if (other.terminalSymbols != null)
         return false;
-    } else if (!nextTerminalSymbols.equals(other.nextTerminalSymbols))
+    } else if (!terminalSymbols.equals(other.terminalSymbols))
       return false;
     if (production == null) {
       if (other.production != null)

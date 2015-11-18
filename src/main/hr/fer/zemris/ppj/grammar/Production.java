@@ -20,6 +20,14 @@ public class Production {
     this.leftSide = leftSide;
     this.rightSide = new ArrayList<>(rightSide);
   }
+  
+  /**
+   * Creates new epsilon production
+   * @param leftSide left side of epsilon production
+   */
+  public Production(NonTerminalSymbol<?> leftSide) {
+    this(leftSide, new ArrayList<>());
+  }
 
   public NonTerminalSymbol<?> getLeftSide() {
     return leftSide;
