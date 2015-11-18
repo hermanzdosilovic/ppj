@@ -22,11 +22,12 @@ public class Grammar {
   private List<Production> productions;
   private Map<NonTerminalSymbol<?>, List<Production>> productionsTable;
   private NonTerminalSymbol<?> initialNonTerminalSymbol;
-  
-  private Set<NonTerminalSymbol<?>> emptySymbols;
-  private Map<NonTerminalSymbol<?>, Set<Symbol<?>>> beginsDirectlyWithSymbolTable;
-  private Map<NonTerminalSymbol<?>, Set<Symbol<?>>> beginsWithSymbolTable;
-  
+
+  private Set<Symbol<?>> emptySymbols;
+  private Map<Symbol<?>, Set<Symbol<?>>> beginsDirectlyWithSymbolTable;
+  private Map<Symbol<?>, Set<Symbol<?>>> beginsWithSymbolTable;
+  private Map<Symbol<?>, Set<Symbol<?>>> beginsWithTable;
+
   public Grammar(Collection<Production> productions,
       NonTerminalSymbol<?> initialNonTerminalSymbol) {
     this.productions = new ArrayList<>(productions);
@@ -65,7 +66,7 @@ public class Grammar {
     }
     return getEmptySymbols().contains(symbol);
   }
-  
+
   public boolean isEmptySequence(Collection<Symbol<?>> sequence) {
     for (Symbol<?> symbol : sequence) {
       if (!isEmptySymbol(symbol)) {
@@ -74,12 +75,12 @@ public class Grammar {
     }
     return true;
   }
-  
-  public Set<NonTerminalSymbol<?>> getEmptySymbols() {
+
+  public Set<Symbol<?>> getEmptySymbols() {
     if (emptySymbols != null) {
       return emptySymbols;
     }
-    
+
     emptySymbols = new HashSet<>();
     for (Production production : productions) {
       if (production.getRightSide().isEmpty()) {
@@ -100,21 +101,21 @@ public class Grammar {
 
     return emptySymbols;
   }
-  
-  public Map<NonTerminalSymbol<?>, Set<Symbol<?>>> getBeginsDirectlyWithSymbolTable() {
+
+  public Map<Symbol<?>, Set<Symbol<?>>> getBeginsDirectlyWithSymbolTable() {
     if (beginsDirectlyWithSymbolTable != null) {
       return beginsDirectlyWithSymbolTable;
     }
-    
+
     beginsDirectlyWithSymbolTable = new HashMap<>();
     for (Production production : productions) {
       NonTerminalSymbol<?> leftSide = production.getLeftSide();
       List<Symbol<?>> rightSide = production.getRightSide();
-      
+
       if (!beginsDirectlyWithSymbolTable.containsKey(leftSide)) {
         beginsDirectlyWithSymbolTable.put(leftSide, new HashSet<>());
       }
-      
+
       for (Symbol<?> symbol : rightSide) {
         beginsDirectlyWithSymbolTable.get(leftSide).add(symbol);
         if (!isEmptySymbol(symbol)) {
@@ -122,45 +123,82 @@ public class Grammar {
         }
       }
     }
-    
+
     return beginsDirectlyWithSymbolTable;
   }
-  
-  public Map<NonTerminalSymbol<?>, Set<Symbol<?>>> getBeginsWithSymbolTable() {
+
+  public Map<Symbol<?>, Set<Symbol<?>>> getBeginsWithSymbolTable() {
     if (beginsWithSymbolTable != null) {
       return beginsWithSymbolTable;
     }
-    
+
     beginsWithSymbolTable = new HashMap<>();
-    Map<NonTerminalSymbol<?>, Set<Symbol<?>>> beginsDirectlyWithSymbolTable = getBeginsDirectlyWithSymbolTable();
-    
-    for (NonTerminalSymbol<?> symbol : beginsDirectlyWithSymbolTable.keySet()) {
+    Map<Symbol<?>, Set<Symbol<?>>> beginsDirectlyWithSymbolTable =
+        getBeginsDirectlyWithSymbolTable();
+
+    for (Symbol<?> symbol : beginsDirectlyWithSymbolTable.keySet()) {
       beginsWithSymbolTable.put(symbol, new HashSet<>());
       beginsWithSymbolTable.get(symbol).add(symbol);
-      
+
       for (Symbol<?> beginSymbol : beginsDirectlyWithSymbolTable.get(symbol)) {
-        beginsWithSymbolTable.get(symbol).addAll(transitiveClosure(symbol, beginSymbol));
+        beginsWithSymbolTable.get(symbol).addAll(transitiveClosure(beginSymbol));
       }
     }
-    
+
     return beginsWithSymbolTable;
   }
 
-  private Set<Symbol<?>> transitiveClosure(Symbol<?> lastSymbol,
-      Symbol<?> currentSymbol) {
-    if (currentSymbol.equals(lastSymbol)) {
-      return new HashSet<>(Arrays.asList(lastSymbol));
-    }
-    
-    HashSet<Symbol<?>> symbols = new HashSet<>();
-    symbols.add(currentSymbol);
-    if (beginsDirectlyWithSymbolTable.containsKey(currentSymbol)) {
-      for (Symbol<?> symbol : beginsDirectlyWithSymbolTable.get(currentSymbol)) {
-        symbols.addAll(transitiveClosure(currentSymbol, symbol));
+  private Set<Symbol<?>> transitiveClosure(Symbol<?> symbol) {
+    HashSet<Symbol<?>> transitiveClosure = new HashSet<>();
+    transitiveClosure.add(symbol);
+    if (beginsDirectlyWithSymbolTable.containsKey(symbol)) {
+      for (Symbol<?> neighbour : beginsDirectlyWithSymbolTable.get(symbol)) {
+        transitiveClosure.addAll(transitiveClosure(neighbour));
       }
     }
-    
-    return symbols;
+    return transitiveClosure;
+  }
+
+  public Map<Symbol<?>, Set<Symbol<?>>> getBeginsWithTable() {
+    if (beginsWithTable != null) {
+      return beginsWithTable;
+    }
+
+    beginsWithTable = new HashMap<>();
+    Map<Symbol<?>, Set<Symbol<?>>> beginsWithSymbolTable = getBeginsWithSymbolTable();
+
+    for (Symbol<?> symbol : beginsWithSymbolTable.keySet()) {
+      beginsWithTable.put(symbol, new HashSet<>());
+      for (Symbol<?> neighbourSymbol : beginsWithSymbolTable.get(symbol)) {
+        if (neighbourSymbol instanceof TerminalSymbol<?>) {
+          beginsWithTable.get(symbol).add((TerminalSymbol<?>) neighbourSymbol);
+        }
+      }
+    }
+
+    return beginsWithTable;
+  }
+
+  public Set<Symbol<?>> beginsWith(Symbol<?> symbol) {
+    if (!getBeginsWithTable().containsKey(symbol)) {
+      return new HashSet<>(Arrays.asList(symbol));
+    }
+    return getBeginsWithTable().get(symbol);
+  }
+
+  public Set<Symbol<?>> beginsWith(Collection<Symbol<?>> symbols) {
+    Set<Symbol<?>> beginsWith = new HashSet<>();
+    for (Symbol<?> symbol : symbols) {
+      beginsWith.addAll(beginsWith(symbol));
+      if (!isEmptySymbol(symbol)) {
+        break;
+      }
+    }
+    return beginsWith;
+  }
+
+  public Set<Symbol<?>> beginsWith(Production production) {
+    return beginsWith(production.getRightSide());
   }
 
   @Override
