@@ -31,4 +31,21 @@ public class NFAConverterTest {
     assertEquals(expectedStates, NFAConverter.findAcceptableStates(states, acceptibleStates));
     
   }
+  
+  @Test
+  public void findInitialState(){
+    Set<Set<Integer>> states = new HashSet<Set<Integer>>();
+    
+    states.add(new HashSet<Integer>(Arrays.asList(1, 2, 3)));
+    states.add(new HashSet<Integer>(Arrays.asList(2, 3, 4)));
+    states.add(new HashSet<Integer>(Arrays.asList(3, 4, 5)));
+    states.add(new HashSet<Integer>(Arrays.asList(1, 2)));
+    states.add(new HashSet<Integer>(Arrays.asList(2, 3)));
+    states.add(new HashSet<Integer>(Arrays.asList(1)));
+    states.add(new HashSet<Integer>(Arrays.asList(2)));
+    
+    
+    assertEquals(new HashSet<Integer>(Arrays.asList(1)), NFAConverter.findInitialState(states, new Integer(1)));
+
+  }
 }

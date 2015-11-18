@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.automaton.converters;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ public class NFAConverter {
     
     Set<Set<S>> newStates = SubsetHelper.getAllSubsets(automaton.getStates());
     Set<Set<S>> newAcceptibleStates = findAcceptableStates(newStates, automaton.getAcceptableStates());
+    Set<S> initialState = findInitialState(newStates, automaton.getInitialState());
 
 
 
@@ -33,6 +35,18 @@ public class NFAConverter {
     
     return newAcceptibleStates;
     
+  }
+  
+  static <S> Set<S> findInitialState(Set<Set<S>> newStates, S initalState){
+    Set<S> newInitialState = null;
+    
+    for(Set<S> newState : newStates) {
+      if(newState.equals(new HashSet<S>(Arrays.asList(initalState)))){
+       newInitialState = newState; 
+       break;
+      }
+    }
+    return newInitialState;
   }
 
   
