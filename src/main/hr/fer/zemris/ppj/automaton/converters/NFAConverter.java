@@ -1,64 +1,39 @@
 package hr.fer.zemris.ppj.automaton.converters;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import hr.fer.zemris.ppj.automaton.Automaton;
+import hr.fer.zemris.ppj.helpers.SubsetHelper;
 
 public class NFAConverter {
 
-  public static <S, C> Automaton convertToDFA(Automaton automaton) {
+  public static <S, C> Automaton<S, C> convertToDFA(Automaton<S, C> automaton) {
+    
+    Set<Set<S>> newStates = SubsetHelper.getAllSubsets(automaton.getStates());
+    Set<Set<S>> newAcceptibleStates = findAcceptableStates(newStates, automaton.getAcceptableStates());
 
 
 
     return automaton;
 
   }
-
-
-
-  HashSet<String> getpowerset(int a[], int size, HashSet<String> states) {
-    if (size < 0) {
-      return null;
+  
+  static <S> Set<Set<S>> findAcceptableStates(Set<Set<S>> newStates, Set<S> acceptibleStates){
+    Set<Set<S>> newAcceptibleStates = new HashSet<Set<S>>();
+    
+    for(Set<S> newState : newStates){
+     for(S state : newState) {
+       if(acceptibleStates.contains(state)){
+         newAcceptibleStates.add(newState);
+         break;
+       }
+     }
     }
-
-    if (size == 0) {
-      if (states == null)
-        states = new HashSet<String>();
-      states.add(" ");
-      return states;
-    }
-    states = getpowerset(a, size - 1, states);
-    HashSet<String> tmpStates = new HashSet<String>();
-    for (String state : states) {
-      if (state.equals(" "))
-        tmpStates.add("" + a[size - 1]);
-      else
-        tmpStates.add(state + a[size - 1]);
-    }
-    states.addAll(tmpStates);
-    return states;
+    
+    return newAcceptibleStates;
+    
   }
 
-  HashSet<String> getpowerset2(int size, HashSet<String> states) {
-    if (size < 0) {
-      return null;
-    }
-
-    if (size == 0) {
-      if (states == null)
-        states = new HashSet<String>();
-      states.add(" ");
-      return states;
-    }
-    states = getpowerset2(size - 1, states);
-    HashSet<String> tmpStates = new HashSet<String>();
-    for (String state : states) {
-      if (state.equals(" "))
-        tmpStates.add("");
-      else
-        tmpStates.add(state);
-    }
-    states.addAll(tmpStates);
-    return states;
-  }
+  
 }
