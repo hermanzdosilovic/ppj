@@ -20,6 +20,9 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
+/**
+ * @author Herman Zvonimir Dosilovic
+ */
 public class GrammarEpsilonNFAConverterTest {
 
   @Test
@@ -125,7 +128,7 @@ public class GrammarEpsilonNFAConverterTest {
     GrammarEpsilonNFAConverter.buildTransitions(new LRItem(new Production(S, A), 0, Arrays.asList(end)), actualTransitionFunction, grammar, visited);
     assertEquals(transitionFunction, actualTransitionFunction);
     
-//    Automaton<LRItem, Symbol<Character>> expectedAutomaton = new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
-//    assertEquals(expectedAutomaton, GrammarEpsilonNFAConverter.convert(grammar, end));
+    Automaton<LRItem, Symbol<Character>> expectedAutomaton = new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
+    assertEquals(expectedAutomaton, GrammarEpsilonNFAConverter.convert(grammar, end));
   }
 }

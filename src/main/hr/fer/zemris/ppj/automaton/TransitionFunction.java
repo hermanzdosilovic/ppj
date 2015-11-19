@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import hr.fer.zemris.ppj.Pair;
 
@@ -111,6 +112,23 @@ public class TransitionFunction<S, C> {
       }
     }
     return newTransitionFunction;
+  }
+
+  public Collection<S> getAllSources() {
+    Set<S> sources = new HashSet<>();
+    for (S source : neighbourTable.keySet()) {
+      sources.add(source);
+      sources.addAll(neighbourTable.get(source));
+    }
+    return sources;
+  }
+
+  public Collection<C> getAllInputSymbols() {
+    Set<C> inputSymbols = new HashSet<>();
+    for (Pair<S, C> pair : transitionTable.keySet()) {
+      inputSymbols.add(pair.getSecond());
+    }
+    return inputSymbols;
   }
 
   @Override
