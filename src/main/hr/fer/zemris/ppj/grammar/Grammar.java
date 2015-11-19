@@ -15,8 +15,6 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 /**
  * @author Herman Zvonimir Dosilovic
- *
- * @param <T> type of productions
  */
 public class Grammar {
   private List<Production> productions;
@@ -197,11 +195,11 @@ public class Grammar {
     }
     return beginsWith;
   }
-  
-  public Set<Symbol<?>> beginsWith(Symbol<?> ... symbols) {
+
+  public Set<Symbol<?>> beginsWith(Symbol<?>... symbols) {
     return beginsWith(Arrays.asList(symbols));
   }
-  
+
   public Set<Symbol<?>> beginsWith(Production production) {
     return beginsWith(production.getRightSide());
   }

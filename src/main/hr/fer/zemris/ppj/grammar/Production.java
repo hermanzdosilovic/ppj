@@ -10,8 +10,6 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 
 /**
  * @author Herman Zvonimir Dosilovic
- *
- * @param <T> type of symbols
  */
 public class Production {
   private NonTerminalSymbol<?> leftSide;
