@@ -170,4 +170,15 @@ public class GeneratorInputDefinitionTest {
     
     assertEquals(expectedProductions, inputDefinition.getProductions());
   }
+  
+  public void getInitialNonTerminalSymbolTest(){
+    List<String> inputLines = new ArrayList<String>();
+    inputLines.add("%V <ja_sam_pocetni> <ostatak_ekipe>");
+    
+    GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition(inputLines);
+    
+    inputDefinition.parseNonterminalSymbols();
+    
+    assertEquals(new NonTerminalSymbol<String>("<ja_sam_pocetni>"), inputDefinition.getInitialNonTerminalSymbol());
+  }
 }

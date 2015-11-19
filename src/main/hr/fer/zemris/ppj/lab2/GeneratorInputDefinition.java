@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.lab2;
 
+import hr.fer.zemris.ppj.grammar.Grammar;
 import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
@@ -10,17 +11,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class GeneratorInputDefinition {
 
   private List<String> inputLines;
   private List<NonTerminalSymbol<String>> nonterminalSymbols;
+  private NonTerminalSymbol<String> initialNonTerminalSymbol;
   private List<TerminalSymbol<String>> terminalSymbols;
   private List<TerminalSymbol<String>> synchronousTerminalSymbols;
   private List<Production> productions;
@@ -56,6 +54,7 @@ public class GeneratorInputDefinition {
     for (int i = 1; i < line.length; i++) {
       nonterminalSymbols.add(new NonTerminalSymbol<String>(line[i]));
     }
+    initialNonTerminalSymbol = new NonTerminalSymbol<String>(nonterminalSymbols.get(0).getValue());
   }
 
   void parseTerminalSymbols() {
@@ -80,10 +79,8 @@ public class GeneratorInputDefinition {
       String leftSide = inputLines.get(index++);
       while (index < inputLines.size() && inputLines.get(index).charAt(0) == ' ') {
         String rightSide = inputLines.get(index++);
-        Collection<Symbol<?>> symbols = new ArrayList<Symbol<?>>();
-        for(String symbol : rightSide.split(" ")){
-          if(symbol.length() == 0)
-            continue;
+        List<Symbol<?>> symbols = new ArrayList<Symbol<?>>();
+        for(String symbol : rightSide.substring(1).split(" ")){
           if(symbol.charAt(0) == '<'){
             symbols.add(new NonTerminalSymbol<String>(symbol));
           }
@@ -113,5 +110,13 @@ public class GeneratorInputDefinition {
 
   public List<Production> getProductions() {
     return productions;
+  }
+  
+  public NonTerminalSymbol<String> getInitialNonTerminalSymbol(){
+    return initialNonTerminalSymbol;
+  }
+  
+  public Grammar getGrammar(){
+    return new Grammar(productions, initialNonTerminalSymbol);
   }
 }
