@@ -1,6 +1,7 @@
 package hr.fer.zemris.ppj.grammar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,12 +16,16 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 public class Production {
   private NonTerminalSymbol<?> leftSide;
   private List<Symbol<?>> rightSide;
-
+  
   public Production(NonTerminalSymbol<?> leftSide, Collection<Symbol<?>> rightSide) {
     this.leftSide = leftSide;
     this.rightSide = new ArrayList<>(rightSide);
   }
   
+  public Production(NonTerminalSymbol<?> leftSide, Symbol<?> ... rightSide) {
+    this(leftSide, Arrays.asList(rightSide));
+  }
+ 
   /**
    * Creates new epsilon production
    * @param leftSide left side of epsilon production
