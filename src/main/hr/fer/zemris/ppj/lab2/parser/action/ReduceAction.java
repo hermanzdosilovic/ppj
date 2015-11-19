@@ -2,8 +2,7 @@ package hr.fer.zemris.ppj.lab2.parser.action;
 
 import hr.fer.zemris.ppj.grammar.Production;
 
-public class ReduceAction implements Action {
-
+public final class ReduceAction implements Action {
   private static final long serialVersionUID = -6928861363927054533L;
   private Production production;
 
@@ -14,7 +13,7 @@ public class ReduceAction implements Action {
   public Production getProduction() {
     return production;
   }
-  
+
   @Override
   public String toString() {
     return "reduce(" + production + ")";

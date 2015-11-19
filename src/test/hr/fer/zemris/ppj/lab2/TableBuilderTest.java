@@ -20,6 +20,7 @@ import hr.fer.zemris.ppj.lab2.parser.LRItem;
 import hr.fer.zemris.ppj.lab2.parser.action.AcceptAction;
 import hr.fer.zemris.ppj.lab2.parser.action.Action;
 import hr.fer.zemris.ppj.lab2.parser.action.MoveAction;
+import hr.fer.zemris.ppj.lab2.parser.action.PutAction;
 import hr.fer.zemris.ppj.lab2.parser.action.ReduceAction;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
@@ -32,6 +33,7 @@ public class TableBuilderTest {
 
   private Automaton<Set<LRItem>, Symbol<?>> automaton;
   private Map<Pair<Set<LRItem>, TerminalSymbol<?>>, Action> actionTable;
+  private Map<Pair<Set<LRItem>, NonTerminalSymbol<?>>, Action> newStateTable;
   
   @BeforeClass
   public static void createSymbols() {
@@ -44,7 +46,7 @@ public class TableBuilderTest {
   }
 
   @Before
-  public void buildAutomatonAndTable() {
+  public void buildTables() {
     LRItem i00 = new LRItem(new Production(null, Arrays.asList()), 0, Arrays.asList()); // q0 state
     LRItem i01 = new LRItem(new Production(S, A), 0, Arrays.asList(end));
     LRItem i02 = new LRItem(new Production(A, B, A), 0, Arrays.asList(end));
@@ -120,6 +122,9 @@ public class TableBuilderTest {
     actionTable.put(new Pair<>(s6, a), new ReduceAction(new Production(B, a, B)));
     actionTable.put(new Pair<>(s6, b), new ReduceAction(new Production(B, a, B)));
     actionTable.put(new Pair<>(s6, end), new ReduceAction(new Production(B, a, B)));
+    
+    newStateTable = new HashMap<>();
+    newStateTable.put(new Pair<>(s0, B), new PutAction<>(s1));
   }
   
   @Test

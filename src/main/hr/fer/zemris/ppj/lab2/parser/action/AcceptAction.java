@@ -1,7 +1,6 @@
 package hr.fer.zemris.ppj.lab2.parser.action;
 
-public class AcceptAction implements Action {
-
+public final class AcceptAction implements Action {
   private static final long serialVersionUID = 7479073770788071993L;
 
   @Override
@@ -12,9 +11,7 @@ public class AcceptAction implements Action {
   @Override
   public int hashCode() {
     final int prime = 31;
-    int result = 1;
-    result = prime * result;
-    return result;
+    return prime;
   }
 
   @Override

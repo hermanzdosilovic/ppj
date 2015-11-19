@@ -1,10 +1,13 @@
 package hr.fer.zemris.ppj.lab2.parser.action;
 
-public final class MoveAction<E> implements Action {
-  private static final long serialVersionUID = 5192614674806549599L;
+/**
+ * @author Herman Zvonimir Dosilovic
+ */
+public class PutAction<E> implements Action {
+  private static final long serialVersionUID = 6227474813983150516L;
   private E state;
 
-  public MoveAction(E state) {
+  public PutAction(E state) {
     this.state = state;
   }
 
@@ -14,7 +17,7 @@ public final class MoveAction<E> implements Action {
 
   @Override
   public String toString() {
-    return "move(" + state + ")";
+    return "put(" + state + ")";
   }
 
   @Override
@@ -33,7 +36,7 @@ public final class MoveAction<E> implements Action {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    MoveAction<?> other = (MoveAction<?>) obj;
+    PutAction<?> other = (PutAction<?>) obj;
     if (state == null) {
       if (other.state != null)
         return false;
