@@ -69,38 +69,38 @@ public class GrammarTest {
   
   @Test
   public void beginsDirectlyWithSymbolTest() {
-    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsDirectlyWithTable = new HashMap<>();
-    expectedBeginsDirectlyWithTable.put(A, new HashSet<>(Arrays.asList(B, C, e)));
-    expectedBeginsDirectlyWithTable.put(B, new HashSet<>(Arrays.asList(b)));
-    expectedBeginsDirectlyWithTable.put(C, new HashSet<>(Arrays.asList(D, a, c)));
-    expectedBeginsDirectlyWithTable.put(D, new HashSet<>(Arrays.asList(d)));
-    expectedBeginsDirectlyWithTable.put(E, new HashSet<>(Arrays.asList(c, e)));
+    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsDirectlyWithSymbolTable = new HashMap<>();
+    expectedBeginsDirectlyWithSymbolTable.put(A, new HashSet<>(Arrays.asList(B, C, e)));
+    expectedBeginsDirectlyWithSymbolTable.put(B, new HashSet<>(Arrays.asList(b)));
+    expectedBeginsDirectlyWithSymbolTable.put(C, new HashSet<>(Arrays.asList(D, a, c)));
+    expectedBeginsDirectlyWithSymbolTable.put(D, new HashSet<>(Arrays.asList(d)));
+    expectedBeginsDirectlyWithSymbolTable.put(E, new HashSet<>(Arrays.asList(c, e)));
     
-    assertEquals(expectedBeginsDirectlyWithTable, grammar.getBeginsDirectlyWithSymbolTable());
+    assertEquals(expectedBeginsDirectlyWithSymbolTable, grammar.getBeginsDirectlyWithSymbolTable());
   }
   
   @Test
   public void beginsWithSymbolTest() {
-    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsDirectlyWithTable = new HashMap<>();
-    expectedBeginsDirectlyWithTable.put(A, new HashSet<>(Arrays.asList(A, B, C, D, a, b, c, d, e)));
-    expectedBeginsDirectlyWithTable.put(B, new HashSet<>(Arrays.asList(B, b)));
-    expectedBeginsDirectlyWithTable.put(C, new HashSet<>(Arrays.asList(C, D, a, c, d)));
-    expectedBeginsDirectlyWithTable.put(D, new HashSet<>(Arrays.asList(D, d)));
-    expectedBeginsDirectlyWithTable.put(E, new HashSet<>(Arrays.asList(E, c, e)));
+    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsWithSymbolTable = new HashMap<>();
+    expectedBeginsWithSymbolTable.put(A, new HashSet<>(Arrays.asList(A, B, C, D, a, b, c, d, e)));
+    expectedBeginsWithSymbolTable.put(B, new HashSet<>(Arrays.asList(B, b)));
+    expectedBeginsWithSymbolTable.put(C, new HashSet<>(Arrays.asList(C, D, a, c, d)));
+    expectedBeginsWithSymbolTable.put(D, new HashSet<>(Arrays.asList(D, d)));
+    expectedBeginsWithSymbolTable.put(E, new HashSet<>(Arrays.asList(E, c, e)));
     
-    assertEquals(expectedBeginsDirectlyWithTable, grammar.getBeginsWithSymbolTable());
+    assertEquals(expectedBeginsWithSymbolTable, grammar.getBeginsWithSymbolTable());
   }
   
   @Test
   public void beginsWithTest() {
-    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsDirectlyWithTable = new HashMap<>();
-    expectedBeginsDirectlyWithTable.put(A, new HashSet<>(Arrays.asList(a, b, c, d, e)));
-    expectedBeginsDirectlyWithTable.put(B, new HashSet<>(Arrays.asList(b)));
-    expectedBeginsDirectlyWithTable.put(C, new HashSet<>(Arrays.asList(a, c, d)));
-    expectedBeginsDirectlyWithTable.put(D, new HashSet<>(Arrays.asList(d)));
-    expectedBeginsDirectlyWithTable.put(E, new HashSet<>(Arrays.asList(c, e)));
+    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsWithTable = new HashMap<>();
+    expectedBeginsWithTable.put(A, new HashSet<>(Arrays.asList(a, b, c, d, e)));
+    expectedBeginsWithTable.put(B, new HashSet<>(Arrays.asList(b)));
+    expectedBeginsWithTable.put(C, new HashSet<>(Arrays.asList(a, c, d)));
+    expectedBeginsWithTable.put(D, new HashSet<>(Arrays.asList(d)));
+    expectedBeginsWithTable.put(E, new HashSet<>(Arrays.asList(c, e)));
     
-    assertEquals(expectedBeginsDirectlyWithTable, grammar.getBeginsWithTable());
+    assertEquals(expectedBeginsWithTable, grammar.getBeginsWithTable());
   }
   
   @Test
@@ -114,5 +114,21 @@ public class GrammarTest {
     assertEquals(new HashSet<>(Arrays.asList(d)), grammar.beginsWith(d, D));
     assertEquals(new HashSet<>(Arrays.asList(e)), grammar.beginsWith(e, A, f));
     assertEquals(new HashSet<>(Arrays.asList(c)), grammar.beginsWith(c));
+  }
+  
+  @Test
+  public void grammarCycleTest() {
+    List<Production> productions = new ArrayList<>();
+    productions.add(new Production(A, B));
+    productions.add(new Production(B, b, B, B));
+    productions.add(new Production(B, d));
+    
+    Grammar grammar = new Grammar(productions, A);
+    
+    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsWithSymbolTable = new HashMap<>();
+    expectedBeginsWithSymbolTable.put(A, new HashSet<>(Arrays.asList(A, B, b, d)));
+    expectedBeginsWithSymbolTable.put(B, new HashSet<>(Arrays.asList(B, b, d)));
+    
+    assertEquals(expectedBeginsWithSymbolTable, grammar.getBeginsWithSymbolTable());
   }
 }

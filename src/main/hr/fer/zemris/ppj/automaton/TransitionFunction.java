@@ -16,7 +16,6 @@ import hr.fer.zemris.ppj.Pair;
  * @param <C> input symbol
  */
 public class TransitionFunction<S, C> {
-
   private Map<Pair<S, C>, Collection<S>> transitionTable;
   private Map<S, Collection<S>> epsilonTransitionTable;
   private Map<S, Collection<S>> neighbourTable;
