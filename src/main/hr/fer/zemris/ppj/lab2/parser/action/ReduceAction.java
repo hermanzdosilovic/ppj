@@ -1,41 +1,47 @@
 package hr.fer.zemris.ppj.lab2.parser.action;
 
+import hr.fer.zemris.ppj.grammar.Production;
+
 public class ReduceAction implements Action {
 
   private static final long serialVersionUID = -6928861363927054533L;
+  private Production production;
 
-  /**
-   * How many characters should be taken of the stack of LR parser
-   */
-  private int howMany;
-  
-  /**
-   * Left hand side of the production that should be used
-   */
-  private String leftHandSide;
-  
-  public ReduceAction() {
+  public ReduceAction(Production production) {
+    this.production = production;
+  }
+
+  public Production getProduction() {
+    return production;
   }
   
-  public ReduceAction(int howMany, String leftHandSide) {
-    this.howMany = howMany;
-    this.leftHandSide = leftHandSide;
+  @Override
+  public String toString() {
+    return "reduce(" + production + ")";
   }
-  
-  public void setHowMany(int howMany) {
-    this.howMany = howMany;
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((production == null) ? 0 : production.hashCode());
+    return result;
   }
-  
-  public void setLeftHandSide(String leftHandSide) {
-    this.leftHandSide = leftHandSide;
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ReduceAction other = (ReduceAction) obj;
+    if (production == null) {
+      if (other.production != null)
+        return false;
+    } else if (!production.equals(other.production))
+      return false;
+    return true;
   }
-  
-  public int getHowMany() {
-    return howMany;
-  }
-  
-  public String getLeftHandSide() {
-    return leftHandSide;
-  }
-  
 }

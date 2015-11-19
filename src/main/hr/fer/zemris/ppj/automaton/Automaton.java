@@ -90,7 +90,7 @@ public class Automaton<S, C> {
   }
 
   public TransitionFunction<S, C> getTransitionFunction() {
-    return new TransitionFunction<S, C>(transitionFunction); 
+    return new TransitionFunction<S, C>(transitionFunction);
   }
 
   public Set<S> getReachableStates() {
