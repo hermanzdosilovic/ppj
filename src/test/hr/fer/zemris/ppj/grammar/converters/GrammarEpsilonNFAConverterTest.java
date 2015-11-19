@@ -1,4 +1,4 @@
-package hr.fer.zemris.ppj.automaton.converters;
+package hr.fer.zemris.ppj.grammar.converters;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,7 +14,6 @@ import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
 import hr.fer.zemris.ppj.grammar.Grammar;
 import hr.fer.zemris.ppj.grammar.Production;
-import hr.fer.zemris.ppj.grammar.coverters.GrammarEpsilonNFAConverter;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;

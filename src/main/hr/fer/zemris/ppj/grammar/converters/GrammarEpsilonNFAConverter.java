@@ -1,4 +1,4 @@
-package hr.fer.zemris.ppj.grammar.coverters;
+package hr.fer.zemris.ppj.grammar.converters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,7 +40,7 @@ public class GrammarEpsilonNFAConverter {
     return new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
   }
 
-  public static void buildTransitions(LRItem item,
+  static void buildTransitions(LRItem item,
       TransitionFunction<LRItem, Symbol<?>> transitionFunction, Grammar grammar,
       Set<LRItem> visited) {
     if (item.isComplete()) {
