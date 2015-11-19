@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.grammar.coverters;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import hr.fer.zemris.ppj.automaton.Automaton;
@@ -13,7 +14,7 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 public class GrammarEpsilonNFAConverter {
 
   public static Automaton<LRItem, Symbol<?>> convert(Grammar grammar) {
-    LRItem initialState = new LRItem(new Production(null, null), null, null);
+    LRItem initialState = new LRItem(new Production(null, new ArrayList<>()), null, null);
     LRItem firstLRState = new LRItem(grammar.getInitialProduction(), 0, Arrays.asList());
     
     TransitionFunction<LRItem, Symbol<?>> transitionFunction = new TransitionFunction<>();

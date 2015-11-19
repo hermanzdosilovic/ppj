@@ -61,9 +61,6 @@ public class Grammar {
   }
 
   public boolean isEmptySymbol(Symbol<?> symbol) {
-    if (symbol instanceof TerminalSymbol<?>) {
-      return false;
-    }
     return getEmptySymbols().contains(symbol);
   }
 
@@ -74,6 +71,10 @@ public class Grammar {
       }
     }
     return true;
+  }
+
+  public boolean isEpsilonProduction(Production production) {
+    return isEmptySequence(production.getRightSide());
   }
 
   public Set<Symbol<?>> getEmptySymbols() {
@@ -196,7 +197,11 @@ public class Grammar {
     }
     return beginsWith;
   }
-
+  
+  public Set<Symbol<?>> beginsWith(Symbol<?> ... symbols) {
+    return beginsWith(Arrays.asList(symbols));
+  }
+  
   public Set<Symbol<?>> beginsWith(Production production) {
     return beginsWith(production.getRightSide());
   }

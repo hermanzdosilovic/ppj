@@ -16,18 +16,19 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 public class Production {
   private NonTerminalSymbol<?> leftSide;
   private List<Symbol<?>> rightSide;
-  
+
   public Production(NonTerminalSymbol<?> leftSide, Collection<Symbol<?>> rightSide) {
     this.leftSide = leftSide;
     this.rightSide = new ArrayList<>(rightSide);
   }
-  
-  public Production(NonTerminalSymbol<?> leftSide, Symbol<?> ... rightSide) {
+
+  public Production(NonTerminalSymbol<?> leftSide, Symbol<?>... rightSide) {
     this(leftSide, Arrays.asList(rightSide));
   }
- 
+
   /**
    * Creates new epsilon production
+   * 
    * @param leftSide left side of epsilon production
    */
   public Production(NonTerminalSymbol<?> leftSide) {
@@ -40,6 +41,10 @@ public class Production {
 
   public List<Symbol<?>> getRightSide() {
     return rightSide;
+  }
+
+  public boolean isEpsilonProduction() {
+    return rightSide.isEmpty();
   }
 
   @Override

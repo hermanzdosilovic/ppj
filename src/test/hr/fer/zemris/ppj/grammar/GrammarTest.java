@@ -33,16 +33,16 @@ public class GrammarTest {
     TerminalSymbol<Character> f = new TerminalSymbol<Character>('f');
     
     List<Production> productions = new ArrayList<>();
-    productions.add(new Production(A, Arrays.asList(B, C, c)));
-    productions.add(new Production(A, Arrays.asList(e, D, B)));
-    productions.add(new Production(B)); // epsilon production
-    productions.add(new Production(B, Arrays.asList(b, C, D, E)));
-    productions.add(new Production(C, Arrays.asList(D, a, B)));
-    productions.add(new Production(C, Arrays.asList(c, a)));
+    productions.add(new Production(A, B, C, c));
+    productions.add(new Production(A, e, D, B));
+    productions.add(new Production(B));
+    productions.add(new Production(B, b, C, D, E));
+    productions.add(new Production(C, D, a, B));
+    productions.add(new Production(C, c, a));
     productions.add(new Production(D));
-    productions.add(new Production(D, Arrays.asList(d, D)));
-    productions.add(new Production(E, Arrays.asList(e, A, f)));
-    productions.add(new Production(E, Arrays.asList(c)));
+    productions.add(new Production(D, d, D));
+    productions.add(new Production(E, e, A, f));
+    productions.add(new Production(E, c));
     
     Grammar grammar = new Grammar(productions, A);
     
@@ -64,16 +64,16 @@ public class GrammarTest {
     TerminalSymbol<Character> f = new TerminalSymbol<Character>('f');
     
     List<Production> productions = new ArrayList<>();
-    productions.add(new Production(A, Arrays.asList(B, C, c)));
-    productions.add(new Production(A, Arrays.asList(e, D, B)));
-    productions.add(new Production(B)); // epsilon production
-    productions.add(new Production(B, Arrays.asList(b, C, D, E)));
-    productions.add(new Production(C, Arrays.asList(D, a, B)));
-    productions.add(new Production(C, Arrays.asList(c, a)));
+    productions.add(new Production(A, B, C, c));
+    productions.add(new Production(A, e, D, B));
+    productions.add(new Production(B));
+    productions.add(new Production(B, b, C, D, E));
+    productions.add(new Production(C, D, a, B));
+    productions.add(new Production(C, c, a));
     productions.add(new Production(D));
-    productions.add(new Production(D, Arrays.asList(d, D)));
-    productions.add(new Production(E, Arrays.asList(e, A, f)));
-    productions.add(new Production(E, Arrays.asList(c)));
+    productions.add(new Production(D, d, D));
+    productions.add(new Production(E, e, A, f));
+    productions.add(new Production(E, c));
     
     Grammar grammar = new Grammar(productions, A);
     
@@ -102,16 +102,16 @@ public class GrammarTest {
     TerminalSymbol<Character> f = new TerminalSymbol<Character>('f');
     
     List<Production> productions = new ArrayList<>();
-    productions.add(new Production(A, Arrays.asList(B, C, c)));
-    productions.add(new Production(A, Arrays.asList(e, D, B)));
-    productions.add(new Production(B)); // epsilon production
-    productions.add(new Production(B, Arrays.asList(b, C, D, E)));
-    productions.add(new Production(C, Arrays.asList(D, a, B)));
-    productions.add(new Production(C, Arrays.asList(c, a)));
+    productions.add(new Production(A, B, C, c));
+    productions.add(new Production(A, e, D, B));
+    productions.add(new Production(B));
+    productions.add(new Production(B, b, C, D, E));
+    productions.add(new Production(C, D, a, B));
+    productions.add(new Production(C, c, a));
     productions.add(new Production(D));
-    productions.add(new Production(D, Arrays.asList(d, D)));
-    productions.add(new Production(E, Arrays.asList(e, A, f)));
-    productions.add(new Production(E, Arrays.asList(c)));
+    productions.add(new Production(D, d, D));
+    productions.add(new Production(E, e, A, f));
+    productions.add(new Production(E, c));
     
     Grammar grammar = new Grammar(productions, A);
     
@@ -140,16 +140,16 @@ public class GrammarTest {
     TerminalSymbol<Character> f = new TerminalSymbol<Character>('f');
     
     List<Production> productions = new ArrayList<>();
-    productions.add(new Production(A, Arrays.asList(B, C, c)));
-    productions.add(new Production(A, Arrays.asList(e, D, B)));
-    productions.add(new Production(B)); // epsilon production
-    productions.add(new Production(B, Arrays.asList(b, C, D, E)));
-    productions.add(new Production(C, Arrays.asList(D, a, B)));
-    productions.add(new Production(C, Arrays.asList(c, a)));
+    productions.add(new Production(A, B, C, c));
+    productions.add(new Production(A, e, D, B));
+    productions.add(new Production(B));
+    productions.add(new Production(B, b, C, D, E));
+    productions.add(new Production(C, D, a, B));
+    productions.add(new Production(C, c, a));
     productions.add(new Production(D));
-    productions.add(new Production(D, Arrays.asList(d, D)));
-    productions.add(new Production(E, Arrays.asList(e, A, f)));
-    productions.add(new Production(E, Arrays.asList(c)));
+    productions.add(new Production(D, d, D));
+    productions.add(new Production(E, e, A, f));
+    productions.add(new Production(E, c));
     
     Grammar grammar = new Grammar(productions, A);
     
@@ -178,16 +178,16 @@ public class GrammarTest {
     TerminalSymbol<Character> f = new TerminalSymbol<Character>('f');
     
     List<Production> productions = new ArrayList<>();
-    productions.add(new Production(A, Arrays.asList(B, C, c)));
-    productions.add(new Production(A, Arrays.asList(e, D, B)));
-    productions.add(new Production(B)); // epsilon production
-    productions.add(new Production(B, Arrays.asList(b, C, D, E)));
-    productions.add(new Production(C, Arrays.asList(D, a, B)));
-    productions.add(new Production(C, Arrays.asList(c, a)));
+    productions.add(new Production(A, B, C, c));
+    productions.add(new Production(A, e, D, B));
+    productions.add(new Production(B));
+    productions.add(new Production(B, b, C, D, E));
+    productions.add(new Production(C, D, a, B));
+    productions.add(new Production(C, c, a));
     productions.add(new Production(D));
-    productions.add(new Production(D, Arrays.asList(d, D)));
-    productions.add(new Production(E, Arrays.asList(e, A, f)));
-    productions.add(new Production(E, Arrays.asList(c)));
+    productions.add(new Production(D, d, D));
+    productions.add(new Production(E, e, A, f));
+    productions.add(new Production(E, c));
     
     Grammar grammar = new Grammar(productions, A);
     
