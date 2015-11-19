@@ -11,7 +11,6 @@ import hr.fer.zemris.ppj.helpers.SubsetHelper;
 public class NFAConverter {
 
   public static <S, C> Automaton<Set<S>, C> convertToDFA(Automaton<S, C> automaton) {
-
     Set<Set<S>> newStates = SubsetHelper.getAllSubsets(automaton.getStates());
     Set<Set<S>> newAcceptibleStates =
         findAcceptableStates(newStates, automaton.getAcceptableStates());
@@ -36,13 +35,11 @@ public class NFAConverter {
         }
       }
     }
-
     return newAcceptibleStates;
-
   }
 
   static <S> Set<S> findInitialState(Set<Set<S>> newStates, S initalState) {
-    Set<S> newInitialState = null;
+    Set<S> newInitialState = new HashSet<S>();
 
     for (Set<S> newState : newStates) {
       if (newState.equals(new HashSet<S>(Arrays.asList(initalState)))) {
@@ -57,18 +54,16 @@ public class NFAConverter {
       TransitionFunction<S, C> transitionFunction, Set<Set<S>> states, Set<C> alphabet) {
     TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<Set<S>, C>();
 
-    Set<S> newTransition = new HashSet<S>();
     for (Set<S> state : states) {
       for (C symbol : alphabet) {
-        newTransition.clear();
+        Set<S> newTransition = new HashSet<S>();
         for (S singleState : state) {
           newTransition.addAll(transitionFunction.getTransitionResult(singleState, symbol));
         }
-        newTransitionFunction.addTransition(state, symbol, new HashSet<S>(newTransition));
+        newTransitionFunction.addTransition(state, symbol, newTransition);
       }
     }
     return newTransitionFunction;
   }
-
 
 }

@@ -31,13 +31,11 @@ public class NFAConverterTest {
     expectedStates.add(new HashSet<Integer>(Arrays.asList(3, 2, 1)));
 
     assertEquals(expectedStates, NFAConverter.findAcceptableStates(states, acceptibleStates));
-
   }
 
   @Test
   public void findInitialState() {
     Set<Set<Integer>> states = new HashSet<Set<Integer>>();
-
     states.add(new HashSet<Integer>(Arrays.asList(1, 2, 3)));
     states.add(new HashSet<Integer>(Arrays.asList(2, 3, 4)));
     states.add(new HashSet<Integer>(Arrays.asList(3, 4, 5)));
@@ -46,10 +44,8 @@ public class NFAConverterTest {
     states.add(new HashSet<Integer>(Arrays.asList(1)));
     states.add(new HashSet<Integer>(Arrays.asList(2)));
 
-
     assertEquals(new HashSet<Integer>(Arrays.asList(1)),
         NFAConverter.findInitialState(states, new Integer(1)));
-
   }
 
   @Test
@@ -135,14 +131,11 @@ public class NFAConverterTest {
     Automaton<Integer, Integer> nka =
         new Automaton<Integer, Integer>(Arrays.asList(0, 1), Arrays.asList(0, 1),
             nkaTransitionFunction, 0, Arrays.asList(1));
-
     Automaton<Set<Integer>, Integer> dka = NFAConverter.convertToDFA(nka);
-
     Automaton<Set<Integer>, Integer> expectedDKA =
         new Automaton<Set<Integer>, Integer>(dkaStates, Arrays.asList(0, 1), dkaTransitionFunction,
             new HashSet<Integer>(Arrays.asList(0)), dkaAcceptableStates);
     
     assertEquals(expectedDKA, dka);
-
   }
 }
