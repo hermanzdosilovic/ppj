@@ -40,7 +40,7 @@ public class Production {
   }
 
   public List<Symbol<?>> getRightSide() {
-    return rightSide;
+    return new ArrayList<>(rightSide);
   }
 
   public boolean isEpsilonProduction() {

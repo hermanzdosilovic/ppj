@@ -1,21 +1,31 @@
 package hr.fer.zemris.ppj.lab2.parser;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
+/**
+ * @author Herman Zvonimir Dosilovic
+ */
 public class LRItem {
   private Production production;
   private Integer dotIndex;
-  private List<TerminalSymbol<?>> terminalSymbols;
+  private Set<TerminalSymbol<?>> terminalSymbols;
 
+  private LRItem nextLRItem;
+  
   public LRItem(Production production, Integer dotIndex,
-      List<TerminalSymbol<?>> terminalSymbols) {
+      Set<TerminalSymbol<?>> terminalSymbols) {
     this.production = production;
     this.dotIndex = dotIndex;
-    this.terminalSymbols = terminalSymbols;
+    this.terminalSymbols = new HashSet<>(terminalSymbols);
+    
+    if (!isComplete()) {
+      nextLRItem = new LRItem(production, dotIndex + 1, terminalSymbols);
+    }
   }
 
   public Production getProduction() {
@@ -26,8 +36,8 @@ public class LRItem {
     return dotIndex;
   }
 
-  public List<TerminalSymbol<?>> getTerminalSymbols() {
-    return terminalSymbols;
+  public Set<TerminalSymbol<?>> getTerminalSymbols() {
+    return new HashSet<>(terminalSymbols);
   }
   
   public boolean isComplete() {
@@ -35,11 +45,14 @@ public class LRItem {
   }
   
   public Symbol<?> getDotSymbol() {
+    if (isComplete()) {
+      return null;
+    }
     return production.getRightSide().get(dotIndex);
   }
   
-  public LRItem createNextItem() {
-    return new LRItem(production, (dotIndex + 1)%(production.getRightSide().size() + 1), terminalSymbols);
+  public LRItem getNextLRItem() {
+    return nextLRItem;
   }
   
   @Override
