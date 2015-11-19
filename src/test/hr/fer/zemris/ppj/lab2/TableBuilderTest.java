@@ -124,12 +124,22 @@ public class TableBuilderTest {
     actionTable.put(new Pair<>(s6, end), new ReduceAction(new Production(B, a, B)));
     
     newStateTable = new HashMap<>();
-    newStateTable.put(new Pair<>(s0, B), new PutAction<>(s1));
+    newStateTable.put(new Pair<>(s0, B), new PutAction<>(s2));
+    newStateTable.put(new Pair<>(s0, A), new PutAction<>(s1));
+    newStateTable.put(new Pair<>(s2, B), new PutAction<>(s2));
+    newStateTable.put(new Pair<>(s2, A), new PutAction<>(s5));
+    newStateTable.put(new Pair<>(s3, B), new PutAction<>(s6));
   }
   
   @Test
   public void buildActionTableTest() {
     Map<Pair<Set<LRItem>, TerminalSymbol<?>>, Action> actualActionTable = TableBuilder.buildActionTable(automaton, new Production(S, A));
     assertEquals(actionTable, actualActionTable);
+  }
+  
+  @Test
+  public void buildNewStateTableTest() {
+    Map<Pair<Set<LRItem>, NonTerminalSymbol<?>>, Action> actualNewStateTable = TableBuilder.buildNewStateTable(automaton);
+    assertEquals(newStateTable, actualNewStateTable);
   }
 }

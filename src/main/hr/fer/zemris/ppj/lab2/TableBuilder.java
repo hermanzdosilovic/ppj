@@ -14,6 +14,7 @@ import hr.fer.zemris.ppj.lab2.parser.action.AcceptAction;
 import hr.fer.zemris.ppj.lab2.parser.action.Action;
 import hr.fer.zemris.ppj.lab2.parser.action.MoveAction;
 import hr.fer.zemris.ppj.lab2.parser.action.ReduceAction;
+import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
@@ -40,5 +41,10 @@ public class TableBuilder {
     }
     
     return actionTable;
+  }
+
+  public static Map<Pair<Set<LRItem>, NonTerminalSymbol<?>>, Action> buildNewStateTable(
+      Automaton<Set<LRItem>, Symbol<?>> automaton) {
+    return null;
   }
 }
