@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.lab2.parser;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ public class LRItem {
   private LRItem nextLRItem;
   
   public LRItem(Production production, Integer dotIndex,
-      Set<TerminalSymbol<?>> terminalSymbols) {
+      Collection<TerminalSymbol<?>> terminalSymbols) {
     this.production = production;
     this.dotIndex = dotIndex;
     this.terminalSymbols = new HashSet<>(terminalSymbols);
