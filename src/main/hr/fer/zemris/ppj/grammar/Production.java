@@ -40,7 +40,7 @@ public class Production {
   }
 
   public List<Symbol<?>> getRightSide() {
-    return new ArrayList<>(rightSide);
+    return rightSide;
   }
 
   public boolean isEpsilonProduction() {
@@ -76,5 +76,10 @@ public class Production {
     } else if (!rightSide.equals(other.rightSide))
       return false;
     return true;
+  }
+  
+  @Override
+  public String toString() {
+    return leftSide + "->" + rightSide;
   }
 }

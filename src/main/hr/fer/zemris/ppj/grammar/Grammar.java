@@ -23,7 +23,7 @@ public class Grammar {
   private Map<NonTerminalSymbol<?>, List<Production>> productionsTable;
   private NonTerminalSymbol<?> initialNonTerminalSymbol;
 
-  private Set<Symbol<?>> emptySymbols;
+  private Set<NonTerminalSymbol<?>> emptySymbols;
   private Map<Symbol<?>, Set<Symbol<?>>> beginsDirectlyWithSymbolTable;
   private Map<Symbol<?>, Set<Symbol<?>>> beginsWithSymbolTable;
   private Map<Symbol<?>, Set<Symbol<?>>> beginsWithTable;
@@ -77,7 +77,7 @@ public class Grammar {
     return isEmptySequence(production.getRightSide());
   }
 
-  public Set<Symbol<?>> getEmptySymbols() {
+  public Set<NonTerminalSymbol<?>> getEmptySymbols() {
     if (emptySymbols != null) {
       return emptySymbols;
     }
@@ -181,7 +181,7 @@ public class Grammar {
   }
 
   public Set<Symbol<?>> beginsWith(Symbol<?> symbol) {
-    if (!getBeginsWithTable().containsKey(symbol)) {
+    if (symbol == null || !getBeginsWithTable().containsKey(symbol)) {
       return new HashSet<>(Arrays.asList(symbol));
     }
     return getBeginsWithTable().get(symbol);

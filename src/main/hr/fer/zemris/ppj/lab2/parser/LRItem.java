@@ -1,12 +1,13 @@
 package hr.fer.zemris.ppj.lab2.parser;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.symbol.Symbol;
-import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 /**
  * @author Herman Zvonimir Dosilovic
@@ -14,19 +15,14 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 public class LRItem {
   private Production production;
   private Integer dotIndex;
-  private Set<TerminalSymbol<?>> terminalSymbols;
+  private Set<Symbol<?>> terminalSymbols;
 
   private LRItem nextLRItem;
-  
-  public LRItem(Production production, Integer dotIndex,
-      Collection<TerminalSymbol<?>> terminalSymbols) {
+
+  public LRItem(Production production, Integer dotIndex, Collection<Symbol<?>> terminalSymbols) {
     this.production = production;
     this.dotIndex = dotIndex;
     this.terminalSymbols = new HashSet<>(terminalSymbols);
-    
-    if (!isComplete()) {
-      nextLRItem = new LRItem(production, dotIndex + 1, terminalSymbols);
-    }
   }
 
   public Production getProduction() {
@@ -37,25 +33,38 @@ public class LRItem {
     return dotIndex;
   }
 
-  public Set<TerminalSymbol<?>> getTerminalSymbols() {
-    return new HashSet<>(terminalSymbols);
+  public Set<Symbol<?>> getTerminalSymbols() {
+    return terminalSymbols;
   }
-  
+
   public boolean isComplete() {
     return dotIndex == production.getRightSide().size();
   }
-  
+
   public Symbol<?> getDotSymbol() {
     if (isComplete()) {
       return null;
     }
     return production.getRightSide().get(dotIndex);
   }
-  
+
   public LRItem getNextLRItem() {
+    if (isComplete()) {
+      return null;
+    } else if (nextLRItem != null) {
+      return nextLRItem;
+    }
+    nextLRItem = new LRItem(production, dotIndex + 1, terminalSymbols);
     return nextLRItem;
   }
-  
+
+  public List<Symbol<?>> getSymbolsAfterDotSymbol() {
+    if (isComplete()) {
+      return new ArrayList<>();
+    }
+    return production.getRightSide().subList(dotIndex + 1, production.getRightSide().size());
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -91,5 +100,10 @@ public class LRItem {
     } else if (!production.equals(other.production))
       return false;
     return true;
+  }
+  
+  @Override
+  public String toString() {
+    return "{" + production + " " + dotIndex + " (" + terminalSymbols + ")" + "}";
   }
 }
