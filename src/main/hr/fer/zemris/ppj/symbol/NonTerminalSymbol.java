@@ -5,8 +5,8 @@ package hr.fer.zemris.ppj.symbol;
  *
  * @param <T> type of non terminal symbol
  */
-public final class NonTerminalSymbol<T> extends Symbol<T> {
-  public NonTerminalSymbol(T value) {
+public final class NonTerminalSymbol extends Symbol {
+  public NonTerminalSymbol(Object value) {
     super(value);
   }
 }

@@ -1,10 +1,6 @@
 package hr.fer.zemris.ppj.lab2;
 
-import static org.junit.Assert.*;
-import hr.fer.zemris.ppj.grammar.Production;
-import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
-import hr.fer.zemris.ppj.symbol.Symbol;
-import hr.fer.zemris.ppj.symbol.TerminalSymbol;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,10 +9,15 @@ import java.util.List;
 
 import org.junit.Test;
 
+import hr.fer.zemris.ppj.grammar.Production;
+import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
+import hr.fer.zemris.ppj.symbol.Symbol;
+import hr.fer.zemris.ppj.symbol.TerminalSymbol;
+
 public class GeneratorInputDefinitionTest {
 
   @Test
-  public void parseNonterminalSymbolsTest() {
+  public void parseNonterminalSymbolsTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("%V <jedan> <Drugi> <Treci_nezavrsni>");
 
@@ -24,13 +25,13 @@ public class GeneratorInputDefinitionTest {
 
     inputDefinition.parseNonterminalSymbols();
 
-    assertEquals(inputDefinition.getNonterminalSymbols(), Arrays.asList(
-        new NonTerminalSymbol<String>("<jedan>"), new NonTerminalSymbol<String>("<Drugi>"),
-        new NonTerminalSymbol<String>("<Treci_nezavrsni>")));
+    assertEquals(inputDefinition.getNonterminalSymbols(),
+        Arrays.asList(new NonTerminalSymbol("<jedan>"), new NonTerminalSymbol("<Drugi>"),
+            new NonTerminalSymbol("<Treci_nezavrsni>")));
   }
 
   @Test
-  public void parseTerminalSymbolsTest() {
+  public void parseTerminalSymbolsTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("%T jedan dva tri");
 
@@ -38,12 +39,12 @@ public class GeneratorInputDefinitionTest {
 
     inputDefinition.parseTerminalSymbols();
 
-    assertEquals(inputDefinition.getTerminalSymbols(), Arrays.asList(new TerminalSymbol<String>(
-        "jedan"), new TerminalSymbol<String>("dva"), new TerminalSymbol<String>("tri")));
+    assertEquals(inputDefinition.getTerminalSymbols(), Arrays.asList(new TerminalSymbol("jedan"),
+        new TerminalSymbol("dva"), new TerminalSymbol("tri")));
   }
 
   @Test
-  public void parseSynchronousTerminalSymbolsTest() {
+  public void parseSynchronousTerminalSymbolsTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("%Syn tu sad neki znakovi");
 
@@ -51,13 +52,13 @@ public class GeneratorInputDefinitionTest {
 
     inputDefinition.parseSynchronousTerminalSymbols();
 
-    assertEquals(inputDefinition.getSynchronousTerminalSymbols(), Arrays.asList(
-        new TerminalSymbol<String>("tu"), new TerminalSymbol<String>("sad"),
-        new TerminalSymbol<String>("neki"), new TerminalSymbol<String>("znakovi")));
+    assertEquals(inputDefinition.getSynchronousTerminalSymbols(),
+        Arrays.asList(new TerminalSymbol("tu"), new TerminalSymbol("sad"),
+            new TerminalSymbol("neki"), new TerminalSymbol("znakovi")));
   }
 
   @Test
-  public void parseProductionsTest() {
+  public void parseProductionsTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("<znak>");
     inputLines.add(" $");
@@ -70,20 +71,21 @@ public class GeneratorInputDefinitionTest {
     inputDefinition.parseProductions();
 
     List<Production> expectedProductions = new ArrayList<Production>();
-    Collection<Symbol<?>> rightSide = new ArrayList<Symbol<?>>();
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<znak>")));
-    rightSide.add(new NonTerminalSymbol<String>("<neki>"));
-    rightSide.add(new TerminalSymbol<String>("znakovi"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<znak>"), rightSide));
-    rightSide = new ArrayList<Symbol<?>>();
-    rightSide.add(new TerminalSymbol<String>("jos"));
-    rightSide.add(new NonTerminalSymbol<String>("<malo>"));
-    rightSide.add(new TerminalSymbol<String>("znakova"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<drugi_znak>"), rightSide));
+    Collection<Symbol> rightSide = new ArrayList<Symbol>();
+    expectedProductions.add(new Production(new NonTerminalSymbol("<znak>")));
+    rightSide.add(new NonTerminalSymbol("<neki>"));
+    rightSide.add(new TerminalSymbol("znakovi"));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<znak>"), rightSide));
+    rightSide = new ArrayList<Symbol>();
+    rightSide.add(new TerminalSymbol("jos"));
+    rightSide.add(new NonTerminalSymbol("<malo>"));
+    rightSide.add(new TerminalSymbol("znakova"));
+    expectedProductions
+        .add(new Production(new NonTerminalSymbol("<drugi_znak>"), rightSide));
   }
 
   @Test
-  public void basicInputTest() {
+  public void basicInputTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
 
     inputLines.add("%V <A> <B> <C> <D> <E>");
@@ -108,77 +110,81 @@ public class GeneratorInputDefinitionTest {
 
     GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition(inputLines);
 
-    inputDefinition.runGenerator();
+    inputDefinition.readDefinition();
+    inputDefinition.parseDefinition();
 
-    assertEquals(inputDefinition.getNonterminalSymbols(), Arrays.asList(
-        new NonTerminalSymbol<String>("<A>"), new NonTerminalSymbol<String>("<B>"),
-        new NonTerminalSymbol<String>("<C>"), new NonTerminalSymbol<String>("<D>"),
-        new NonTerminalSymbol<String>("<E>")));
-    assertEquals(inputDefinition.getTerminalSymbols(), Arrays.asList(
-        new TerminalSymbol<String>("a"), new TerminalSymbol<String>("b"),
-        new TerminalSymbol<String>("c"), new TerminalSymbol<String>("d"),
-        new TerminalSymbol<String>("e"), new TerminalSymbol<String>("f")));
-    assertEquals(inputDefinition.getSynchronousTerminalSymbols(), Arrays.asList(new TerminalSymbol<String>("a")));
+    assertEquals(inputDefinition.getNonterminalSymbols(),
+        Arrays.asList(new NonTerminalSymbol("<A>"), new NonTerminalSymbol("<B>"),
+            new NonTerminalSymbol("<C>"), new NonTerminalSymbol("<D>"),
+            new NonTerminalSymbol("<E>")));
+    assertEquals(inputDefinition.getTerminalSymbols(),
+        Arrays.asList(new TerminalSymbol("a"), new TerminalSymbol("b"),
+            new TerminalSymbol("c"), new TerminalSymbol("d"),
+            new TerminalSymbol("e"), new TerminalSymbol("f")));
+    assertEquals(inputDefinition.getSynchronousTerminalSymbols(),
+        Arrays.asList(new TerminalSymbol("a")));
 
-//    assertEquals(inputDefinition.getProductions().,
-//        Arrays.asList("<B> <C> c", "e <D> <B>"));
-//    assertEquals(inputDefinition.getProductions().get("<B>"), Arrays.asList("$", "b <C> <D> <E>"));
-//    assertEquals(inputDefinition.getProductions().get("<C>"), Arrays.asList("<D> a <B>", "c a"));
-//    assertEquals(inputDefinition.getProductions().get("<D>"), Arrays.asList("$", "d <D>"));
-//    assertEquals(inputDefinition.getProductions().get("<E>"), Arrays.asList("e <A> f", "c"));
-    
+    // assertEquals(inputDefinition.getProductions().,
+    // Arrays.asList("<B> <C> c", "e <D> <B>"));
+    // assertEquals(inputDefinition.getProductions().get("<B>"), Arrays.asList("$", "b <C> <D>
+    // <E>"));
+    // assertEquals(inputDefinition.getProductions().get("<C>"), Arrays.asList("<D> a <B>", "c a"));
+    // assertEquals(inputDefinition.getProductions().get("<D>"), Arrays.asList("$", "d <D>"));
+    // assertEquals(inputDefinition.getProductions().get("<E>"), Arrays.asList("e <A> f", "c"));
+
     List<Production> expectedProductions = new ArrayList<Production>();
-    Collection<Symbol<?>> rightSide = new ArrayList<Symbol<?>>();
-    rightSide.add(new NonTerminalSymbol<String>("<B>"));
-    rightSide.add(new NonTerminalSymbol<String>("<C>"));
-    rightSide.add(new TerminalSymbol<String>("c"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<A>"), rightSide));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<B>")));
-    rightSide = new ArrayList<Symbol<?>>();
-    rightSide.add(new TerminalSymbol<String>("b"));
-    rightSide.add(new NonTerminalSymbol<String>("<C>"));
-    rightSide.add(new NonTerminalSymbol<String>("<D>"));
-    rightSide.add(new NonTerminalSymbol<String>("<E>"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<B>"), rightSide));
-    rightSide = new ArrayList<Symbol<?>>();
-    rightSide.add(new TerminalSymbol<String>("e"));
-    rightSide.add(new NonTerminalSymbol<String>("<D>"));
-    rightSide.add(new NonTerminalSymbol<String>("<B>"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<A>"), rightSide));
-    rightSide = new ArrayList<Symbol<?>>();
-    rightSide.add(new NonTerminalSymbol<String>("<D>"));
-    rightSide.add(new TerminalSymbol<String>("a"));
-    rightSide.add(new NonTerminalSymbol<String>("<B>"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<C>"), rightSide));
-    rightSide = new ArrayList<Symbol<?>>();
-    rightSide.add(new TerminalSymbol<String>("c"));
-    rightSide.add(new TerminalSymbol<String>("a"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<C>"), rightSide));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<D>")));
-    rightSide = new ArrayList<Symbol<?>>();
-    rightSide.add(new TerminalSymbol<String>("d"));
-    rightSide.add(new NonTerminalSymbol<String>("<D>"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<D>"), rightSide));
-    rightSide = new ArrayList<Symbol<?>>();
-    rightSide.add(new TerminalSymbol<String>("e"));
-    rightSide.add(new NonTerminalSymbol<String>("<A>"));
-    rightSide.add(new TerminalSymbol<String>("f"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<E>"), rightSide));
-    rightSide = new ArrayList<Symbol<?>>();
-    rightSide.add(new TerminalSymbol<String>("c"));
-    expectedProductions.add(new Production(new NonTerminalSymbol<String>("<E>"), rightSide));
-    
+    Collection<Symbol> rightSide = new ArrayList<Symbol>();
+    rightSide.add(new NonTerminalSymbol("<B>"));
+    rightSide.add(new NonTerminalSymbol("<C>"));
+    rightSide.add(new TerminalSymbol("c"));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<A>"), rightSide));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<B>")));
+    rightSide = new ArrayList<Symbol>();
+    rightSide.add(new TerminalSymbol("b"));
+    rightSide.add(new NonTerminalSymbol("<C>"));
+    rightSide.add(new NonTerminalSymbol("<D>"));
+    rightSide.add(new NonTerminalSymbol("<E>"));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<B>"), rightSide));
+    rightSide = new ArrayList<Symbol>();
+    rightSide.add(new TerminalSymbol("e"));
+    rightSide.add(new NonTerminalSymbol("<D>"));
+    rightSide.add(new NonTerminalSymbol("<B>"));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<A>"), rightSide));
+    rightSide = new ArrayList<Symbol>();
+    rightSide.add(new NonTerminalSymbol("<D>"));
+    rightSide.add(new TerminalSymbol("a"));
+    rightSide.add(new NonTerminalSymbol("<B>"));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<C>"), rightSide));
+    rightSide = new ArrayList<Symbol>();
+    rightSide.add(new TerminalSymbol("c"));
+    rightSide.add(new TerminalSymbol("a"));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<C>"), rightSide));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<D>")));
+    rightSide = new ArrayList<Symbol>();
+    rightSide.add(new TerminalSymbol("d"));
+    rightSide.add(new NonTerminalSymbol("<D>"));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<D>"), rightSide));
+    rightSide = new ArrayList<Symbol>();
+    rightSide.add(new TerminalSymbol("e"));
+    rightSide.add(new NonTerminalSymbol("<A>"));
+    rightSide.add(new TerminalSymbol("f"));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<E>"), rightSide));
+    rightSide = new ArrayList<Symbol>();
+    rightSide.add(new TerminalSymbol("c"));
+    expectedProductions.add(new Production(new NonTerminalSymbol("<E>"), rightSide));
+
     assertEquals(expectedProductions, inputDefinition.getProductions());
   }
-  
-  public void getInitialNonTerminalSymbolTest(){
+
+  public void getInitialNonTerminalSymbolTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("%V <ja_sam_pocetni> <ostatak_ekipe>");
-    
+
     GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition(inputLines);
-    
+
     inputDefinition.parseNonterminalSymbols();
-    
-    assertEquals(new NonTerminalSymbol<String>("<ja_sam_pocetni>"), inputDefinition.getInitialNonTerminalSymbol());
+
+    assertEquals(new NonTerminalSymbol("<ja_sam_pocetni>"),
+        inputDefinition.getInitialNonTerminalSymbol());
   }
 }

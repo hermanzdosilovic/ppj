@@ -15,11 +15,11 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 public class LRItem {
   private Production production;
   private Integer dotIndex;
-  private Set<Symbol<?>> terminalSymbols;
+  private Set<Symbol> terminalSymbols;
 
   private LRItem nextLRItem;
 
-  public LRItem(Production production, Integer dotIndex, Collection<Symbol<?>> terminalSymbols) {
+  public LRItem(Production production, Integer dotIndex, Collection<Symbol> terminalSymbols) {
     this.production = production;
     this.dotIndex = dotIndex;
     this.terminalSymbols = new HashSet<>(terminalSymbols);
@@ -33,7 +33,7 @@ public class LRItem {
     return dotIndex;
   }
 
-  public Set<Symbol<?>> getTerminalSymbols() {
+  public Set<Symbol> getTerminalSymbols() {
     return terminalSymbols;
   }
 
@@ -41,7 +41,7 @@ public class LRItem {
     return dotIndex == production.getRightSide().size();
   }
 
-  public Symbol<?> getDotSymbol() {
+  public Symbol getDotSymbol() {
     if (isComplete()) {
       return null;
     }
@@ -58,7 +58,7 @@ public class LRItem {
     return nextLRItem;
   }
 
-  public List<Symbol<?>> getSymbolsAfterDotSymbol() {
+  public List<Symbol> getSymbolsAfterDotSymbol() {
     if (isComplete()) {
       return new ArrayList<>();
     }

@@ -5,14 +5,14 @@ package hr.fer.zemris.ppj.symbol;
  *
  * @param <T> type of symbol
  */
-public abstract class Symbol<T> {
-  private T value;
+public abstract class Symbol {
+  private Object value;
   
-  public Symbol(T value) {
+  public Symbol(Object value) {
     this.value = value;
   }
   
-  public T getValue() {
+  public Object getValue() {
     return this.value;
   }
 
@@ -32,7 +32,7 @@ public abstract class Symbol<T> {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Symbol<?> other = (Symbol<?>) obj;
+    Symbol other = (Symbol) obj;
     if (value == null) {
       if (other.value != null)
         return false;

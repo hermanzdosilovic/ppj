@@ -1,6 +1,5 @@
 package hr.fer.zemris.ppj.grammar.converters;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -19,13 +18,10 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  * @author Herman Zvonimir Dosilovic
  */
 public class GrammarEpsilonNFAConverter {
-
-  public static Automaton<LRItem, Symbol<?>> convert(Grammar grammar, TerminalSymbol<?> endSymbol) {
-    LRItem initialState = new LRItem(new Production(null, new ArrayList<>()), 0, Arrays.asList());
+  public static Automaton<LRItem, Symbol> convert(Grammar grammar, TerminalSymbol endSymbol) {
     LRItem firstLRState = new LRItem(grammar.getInitialProduction(), 0, Arrays.asList(endSymbol));
 
-    TransitionFunction<LRItem, Symbol<?>> transitionFunction = new TransitionFunction<>();
-    transitionFunction.addEpsilonTransition(initialState, firstLRState);
+    TransitionFunction<LRItem, Symbol> transitionFunction = new TransitionFunction<>();
 
     Set<LRItem> visited = new HashSet<>();
     visited.add(firstLRState);
@@ -33,16 +29,14 @@ public class GrammarEpsilonNFAConverter {
 
     Set<LRItem> states = new HashSet<>(transitionFunction.getAllSources());
     Set<LRItem> acceptableStates = new HashSet<>(states);
-    acceptableStates.remove(initialState);
 
-    Set<Symbol<?>> alphabet = new HashSet<>(transitionFunction.getAllInputSymbols());
+    Set<Symbol> alphabet = new HashSet<>(transitionFunction.getAllInputSymbols());
 
-    return new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
+    return new Automaton<>(states, alphabet, transitionFunction, firstLRState, acceptableStates);
   }
 
-  static void buildTransitions(LRItem item,
-      TransitionFunction<LRItem, Symbol<?>> transitionFunction, Grammar grammar,
-      Set<LRItem> visited) {
+  static void buildTransitions(LRItem item, TransitionFunction<LRItem, Symbol> transitionFunction,
+      Grammar grammar, Set<LRItem> visited) {
     if (item.isComplete()) {
       return;
     }
@@ -54,10 +48,10 @@ public class GrammarEpsilonNFAConverter {
       buildTransitions(item.getNextLRItem(), transitionFunction, grammar, visited);
     }
 
-    if (item.getDotSymbol() instanceof NonTerminalSymbol<?>) {
-      NonTerminalSymbol<?> symbol = (NonTerminalSymbol<?>) item.getDotSymbol();
-      List<Symbol<?>> nextSymbolSequence = item.getSymbolsAfterDotSymbol();
-      Set<Symbol<?>> nextTerminalSymbols = grammar.beginsWith(nextSymbolSequence);
+    if (item.getDotSymbol() instanceof NonTerminalSymbol) {
+      NonTerminalSymbol symbol = (NonTerminalSymbol) item.getDotSymbol();
+      List<Symbol> nextSymbolSequence = item.getSymbolsAfterDotSymbol();
+      Set<Symbol> nextTerminalSymbols = grammar.beginsWith(nextSymbolSequence);
       if (grammar.isEmptySequence(nextSymbolSequence)) {
         nextTerminalSymbols.addAll(item.getTerminalSymbols());
       }

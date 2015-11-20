@@ -130,6 +130,17 @@ public class TransitionFunction<S, C> {
     return inputSymbols;
   }
 
+  public int getNumberOfTransitions() {
+    int numberOfTransitions = 0;
+    for (Collection<S> transitions : transitionTable.values()) {
+      numberOfTransitions += transitions.size();
+    }
+    for (Collection<S> transitions : epsilonTransitionTable.values()) {
+      numberOfTransitions += transitions.size();
+    }
+    return numberOfTransitions;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
