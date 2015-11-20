@@ -3,10 +3,8 @@ package hr.fer.zemris.ppj.lab2;
 import static org.junit.Assert.assertEquals;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +30,7 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
-public class TableBuilderTest {
+public class GSATest {
   private static NonTerminalSymbol S, A, B;
   private static TerminalSymbol a, b;
   private static TerminalSymbol end;
@@ -138,51 +136,17 @@ public class TableBuilderTest {
     newStateTable.put(new Pair<>(s3, B), new PutAction<>(s6));
   }
 
-  @Test
-  public void buildActionTableTest() {
-    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
-        TableBuilder.buildActionTable(automaton, new Production(S, A));
-    assertEquals(actionTable, actualActionTable);
-  }
-
-  @Test
-  public void buildNewStateTableTest() {
-    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable =
-        TableBuilder.buildNewStateTable(automaton);
-    assertEquals(newStateTable, actualNewStateTable);
-  }
-
   @SuppressWarnings("unchecked")
   @Test
-  public void actionTableSerializerTest() throws IOException, ClassNotFoundException {
-    ObjectOutputStream objectOutputStream =
-        new ObjectOutputStream(new FileOutputStream(ParserDeserializer.ACTION_TABLE));
-    objectOutputStream.writeObject(actionTable);
-    objectOutputStream.close();
+  public void serializeTest() throws IOException, ClassNotFoundException {
+    new GSA().serialize(actionTable, ParserDeserializer.ACTION_TABLE);
 
     ObjectInputStream objectInputStream =
         new ObjectInputStream(new FileInputStream(ParserDeserializer.ACTION_TABLE));
     Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
         (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
     objectInputStream.close();
-    
-    assertEquals(actionTable, actualActionTable);
-  }
-  
-  @SuppressWarnings("unchecked")
-  @Test
-  public void newStateTableSerializerTest() throws IOException, ClassNotFoundException {
-    ObjectOutputStream objectOutputStream =
-        new ObjectOutputStream(new FileOutputStream(ParserDeserializer.NEW_STATE_TABLE));
-    objectOutputStream.writeObject(newStateTable);
-    objectOutputStream.close();
 
-    ObjectInputStream objectInputStream =
-        new ObjectInputStream(new FileInputStream(ParserDeserializer.NEW_STATE_TABLE));
-    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable =
-        (Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action>) objectInputStream.readObject();
-    objectInputStream.close();
-    
-    assertEquals(newStateTable, actualNewStateTable);
+    assertEquals(actionTable, actualActionTable);
   }
 }

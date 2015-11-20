@@ -1,17 +1,19 @@
 package hr.fer.zemris.ppj.symbol;
 
+import java.io.Serializable;
+
 /**
  * @author Herman Zvonimir Dosilovic
- *
- * @param <T> type of symbol
  */
-public abstract class Symbol {
+public abstract class Symbol implements Serializable {
+  private static final long serialVersionUID = -8148692972316327415L;
+
   private Object value;
-  
+
   public Symbol(Object value) {
     this.value = value;
   }
-  
+
   public Object getValue() {
     return this.value;
   }
@@ -40,7 +42,7 @@ public abstract class Symbol {
       return false;
     return true;
   }
-  
+
   @Override
   public String toString() {
     return value.toString();

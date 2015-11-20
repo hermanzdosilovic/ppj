@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.grammar;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,7 +12,9 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 /**
  * @author Herman Zvonimir Dosilovic
  */
-public class Production {
+public class Production implements Serializable {
+  private static final long serialVersionUID = -7641173533889283041L;
+
   private NonTerminalSymbol leftSide;
   private List<Symbol> rightSide;
 
@@ -76,7 +79,7 @@ public class Production {
       return false;
     return true;
   }
-  
+
   @Override
   public String toString() {
     return leftSide + "->" + rightSide;

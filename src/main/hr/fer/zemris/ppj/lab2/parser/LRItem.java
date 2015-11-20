@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.lab2.parser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,7 +13,9 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 /**
  * @author Herman Zvonimir Dosilovic
  */
-public class LRItem {
+public class LRItem implements Serializable {
+  private static final long serialVersionUID = -2146573324496034998L;
+
   private Production production;
   private Integer dotIndex;
   private Set<Symbol> terminalSymbols;
@@ -101,7 +104,7 @@ public class LRItem {
       return false;
     return true;
   }
-  
+
   @Override
   public String toString() {
     return "{" + production + " " + dotIndex + " (" + terminalSymbols + ")" + "}";

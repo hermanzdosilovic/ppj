@@ -2,20 +2,25 @@ package hr.fer.zemris.ppj.lab2;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.converters.EpsilonNFAConverter;
 import hr.fer.zemris.ppj.automaton.converters.NFAConverter;
-import hr.fer.zemris.ppj.automaton.minimizers.DFAMinimizer;
 import hr.fer.zemris.ppj.grammar.Grammar;
-import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.grammar.converters.GrammarEpsilonNFAConverter;
 import hr.fer.zemris.ppj.helpers.Stopwatch;
+import hr.fer.zemris.ppj.lab2.analyzer.SA;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
+import hr.fer.zemris.ppj.lab2.parser.action.Action;
+import hr.fer.zemris.ppj.lab2.parser.deserializer.ParserDeserializer;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
@@ -24,7 +29,6 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  * @author Herman Zvonimir Dosilovic
  */
 public final class GSA {
-
   private GeneratorInputDefinition generatorInputDefinition;
 
   public static void main(String[] args) throws Exception {
@@ -52,19 +56,13 @@ public final class GSA {
     generatorInputDefinition.readDefinition();
     generatorInputDefinition.parseDefinition();
 
-    List<Production> productions = generatorInputDefinition.getProductions();
-    NonTerminalSymbol initialNonTerminalSymbol =
-        generatorInputDefinition.getInitialNonTerminalSymbol();
-    NonTerminalSymbol newInitialNonTerminalSymbol =
-        new NonTerminalSymbol(initialNonTerminalSymbol + "'");
-    productions.add(new Production(newInitialNonTerminalSymbol, initialNonTerminalSymbol));
-
-    Grammar grammar = new Grammar(productions, newInitialNonTerminalSymbol);
+    Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(),
+        new NonTerminalSymbol(generatorInputDefinition.getInitialNonTerminalSymbol() + "'"));
 
     String time;
     Stopwatch.start();
     Automaton<LRItem, Symbol> eNFA =
-        GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("<posljednji_znakic>"));
+        GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol(SA.END_STRING));
     time = Stopwatch.end();
     System.err.println("eNFA:\n states: " + eNFA.getNumberOfStates() + "\n transitions: "
         + eNFA.getNumberOfTransitions() + "\n time: " + time);
@@ -81,10 +79,34 @@ public final class GSA {
     System.err.println("\nDFA:\n states: " + DFA.getNumberOfStates() + "\n transitions: "
         + DFA.getNumberOfTransitions() + "\n time: " + time);
 
+    // Stopwatch.start();
+    // Automaton<Set<Set<LRItem>>, Symbol> minDFA = DFAMinimizer.minimize(DFA);
+    // time = Stopwatch.end();
+    // System.err.println("\nminDFA:\n states: " + minDFA.getNumberOfStates() + "\n transitions: "
+    // + minDFA.getNumberOfTransitions() + "\n time: " + time);
+
     Stopwatch.start();
-    Automaton<Set<Set<LRItem>>, Symbol> minDFA = DFAMinimizer.minimize(DFA);
+    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable =
+        TableBuilder.buildActionTable(DFA, grammar.getInitialProduction());
     time = Stopwatch.end();
-    System.err.println("\nminDFA:\n states: " + minDFA.getNumberOfStates() + "\n transitions: "
-        + minDFA.getNumberOfTransitions() + "\n time: " + time);
+    System.err.println("\nActionTable:\n time: " + time);
+
+    Stopwatch.start();
+    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> newStateTable =
+        TableBuilder.buildNewStateTable(DFA);
+    time = Stopwatch.end();
+    System.err.println("\nNewStateTable:\n time: " + time);
+
+    serialize(actionTable, ParserDeserializer.ACTION_TABLE);
+    serialize(newStateTable, ParserDeserializer.NEW_STATE_TABLE);
+    serialize(DFA.getInitialState(), ParserDeserializer.START_STATE);
+    serialize(generatorInputDefinition.getSynchronousTerminalSymbols(),
+        ParserDeserializer.SYN_STRINGS);
+  }
+
+  void serialize(Object object, String path) throws IOException {
+    ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(path));
+    objectOutputStream.writeObject(object);
+    objectOutputStream.close();
   }
 }

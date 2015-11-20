@@ -2,6 +2,7 @@ package hr.fer.zemris.ppj.lab2;
 
 import hr.fer.zemris.ppj.grammar.Grammar;
 import hr.fer.zemris.ppj.grammar.Production;
+import hr.fer.zemris.ppj.lab2.analyzer.SA;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
@@ -120,11 +121,11 @@ public class GeneratorInputDefinition {
           if(symbol.charAt(0) == '<'){
             symbols.add(new NonTerminalSymbol(symbol));
           }
-          else if(!symbol.equals("$")){
+          else if(!symbol.equals(SA.EPSILON)){
             symbols.add(new TerminalSymbol(symbol));
           }
         }
-        if(rightSide.contains("$"))
+        if(rightSide.contains(SA.EPSILON))
           productions.add(new Production(new NonTerminalSymbol(leftSide)));
         else
           productions.add(new Production(new NonTerminalSymbol(leftSide), symbols));
