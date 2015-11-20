@@ -3,6 +3,7 @@ package hr.fer.zemris.ppj.lab2;
 import static org.junit.Assert.assertEquals;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -167,5 +168,22 @@ public class TableBuilderTest {
     objectInputStream.close();
     
     assertEquals(actionTable, actualActionTable);
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test
+  public void newStateTableSerializerTest() throws IOException, ClassNotFoundException {
+    ObjectOutputStream objectOutputStream =
+        new ObjectOutputStream(new FileOutputStream(ParserDeserializer.NEW_STATE_TABLE));
+    objectOutputStream.writeObject(newStateTable);
+    objectOutputStream.close();
+
+    ObjectInputStream objectInputStream =
+        new ObjectInputStream(new FileInputStream(ParserDeserializer.NEW_STATE_TABLE));
+    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable =
+        (Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action>) objectInputStream.readObject();
+    objectInputStream.close();
+    
+    assertEquals(newStateTable, actualNewStateTable);
   }
 }
