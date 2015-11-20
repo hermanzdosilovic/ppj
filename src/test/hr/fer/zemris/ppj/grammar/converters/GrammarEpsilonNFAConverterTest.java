@@ -175,7 +175,7 @@ public class GrammarEpsilonNFAConverterTest {
   }
   
   @Test
-  public void simplePPJGrammarTest() throws Exception {
+  public void simplePpjLangGrammarTest() throws Exception {
     List<String> inputLines = new ArrayList<>();
     inputLines.add("%V <prijevodna_jedinica> <vanjska_deklaracija> <deklaracija> <definicija_funkcije> <specifikatori_deklaracije> <primarni_izraz> <izraz> <postfiks_izraz> <lista_argumenata> <izraz_pridruzivanja> <unarni_izraz> <unarni_operator> <cast_izraz> <ime_tipa> <multiplikativni_izraz> <aditivni_izraz> <odnosni_izraz> <jednakosni_izraz> <bin_i_izraz> <bin_xili_izraz> <bin_ili_izraz> <log_i_izraz> <log_ili_izraz> <specifikator_tipa> <lista_init_deklaratora> <init_deklarator> <inicijalizator> <lista_specifikatora_kvalifikatora> <izravni_deklarator> <lista_parametara> <deklaracija_parametra> <lista_izraza_pridruzivanja> <naredba> <slozena_naredba> <izraz_naredba> <naredba_grananja> <naredba_petlje> <naredba_skoka> <lista_naredbi> <lista_deklaracija>");
     inputLines.add("%T IDN BROJ ZNAK NIZ_ZNAKOVA KR_BREAK KR_CHAR KR_CONST KR_CONTINUE KR_ELSE KR_FOR KR_IF KR_INT KR_RETURN KR_VOID KR_WHILE PLUS OP_INC MINUS OP_DEC OP_PUTA OP_DIJELI OP_MOD OP_PRIDRUZI OP_LT OP_LTE OP_GT OP_GTE OP_EQ OP_NEQ OP_NEG OP_TILDA OP_I OP_ILI OP_BIN_I OP_BIN_ILI OP_BIN_XILI ZAREZ TOCKAZAREZ L_ZAGRADA D_ZAGRADA L_UGL_ZAGRADA D_UGL_ZAGRADA L_VIT_ZAGRADA D_VIT_ZAGRADA");

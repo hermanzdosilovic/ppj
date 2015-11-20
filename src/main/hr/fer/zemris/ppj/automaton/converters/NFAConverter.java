@@ -18,8 +18,8 @@ public class NFAConverter {
     Set<C> alphabet = automaton.getAlphabet();
     TransitionFunction<Set<S>, C> newTransitionFunction =
         findTransitions(automaton.getTransitionFunction(), newStates, alphabet);
-
-    return new Automaton<Set<S>, C>(newStates, alphabet, newTransitionFunction, initialState,
+    
+    return new Automaton<Set<S>, C>(newTransitionFunction.getAllSources(), alphabet, newTransitionFunction, initialState,
         newAcceptibleStates);
 
   }
