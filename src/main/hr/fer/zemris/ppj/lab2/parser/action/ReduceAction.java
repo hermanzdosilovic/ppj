@@ -1,6 +1,7 @@
 package hr.fer.zemris.ppj.lab2.parser.action;
 
 import hr.fer.zemris.ppj.grammar.Production;
+import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
 public final class ReduceAction implements Action {
   private static final long serialVersionUID = -6928861363927054533L;
@@ -12,6 +13,14 @@ public final class ReduceAction implements Action {
 
   public Production getProduction() {
     return production;
+  }
+
+  public int getHowMany() {
+    return production.getRightSide().size();
+  }
+
+  public NonTerminalSymbol getLeftHandSide() {
+    return production.getLeftSide();
   }
 
   @Override
