@@ -139,7 +139,7 @@ public class NFAConverterTest {
   @Test
   public void simplePpjGrammarTest() throws Exception {
     GeneratorInputDefinition generatorInputDefinition =
-        new GeneratorInputDefinition(new FileInputStream(new File("simplePpjLang.san")));
+        new GeneratorInputDefinition(new FileInputStream(new File("langdefs/simplePpjLang.san")));
 
     generatorInputDefinition.readDefinition();
     generatorInputDefinition.parseDefinition();

@@ -2,6 +2,9 @@ package hr.fer.zemris.ppj.lab2.analyzer;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,12 +20,14 @@ import org.junit.Test;
 import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
 import hr.fer.zemris.ppj.grammar.Production;
+import hr.fer.zemris.ppj.lab2.GSA;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
 import hr.fer.zemris.ppj.lab2.parser.action.AcceptAction;
 import hr.fer.zemris.ppj.lab2.parser.action.Action;
 import hr.fer.zemris.ppj.lab2.parser.action.MoveAction;
 import hr.fer.zemris.ppj.lab2.parser.action.PutAction;
 import hr.fer.zemris.ppj.lab2.parser.action.ReduceAction;
+import hr.fer.zemris.ppj.lab2.parser.deserializer.ParserDeserializer;
 import hr.fer.zemris.ppj.node.Node;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
@@ -35,7 +40,7 @@ public class SATest {
   private Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable;
   private Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> newStateTable;
   private Set<LRItem> initialState;
-  
+
   @BeforeClass
   public static void createSymbols() {
     S = new NonTerminalSymbol("S");
@@ -45,7 +50,7 @@ public class SATest {
     b = new TerminalSymbol("b");
     end = new TerminalSymbol(SA.END_STRING);
   }
-  
+
   @Before
   public void buildTables() {
     LRItem i00 = new LRItem(new Production(S, A), 0, Arrays.asList(end));
@@ -125,7 +130,7 @@ public class SATest {
     newStateTable.put(new Pair<>(s2, A), new PutAction<>(s5));
     newStateTable.put(new Pair<>(s3, B), new PutAction<>(s6));
   }
-  
+
   @Test
   public void basicTest() {
     List<String> input = new ArrayList<>();
@@ -152,4 +157,26 @@ public class SATest {
     assertEquals(expected.toString(), Node.printTree(sa.LR(input)));
   }
 
+  @Test
+  public void minusLangTest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/minusLang.san")));
+    gsa.start();
+    
+    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/minusLang.in")));
+    input.add(SA.END_STRING + " kraj T");
+    ParserDeserializer deserializer = new ParserDeserializer();
+    deserializer.deserializeParserStructures();
+    SA sa = new SA(deserializer.deserializeActions(), deserializer.deserializeNewState(),
+        deserializer.deserializeSynStrings(), deserializer.deserializeStartState());
+    
+    Node node = sa.LR(input);
+    
+    StringBuilder expectedOutput = new StringBuilder();
+    input = SA.readInput(new FileInputStream(new File("langdefs/minusLang.out")));
+    for (String line : input) {
+      expectedOutput.append(line).append(System.lineSeparator());
+    }
+    
+    assertEquals(expectedOutput, Node.printTree(node));
+  }
 }

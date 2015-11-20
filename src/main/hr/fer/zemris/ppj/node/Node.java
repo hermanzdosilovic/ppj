@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class that represents a node of a tree. A node can have zero or more children.
- * Class has a static method which can output the given tree.
+ * A class that represents a node of a tree. A node can have zero or more children. Class has a
+ * static method which can output the given tree.
  * 
  * 
  * @author Josipa Kelava
@@ -29,16 +29,17 @@ public class Node {
   /**
    * Adds child to the node.
    * 
-   * @param child 
+   * @param child
    */
   public void addChild(Node child) {
     children.add(child);
   }
-  
+
   /**
-   * Makes a string which contains preorder output of this tree. Every child is written in a new line.
-   * Child is indrawn for one space more than a parent. 
-   * If the provided root is null, returns an empty string.
+   * Makes a string which contains preorder output of this tree. Every child is written in a new
+   * line. Child is indrawn for one space more than a parent. If the provided root is null, returns
+   * an empty string.
+   * 
    * @param root - root of a tree
    * @return Returns a string that represents this tree.
    */
