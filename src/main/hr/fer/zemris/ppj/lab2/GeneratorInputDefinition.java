@@ -13,10 +13,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * @author Ivan Trubic
+ */
 public class GeneratorInputDefinition {
 
   private List<String> inputLines;
+  private InputStream inputStream;
+  
   private List<NonTerminalSymbol> nonterminalSymbols;
   private NonTerminalSymbol initialNonTerminalSymbol;
   private List<TerminalSymbol> terminalSymbols;
@@ -29,26 +33,46 @@ public class GeneratorInputDefinition {
   }
 
   public GeneratorInputDefinition(InputStream stream) throws IOException {
-    inputLines = new ArrayList<String>();
-    BufferedReader input = new BufferedReader(new InputStreamReader(stream));
-    String line;
-    while ((line = input.readLine()) != null) {
-      inputLines.add(line);
+    if (stream == null) {
+      throw new IllegalArgumentException("stream cannot be null");
     }
+    inputStream = stream;
   }
 
   public GeneratorInputDefinition(List<String> inputLines) {
+    if (inputLines == null) {
+      throw new IllegalArgumentException("input lines cannot be null");
+    }
     this.inputLines = inputLines;
   }
 
-  public void runGenerator() {
+  public void readDefinition() throws IOException {
+    if (inputStream != null) {
+      inputLines = new ArrayList<String>();
+      BufferedReader input = new BufferedReader(new InputStreamReader(inputStream));
+      String line;
+      while ((line = input.readLine()) != null) {
+        inputLines.add(line);
+      }
+    }
+  }
+  
+  public void parseDefinition() throws Exception {
+    if (inputLines == null) {
+      throw new Exception("definition must be read before parsing");
+    }
+    
     parseNonterminalSymbols();
     parseTerminalSymbols();
     parseSynchronousTerminalSymbols();
     parseProductions();
   }
-
-  void parseNonterminalSymbols() {
+  
+  void parseNonterminalSymbols() throws Exception {
+    if (inputLines == null) {
+      throw new Exception("definition must be read before parsing");
+    }
+    
     nonterminalSymbols = new ArrayList<NonTerminalSymbol>();
     String[] line = inputLines.get(index++).split(" ");
     for (int i = 1; i < line.length; i++) {
@@ -57,7 +81,11 @@ public class GeneratorInputDefinition {
     initialNonTerminalSymbol = new NonTerminalSymbol(nonterminalSymbols.get(0).getValue());
   }
 
-  void parseTerminalSymbols() {
+  void parseTerminalSymbols() throws Exception {
+    if (inputLines == null) {
+      throw new Exception("definition must be read before parsing");
+    }
+    
     terminalSymbols = new ArrayList<TerminalSymbol>();
     String[] line = inputLines.get(index++).split(" ");
     for (int i = 1; i < line.length; i++) {
@@ -65,7 +93,11 @@ public class GeneratorInputDefinition {
     }
   }
 
-  void parseSynchronousTerminalSymbols() {
+  void parseSynchronousTerminalSymbols() throws Exception {
+    if (inputLines == null) {
+      throw new Exception("definition must be read before parsing");
+    }
+    
     synchronousTerminalSymbols = new ArrayList<TerminalSymbol>();
     String[] line = inputLines.get(index++).split(" ");
     for (int i = 1; i < line.length; i++) {
@@ -73,7 +105,11 @@ public class GeneratorInputDefinition {
     }
   }
 
-  void parseProductions() {
+  void parseProductions() throws Exception {
+    if (inputLines == null) {
+      throw new Exception("definition must be read before parsing");
+    }
+    
     productions = new ArrayList<Production>();
     while (index < inputLines.size()) {
       String leftSide = inputLines.get(index++);

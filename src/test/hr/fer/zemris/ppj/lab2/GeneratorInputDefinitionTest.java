@@ -1,10 +1,6 @@
 package hr.fer.zemris.ppj.lab2;
 
-import static org.junit.Assert.*;
-import hr.fer.zemris.ppj.grammar.Production;
-import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
-import hr.fer.zemris.ppj.symbol.Symbol;
-import hr.fer.zemris.ppj.symbol.TerminalSymbol;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,10 +9,15 @@ import java.util.List;
 
 import org.junit.Test;
 
+import hr.fer.zemris.ppj.grammar.Production;
+import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
+import hr.fer.zemris.ppj.symbol.Symbol;
+import hr.fer.zemris.ppj.symbol.TerminalSymbol;
+
 public class GeneratorInputDefinitionTest {
 
   @Test
-  public void parseNonterminalSymbolsTest() {
+  public void parseNonterminalSymbolsTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("%V <jedan> <Drugi> <Treci_nezavrsni>");
 
@@ -30,7 +31,7 @@ public class GeneratorInputDefinitionTest {
   }
 
   @Test
-  public void parseTerminalSymbolsTest() {
+  public void parseTerminalSymbolsTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("%T jedan dva tri");
 
@@ -43,7 +44,7 @@ public class GeneratorInputDefinitionTest {
   }
 
   @Test
-  public void parseSynchronousTerminalSymbolsTest() {
+  public void parseSynchronousTerminalSymbolsTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("%Syn tu sad neki znakovi");
 
@@ -57,7 +58,7 @@ public class GeneratorInputDefinitionTest {
   }
 
   @Test
-  public void parseProductionsTest() {
+  public void parseProductionsTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("<znak>");
     inputLines.add(" $");
@@ -84,7 +85,7 @@ public class GeneratorInputDefinitionTest {
   }
 
   @Test
-  public void basicInputTest() {
+  public void basicInputTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
 
     inputLines.add("%V <A> <B> <C> <D> <E>");
@@ -109,7 +110,8 @@ public class GeneratorInputDefinitionTest {
 
     GeneratorInputDefinition inputDefinition = new GeneratorInputDefinition(inputLines);
 
-    inputDefinition.runGenerator();
+    inputDefinition.readDefinition();
+    inputDefinition.parseDefinition();
 
     assertEquals(inputDefinition.getNonterminalSymbols(),
         Arrays.asList(new NonTerminalSymbol("<A>"), new NonTerminalSymbol("<B>"),
@@ -174,7 +176,7 @@ public class GeneratorInputDefinitionTest {
     assertEquals(expectedProductions, inputDefinition.getProductions());
   }
 
-  public void getInitialNonTerminalSymbolTest() {
+  public void getInitialNonTerminalSymbolTest() throws Exception {
     List<String> inputLines = new ArrayList<String>();
     inputLines.add("%V <ja_sam_pocetni> <ostatak_ekipe>");
 
