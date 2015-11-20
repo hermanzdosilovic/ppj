@@ -141,6 +141,14 @@ public class Automaton<S, C> {
     return acceptableStates.contains(state);
   }
 
+  public int getNumberOfStates() {
+    return states.size();
+  }
+
+  public int getNumberOfTransitions() {
+    return transitionFunction.getNumberOfTransitions();
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;

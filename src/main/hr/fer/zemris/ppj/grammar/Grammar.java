@@ -26,8 +26,7 @@ public class Grammar {
   private Map<Symbol, Set<Symbol>> beginsWithSymbolTable;
   private Map<Symbol, Set<Symbol>> beginsWithTable;
 
-  public Grammar(Collection<Production> productions,
-      NonTerminalSymbol initialNonTerminalSymbol) {
+  public Grammar(Collection<Production> productions, NonTerminalSymbol initialNonTerminalSymbol) {
     this.productions = new ArrayList<>(productions);
     this.productionsTable = new HashMap<>();
     for (Production production : productions) {
@@ -132,29 +131,38 @@ public class Grammar {
     }
 
     beginsWithSymbolTable = new HashMap<>();
-    Map<Symbol, Set<Symbol>> beginsDirectlyWithSymbolTable =
-        getBeginsDirectlyWithSymbolTable();
+    Map<Symbol, Set<Symbol>> beginsDirectlyWithSymbolTable = getBeginsDirectlyWithSymbolTable();
 
+    Map<Symbol, Set<Symbol>> transitiveClosureMemo = new HashMap<>();
     for (Symbol symbol : beginsDirectlyWithSymbolTable.keySet()) {
       beginsWithSymbolTable.put(symbol, new HashSet<>());
       beginsWithSymbolTable.get(symbol).add(symbol);
 
       for (Symbol beginSymbol : beginsDirectlyWithSymbolTable.get(symbol)) {
-        beginsWithSymbolTable.get(symbol).addAll(transitiveClosure(beginSymbol));
+        beginsWithSymbolTable.get(symbol)
+            .addAll(transitiveClosure(beginSymbol, transitiveClosureMemo));
       }
     }
 
     return beginsWithSymbolTable;
   }
 
-  private Set<Symbol> transitiveClosure(Symbol symbol) {
-    HashSet<Symbol> transitiveClosure = new HashSet<>();
-    transitiveClosure.add(symbol);
+  private Set<Symbol> transitiveClosure(Symbol symbol,
+      Map<Symbol, Set<Symbol>> transitiveClosureMemo) {
+    if (transitiveClosureMemo.containsKey(symbol)) {
+      return transitiveClosureMemo.get(symbol);
+    }
+
+    HashSet<Symbol> transitiveClosure = new HashSet<>(Arrays.asList(symbol));
+    transitiveClosureMemo.put(symbol, transitiveClosure);
+
     if (beginsDirectlyWithSymbolTable.containsKey(symbol)) {
       for (Symbol neighbour : beginsDirectlyWithSymbolTable.get(symbol)) {
-        transitiveClosure.addAll(transitiveClosure(neighbour));
+        transitiveClosure.addAll(transitiveClosure(neighbour, transitiveClosureMemo));
       }
     }
+
+    transitiveClosureMemo.put(symbol, transitiveClosure);
     return transitiveClosure;
   }
 

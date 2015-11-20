@@ -130,6 +130,10 @@ public class TransitionFunction<S, C> {
     return inputSymbols;
   }
 
+  public int getNumberOfTransitions() {
+    return transitionTable.size() + epsilonTransitionTable.size();
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
