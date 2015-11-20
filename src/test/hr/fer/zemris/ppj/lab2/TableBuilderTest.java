@@ -1,7 +1,12 @@
 package hr.fer.zemris.ppj.lab2;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +27,7 @@ import hr.fer.zemris.ppj.lab2.parser.action.Action;
 import hr.fer.zemris.ppj.lab2.parser.action.MoveAction;
 import hr.fer.zemris.ppj.lab2.parser.action.PutAction;
 import hr.fer.zemris.ppj.lab2.parser.action.ReduceAction;
+import hr.fer.zemris.ppj.lab2.parser.deserializer.ParserDeserializer;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
@@ -34,7 +40,7 @@ public class TableBuilderTest {
   private Automaton<Set<LRItem>, Symbol> automaton;
   private Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable;
   private Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> newStateTable;
-  
+
   @BeforeClass
   public static void createSymbols() {
     S = new NonTerminalSymbol("S");
@@ -83,7 +89,7 @@ public class TableBuilderTest {
     Set<Set<LRItem>> acceptableStates = states;
     Set<Symbol> alphabet = new HashSet<>(Arrays.asList(S, A, B, a, b));
     Set<LRItem> initialState = s0;
-    
+
     TransitionFunction<Set<LRItem>, Symbol> transitionFunction = new TransitionFunction<>();
     transitionFunction.addTransition(s0, A, s1);
     transitionFunction.addTransition(s0, a, s3);
@@ -96,33 +102,34 @@ public class TableBuilderTest {
     transitionFunction.addTransition(s3, a, s3);
     transitionFunction.addTransition(s3, b, s4);
     transitionFunction.addTransition(s3, B, s6);
-    
-    automaton = new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
-    
+
+    automaton =
+        new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
+
     actionTable = new HashMap<>();
     actionTable.put(new Pair<>(s0, a), new MoveAction<>(s3));
     actionTable.put(new Pair<>(s0, b), new MoveAction<>(s4));
     actionTable.put(new Pair<>(s0, end), new ReduceAction(new Production(A)));
-    
+
     actionTable.put(new Pair<>(s1, end), new AcceptAction());
-    
+
     actionTable.put(new Pair<>(s2, a), new MoveAction<>(s3));
     actionTable.put(new Pair<>(s2, b), new MoveAction<>(s4));
     actionTable.put(new Pair<>(s2, end), new ReduceAction(new Production(A)));
-    
+
     actionTable.put(new Pair<>(s3, a), new MoveAction<>(s3));
     actionTable.put(new Pair<>(s3, b), new MoveAction<>(s4));
-    
+
     actionTable.put(new Pair<>(s4, a), new ReduceAction(new Production(B, b)));
     actionTable.put(new Pair<>(s4, b), new ReduceAction(new Production(B, b)));
     actionTable.put(new Pair<>(s4, end), new ReduceAction(new Production(B, b)));
-    
+
     actionTable.put(new Pair<>(s5, end), new ReduceAction(new Production(A, B, A)));
-    
+
     actionTable.put(new Pair<>(s6, a), new ReduceAction(new Production(B, a, B)));
     actionTable.put(new Pair<>(s6, b), new ReduceAction(new Production(B, a, B)));
     actionTable.put(new Pair<>(s6, end), new ReduceAction(new Production(B, a, B)));
-    
+
     newStateTable = new HashMap<>();
     newStateTable.put(new Pair<>(s0, B), new PutAction<>(s2));
     newStateTable.put(new Pair<>(s0, A), new PutAction<>(s1));
@@ -130,16 +137,35 @@ public class TableBuilderTest {
     newStateTable.put(new Pair<>(s2, A), new PutAction<>(s5));
     newStateTable.put(new Pair<>(s3, B), new PutAction<>(s6));
   }
-  
+
   @Test
   public void buildActionTableTest() {
-    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable = TableBuilder.buildActionTable(automaton, new Production(S, A));
+    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
+        TableBuilder.buildActionTable(automaton, new Production(S, A));
     assertEquals(actionTable, actualActionTable);
   }
-  
+
   @Test
   public void buildNewStateTableTest() {
-    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable = TableBuilder.buildNewStateTable(automaton);
+    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable =
+        TableBuilder.buildNewStateTable(automaton);
     assertEquals(newStateTable, actualNewStateTable);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void actionTableSerializerTest() throws IOException, ClassNotFoundException {
+    ObjectOutputStream objectOutputStream =
+        new ObjectOutputStream(new FileOutputStream(ParserDeserializer.ACTION_TABLE));
+    objectOutputStream.writeObject(actionTable);
+    objectOutputStream.close();
+
+    ObjectInputStream objectInputStream =
+        new ObjectInputStream(new FileInputStream(ParserDeserializer.ACTION_TABLE));
+    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
+        (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
+    objectInputStream.close();
+    
+    assertEquals(actionTable, actualActionTable);
   }
 }
