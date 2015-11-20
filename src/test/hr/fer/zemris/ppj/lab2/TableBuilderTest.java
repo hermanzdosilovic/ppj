@@ -3,7 +3,6 @@ package hr.fer.zemris.ppj.lab2;
 import static org.junit.Assert.assertEquals;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -7,7 +7,6 @@ import java.util.Stack;
  */
 public final class Stopwatch {
   private static Stack<Long> startTime = new Stack<>();
-  private static long endTime;
 
   private Stopwatch() {}
 
