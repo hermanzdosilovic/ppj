@@ -62,7 +62,6 @@ public final class GSA {
     Grammar grammar = new Grammar(productions, newInitialNonTerminalSymbol);
 
     String time;
-
     Stopwatch.start();
     Automaton<LRItem, Symbol> eNFA =
         GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("<posljednji_znakic>"));
@@ -73,19 +72,19 @@ public final class GSA {
     Stopwatch.start();
     Automaton<LRItem, Symbol> NFA = EpsilonNFAConverter.convertToNFA(eNFA);
     time = Stopwatch.end();
-    System.err.println("NFA:\n states: " + NFA.getNumberOfStates() + "\n transitions: "
+    System.err.println("\nNFA:\n states: " + NFA.getNumberOfStates() + "\n transitions: "
         + NFA.getNumberOfTransitions() + "\n time: " + time);
 
     Stopwatch.start();
     Automaton<Set<LRItem>, Symbol> DFA = NFAConverter.convertToDFA(NFA);
     time = Stopwatch.end();
-    System.err.println("DFA:\n states: " + DFA.getNumberOfStates() + "\n transitions: "
+    System.err.println("\nDFA:\n states: " + DFA.getNumberOfStates() + "\n transitions: "
         + DFA.getNumberOfTransitions() + "\n time: " + time);
 
     Stopwatch.start();
     Automaton<Set<Set<LRItem>>, Symbol> minDFA = DFAMinimizer.minimize(DFA);
     time = Stopwatch.end();
-    System.err.println("minDFA:\n states: " + minDFA.getNumberOfStates() + "\n transitions: "
+    System.err.println("\nminDFA:\n states: " + minDFA.getNumberOfStates() + "\n transitions: "
         + minDFA.getNumberOfTransitions() + "\n time: " + time);
   }
 }
