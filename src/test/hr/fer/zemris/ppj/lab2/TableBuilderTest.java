@@ -138,23 +138,27 @@ public class TableBuilderTest {
     newStateTable.put(new Pair<>(s3, B), new PutAction<>(s6));
   }
 
+  /*
+   * This example tests langdefs/kanon_gramatika.san
+   */
   @Test
   public void buildActionTableTest() {
     Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
         TableBuilder.buildActionTable(automaton, new Production(S, A));
     assertEquals(actionTable, actualActionTable);
   }
-
+  
+  /*
+   * This example tests langdefs/kanon_gramatika.san
+   */
   @Test
   public void buildNewStateTableTest() {
     Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable =
         TableBuilder.buildNewStateTable(automaton);
     assertEquals(newStateTable, actualNewStateTable);
   }
+
   
-  /*
-   * This example tests langdefs/kanon_gramatika.san
-   */
   @SuppressWarnings("unchecked")
   @Test
   public void actionTableSerializerTest() throws IOException, ClassNotFoundException {
@@ -168,13 +172,10 @@ public class TableBuilderTest {
     Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
         (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
     objectInputStream.close();
-    
+
     assertEquals(actionTable, actualActionTable);
   }
-  
-  /*
-   * This example tests langdefs/kanon_gramatika.san
-   */
+
   @SuppressWarnings("unchecked")
   @Test
   public void newStateTableSerializerTest() throws IOException, ClassNotFoundException {
@@ -188,7 +189,7 @@ public class TableBuilderTest {
     Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable =
         (Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action>) objectInputStream.readObject();
     objectInputStream.close();
-    
+
     assertEquals(newStateTable, actualNewStateTable);
   }
 }
