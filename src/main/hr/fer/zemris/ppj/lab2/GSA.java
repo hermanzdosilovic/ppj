@@ -1,7 +1,5 @@
 package hr.fer.zemris.ppj.lab2;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,9 +30,7 @@ public final class GSA {
   private GeneratorInputDefinition generatorInputDefinition;
 
   public static void main(String[] args) throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("simplePpjLang.san")));
-    // GSA gsa = new GSA(new FileInputStream(new File("example.san")));
-
+    GSA gsa = new GSA();
     Stopwatch.start();
     gsa.start();
     System.err.println("\n - Total Time: " + Stopwatch.end());
@@ -78,12 +74,6 @@ public final class GSA {
     time = Stopwatch.end();
     System.err.println("\nDFA:\n states: " + DFA.getNumberOfStates() + "\n transitions: "
         + DFA.getNumberOfTransitions() + "\n time: " + time);
-
-    // Stopwatch.start();
-    // Automaton<Set<Set<LRItem>>, Symbol> minDFA = DFAMinimizer.minimize(DFA);
-    // time = Stopwatch.end();
-    // System.err.println("\nminDFA:\n states: " + minDFA.getNumberOfStates() + "\n transitions: "
-    // + minDFA.getNumberOfTransitions() + "\n time: " + time);
 
     Stopwatch.start();
     Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable =

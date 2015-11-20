@@ -9,14 +9,14 @@ import java.util.Set;
 import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
 
-public class NFAConverter<S, C> {
+public class NFAConverter {
 
   public static <S, C> Automaton<Set<S>, C> convertToDFA(Automaton<S, C> automaton) {
     Set<S> initialState = findInitialState(automaton.getInitialState());
     Set<C> alphabet = automaton.getAlphabet();
+
     Set<Set<S>> states = findStates(alphabet, initialState, automaton.getTransitionFunction());
-    Set<Set<S>> newAcceptibleStates =
-        findAcceptableStates(states, automaton.getAcceptableStates());
+    Set<Set<S>> newAcceptibleStates = findAcceptableStates(states, automaton.getAcceptableStates());
     TransitionFunction<Set<S>, C> newTransitionFunction =
         findTransitions(automaton.getTransitionFunction(), states, alphabet);
 
@@ -52,8 +52,9 @@ public class NFAConverter<S, C> {
         for (S singleState : state) {
           newTransition.addAll(transitionFunction.getTransitionResult(singleState, symbol));
         }
-        if(!newTransition.isEmpty())
-        newTransitionFunction.addTransition(state, symbol, newTransition);
+        if (!newTransition.isEmpty()) {
+          newTransitionFunction.addTransition(state, symbol, newTransition);
+        }
       }
     }
     return newTransitionFunction;
@@ -64,18 +65,26 @@ public class NFAConverter<S, C> {
     Set<Set<S>> newStates = new HashSet<Set<S>>();
     Queue<Set<S>> queue = new LinkedList<Set<S>>();
     queue.add(initialState);
-    while(!queue.isEmpty()){
+
+    TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<>();
+    while (!queue.isEmpty()) {
       Set<S> currentState = queue.remove();
       newStates.add(currentState);
-      for(C symbol : alphabet){
+
+      for (C symbol : alphabet) {
         Set<S> newState = new HashSet<S>();
-        for(S state : currentState){
-          newState.addAll(transitionFunction.getTransitionResult(state, symbol));
+        if (!newTransitionFunction.existsTransition(currentState, symbol)) {
+          for (S state : currentState) {
+            newState.addAll(transitionFunction.getTransitionResult(state, symbol));
+          }
+          newTransitionFunction.addTransition(currentState, symbol, newState);
+          if (!newStates.contains(newState) && !newState.isEmpty()) {
+            queue.add(newState);
+          }
         }
-        if(!newStates.contains(newState) && !newState.isEmpty())
-          queue.add(newState);
       }
     }
+
     return newStates;
   }
 
