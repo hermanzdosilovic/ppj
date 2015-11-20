@@ -1,4 +1,4 @@
-package hr.fer.zemris.ppj.lab2.parser;
+package hr.fer.zemris.ppj.lab2.analyzer;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,7 +17,7 @@ import org.junit.Test;
 import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
 import hr.fer.zemris.ppj.grammar.Production;
-import hr.fer.zemris.ppj.lab2.analyzer.SA;
+import hr.fer.zemris.ppj.lab2.parser.LRItem;
 import hr.fer.zemris.ppj.lab2.parser.action.AcceptAction;
 import hr.fer.zemris.ppj.lab2.parser.action.Action;
 import hr.fer.zemris.ppj.lab2.parser.action.MoveAction;
@@ -127,7 +127,7 @@ public class SATest {
   }
   
   @Test
-  public void test() {
+  public void basicTest() {
     List<String> input = new ArrayList<>();
     input.add("a 1 x x x");
     input.add("b 2 y y");
