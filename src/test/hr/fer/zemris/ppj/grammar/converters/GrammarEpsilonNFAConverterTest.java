@@ -2,7 +2,6 @@ package hr.fer.zemris.ppj.grammar.converters;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -145,15 +144,7 @@ public class GrammarEpsilonNFAConverterTest {
     generatorInputDefinition.readDefinition();
     generatorInputDefinition.parseDefinition();
     
-    List<Production> productions = generatorInputDefinition.getProductions();
-    NonTerminalSymbol initialNonTerminalSymbol =
-        generatorInputDefinition.getInitialNonTerminalSymbol();
-    NonTerminalSymbol newInitialNonTerminalSymbol =
-        new NonTerminalSymbol(initialNonTerminalSymbol + "'");
-    productions.add(0, new Production(newInitialNonTerminalSymbol, initialNonTerminalSymbol));
-
-    Grammar grammar = new Grammar(productions, newInitialNonTerminalSymbol);
-    
+    Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
     Automaton<LRItem, Symbol> eNFA = GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
     assertEquals(11, eNFA.getNumberOfStates());
   }

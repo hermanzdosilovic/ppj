@@ -38,6 +38,12 @@ public class Grammar {
     this.initialNonTerminalSymbol = initialNonTerminalSymbol;
   }
 
+  public static Grammar extendGrammar(Grammar grammar, NonTerminalSymbol newInitialNonTerminalSymbol) {
+    List<Production> productions = grammar.getProductions();
+    productions.add(0, new Production(newInitialNonTerminalSymbol, grammar.initialNonTerminalSymbol));
+    return new Grammar(productions, newInitialNonTerminalSymbol);
+  }
+
   public List<Production> getProductions() {
     return productions;
   }
