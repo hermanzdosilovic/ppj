@@ -131,7 +131,14 @@ public class TransitionFunction<S, C> {
   }
 
   public int getNumberOfTransitions() {
-    return transitionTable.size() + epsilonTransitionTable.size();
+    int numberOfTransitions = 0;
+    for (Collection<S> transitions : transitionTable.values()) {
+      numberOfTransitions += transitions.size();
+    }
+    for (Collection<S> transitions : epsilonTransitionTable.values()) {
+      numberOfTransitions += transitions.size();
+    }
+    return numberOfTransitions;
   }
 
   @Override

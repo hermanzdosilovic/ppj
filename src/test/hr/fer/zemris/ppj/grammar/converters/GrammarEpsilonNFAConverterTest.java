@@ -147,5 +147,6 @@ public class GrammarEpsilonNFAConverterTest {
     Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
     Automaton<LRItem, Symbol> eNFA = GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
     assertEquals(11, eNFA.getNumberOfStates());
+    assertEquals(14, eNFA.getNumberOfTransitions());
   }
 }
