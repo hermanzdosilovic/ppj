@@ -179,4 +179,27 @@ public class SATest {
     
     assertEquals(expectedOutput, Node.printTree(node));
   }
+  
+  @Test
+  public void kanonGrammarTest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
+    gsa.start();
+    
+    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/kanon_gramatika.in")));
+    input.add(SA.END_STRING + " kraj T");
+    ParserDeserializer deserializer = new ParserDeserializer();
+    deserializer.deserializeParserStructures();
+    SA sa = new SA(deserializer.deserializeActions(), deserializer.deserializeNewState(),
+        deserializer.deserializeSynStrings(), deserializer.deserializeStartState());
+    
+    Node node = sa.LR(input);
+    
+    StringBuilder expectedOutput = new StringBuilder();
+    input = SA.readInput(new FileInputStream(new File("langdefs/kanon_gramatika.out")));
+    for (String line : input) {
+      expectedOutput.append(line).append(System.lineSeparator());
+    }
+    
+    assertEquals(expectedOutput, Node.printTree(node));
+  }
 }
