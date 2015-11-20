@@ -169,6 +169,9 @@ public class SA {
         }
       }
     }
+    if (root == null && !stackValue.isEmpty()) {
+      return stackValue.getLast();
+    }
     return root;
   }
 

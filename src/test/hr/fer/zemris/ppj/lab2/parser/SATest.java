@@ -134,7 +134,7 @@ public class SATest {
     input.add("a 3 xx xx");
     input.add("a 4 xx xx xx");
     input.add("b 4 y");
-    input.add("T 5 1");
+    input.add(SA.END_STRING + " 5 T");
 
     List<TerminalSymbol> syn = Arrays.asList(b);
 
@@ -149,7 +149,6 @@ public class SATest {
         .append("    B").append(System.lineSeparator()).append("     b 4 y")
         .append(System.lineSeparator()).append("  A").append(System.lineSeparator()).append("   $")
         .append(System.lineSeparator());
-
     assertEquals(expected.toString(), Node.printTree(sa.LR(input)));
   }
 
