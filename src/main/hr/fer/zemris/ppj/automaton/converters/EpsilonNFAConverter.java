@@ -18,7 +18,8 @@ public class EpsilonNFAConverter {
     S initialState = automata.getInitialState();
     Set<S> acceptableStates = automata.getAcceptableStates();
 
-    for (S state : automata.epsilonClosure(initialState)) {
+    Set<S> epsilonClosure = automata.epsilonClosure(initialState);
+    for (S state : automata.epsilonClosure(epsilonClosure)) {
       if (automata.hasAcceptableState(state)) {
         acceptableStates.add(initialState);
         break;
