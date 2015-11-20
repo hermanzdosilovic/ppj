@@ -149,4 +149,9 @@ public class GSATest {
 
     assertEquals(actionTable, actualActionTable);
   }
+  
+  @Test
+  public void minusLangTest() {
+    
+  }
 }

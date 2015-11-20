@@ -151,7 +151,10 @@ public class TableBuilderTest {
         TableBuilder.buildNewStateTable(automaton);
     assertEquals(newStateTable, actualNewStateTable);
   }
-
+  
+  /*
+   * This example tests langdefs/kanon_gramatika.san
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void actionTableSerializerTest() throws IOException, ClassNotFoundException {
@@ -169,6 +172,9 @@ public class TableBuilderTest {
     assertEquals(actionTable, actualActionTable);
   }
   
+  /*
+   * This example tests langdefs/kanon_gramatika.san
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void newStateTableSerializerTest() throws IOException, ClassNotFoundException {
