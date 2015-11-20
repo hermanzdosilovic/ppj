@@ -23,8 +23,8 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  */
 public class GrammarTest {
   private Grammar grammar;
-  private static NonTerminalSymbol<Character> A, B, C, D, E;
-  private static TerminalSymbol<Character> a, b, c, d, e, f;
+  private static NonTerminalSymbol A, B, C, D, E;
+  private static TerminalSymbol a, b, c, d, e, f;
   private static List<Production> productions;
   
   @BeforeClass
@@ -44,17 +44,17 @@ public class GrammarTest {
   }
   
   public static void createSymbols() {
-    A = new NonTerminalSymbol<Character>('A');
-    B = new NonTerminalSymbol<Character>('B');
-    C = new NonTerminalSymbol<Character>('C');
-    D = new NonTerminalSymbol<Character>('D');
-    E = new NonTerminalSymbol<Character>('E');
-    a = new TerminalSymbol<Character>('a');
-    b = new TerminalSymbol<Character>('b');
-    c = new TerminalSymbol<Character>('c');
-    d = new TerminalSymbol<Character>('d');
-    e = new TerminalSymbol<Character>('e');
-    f = new TerminalSymbol<Character>('f');
+    A = new NonTerminalSymbol('A');
+    B = new NonTerminalSymbol('B');
+    C = new NonTerminalSymbol('C');
+    D = new NonTerminalSymbol('D');
+    E = new NonTerminalSymbol('E');
+    a = new TerminalSymbol('a');
+    b = new TerminalSymbol('b');
+    c = new TerminalSymbol('c');
+    d = new TerminalSymbol('d');
+    e = new TerminalSymbol('e');
+    f = new TerminalSymbol('f');
   }
   
   @Before
@@ -69,7 +69,7 @@ public class GrammarTest {
   
   @Test
   public void beginsDirectlyWithSymbolTest() {
-    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsDirectlyWithSymbolTable = new HashMap<>();
+    Map<NonTerminalSymbol, Set<Symbol>> expectedBeginsDirectlyWithSymbolTable = new HashMap<>();
     expectedBeginsDirectlyWithSymbolTable.put(A, new HashSet<>(Arrays.asList(B, C, e)));
     expectedBeginsDirectlyWithSymbolTable.put(B, new HashSet<>(Arrays.asList(b)));
     expectedBeginsDirectlyWithSymbolTable.put(C, new HashSet<>(Arrays.asList(D, a, c)));
@@ -81,7 +81,7 @@ public class GrammarTest {
   
   @Test
   public void beginsWithSymbolTest() {
-    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsWithSymbolTable = new HashMap<>();
+    Map<NonTerminalSymbol, Set<Symbol>> expectedBeginsWithSymbolTable = new HashMap<>();
     expectedBeginsWithSymbolTable.put(A, new HashSet<>(Arrays.asList(A, B, C, D, a, b, c, d, e)));
     expectedBeginsWithSymbolTable.put(B, new HashSet<>(Arrays.asList(B, b)));
     expectedBeginsWithSymbolTable.put(C, new HashSet<>(Arrays.asList(C, D, a, c, d)));
@@ -93,7 +93,7 @@ public class GrammarTest {
   
   @Test
   public void beginsWithTest() {
-    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsWithTable = new HashMap<>();
+    Map<NonTerminalSymbol, Set<Symbol>> expectedBeginsWithTable = new HashMap<>();
     expectedBeginsWithTable.put(A, new HashSet<>(Arrays.asList(a, b, c, d, e)));
     expectedBeginsWithTable.put(B, new HashSet<>(Arrays.asList(b)));
     expectedBeginsWithTable.put(C, new HashSet<>(Arrays.asList(a, c, d)));
@@ -125,7 +125,7 @@ public class GrammarTest {
     
     Grammar grammar = new Grammar(productions, A);
     
-    Map<NonTerminalSymbol<?>, Set<Symbol<Character>>> expectedBeginsWithSymbolTable = new HashMap<>();
+    Map<NonTerminalSymbol, Set<Symbol>> expectedBeginsWithSymbolTable = new HashMap<>();
     expectedBeginsWithSymbolTable.put(A, new HashSet<>(Arrays.asList(A, B, b, d)));
     expectedBeginsWithSymbolTable.put(B, new HashSet<>(Arrays.asList(B, b, d)));
     

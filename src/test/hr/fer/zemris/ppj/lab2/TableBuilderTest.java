@@ -27,22 +27,22 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class TableBuilderTest {
-  private static NonTerminalSymbol<?> S, A, B;
-  private static TerminalSymbol<?> a, b;
-  private static TerminalSymbol<?> end;
+  private static NonTerminalSymbol S, A, B;
+  private static TerminalSymbol a, b;
+  private static TerminalSymbol end;
 
-  private Automaton<Set<LRItem>, Symbol<?>> automaton;
-  private Map<Pair<Set<LRItem>, TerminalSymbol<?>>, Action> actionTable;
-  private Map<Pair<Set<LRItem>, NonTerminalSymbol<?>>, Action> newStateTable;
+  private Automaton<Set<LRItem>, Symbol> automaton;
+  private Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable;
+  private Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> newStateTable;
   
   @BeforeClass
   public static void createSymbols() {
-    S = new NonTerminalSymbol<String>("S");
-    A = new NonTerminalSymbol<String>("A");
-    B = new NonTerminalSymbol<String>("B");
-    a = new TerminalSymbol<String>("a");
-    b = new TerminalSymbol<String>("b");
-    end = new TerminalSymbol<String>("END");
+    S = new NonTerminalSymbol("S");
+    A = new NonTerminalSymbol("A");
+    B = new NonTerminalSymbol("B");
+    a = new TerminalSymbol("a");
+    b = new TerminalSymbol("b");
+    end = new TerminalSymbol("END");
   }
 
   @Before
@@ -81,10 +81,10 @@ public class TableBuilderTest {
 
     Set<Set<LRItem>> states = new HashSet<>(Arrays.asList(s0, s1, s2, s3, s4, s5, s6));
     Set<Set<LRItem>> acceptableStates = states;
-    Set<Symbol<?>> alphabet = new HashSet<>(Arrays.asList(S, A, B, a, b));
+    Set<Symbol> alphabet = new HashSet<>(Arrays.asList(S, A, B, a, b));
     Set<LRItem> initialState = s0;
     
-    TransitionFunction<Set<LRItem>, Symbol<?>> transitionFunction = new TransitionFunction<>();
+    TransitionFunction<Set<LRItem>, Symbol> transitionFunction = new TransitionFunction<>();
     transitionFunction.addTransition(s0, A, s1);
     transitionFunction.addTransition(s0, a, s3);
     transitionFunction.addTransition(s0, B, s2);
@@ -133,13 +133,13 @@ public class TableBuilderTest {
   
   @Test
   public void buildActionTableTest() {
-    Map<Pair<Set<LRItem>, TerminalSymbol<?>>, Action> actualActionTable = TableBuilder.buildActionTable(automaton, new Production(S, A));
+    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable = TableBuilder.buildActionTable(automaton, new Production(S, A));
     assertEquals(actionTable, actualActionTable);
   }
   
   @Test
   public void buildNewStateTableTest() {
-    Map<Pair<Set<LRItem>, NonTerminalSymbol<?>>, Action> actualNewStateTable = TableBuilder.buildNewStateTable(automaton);
+    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable = TableBuilder.buildNewStateTable(automaton);
     assertEquals(newStateTable, actualNewStateTable);
   }
 }

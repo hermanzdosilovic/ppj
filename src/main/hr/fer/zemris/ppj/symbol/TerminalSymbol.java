@@ -5,8 +5,8 @@ package hr.fer.zemris.ppj.symbol;
  * 
  * @param <T> type of terminal symbol
  */
-public final class TerminalSymbol<T> extends Symbol<T> {
-  public TerminalSymbol(T value) {
+public final class TerminalSymbol extends Symbol {
+  public TerminalSymbol(Object value) {
     super(value);
   }
 }

@@ -12,15 +12,16 @@ import hr.fer.zemris.ppj.symbol.Symbol;
  * @author Herman Zvonimir Dosilovic
  */
 public class Production {
-  private NonTerminalSymbol<?> leftSide;
-  private List<Symbol<?>> rightSide;
+  private NonTerminalSymbol leftSide;
+  private List<Symbol> rightSide;
 
-  public Production(NonTerminalSymbol<?> leftSide, Collection<Symbol<?>> rightSide) {
+  public Production(NonTerminalSymbol leftSide, Collection<Symbol> rightSide) {
     this.leftSide = leftSide;
     this.rightSide = new ArrayList<>(rightSide);
   }
 
-  public Production(NonTerminalSymbol<?> leftSide, Symbol<?>... rightSide) {
+  @SafeVarargs
+  public Production(NonTerminalSymbol leftSide, Symbol... rightSide) {
     this(leftSide, Arrays.asList(rightSide));
   }
 
@@ -29,15 +30,15 @@ public class Production {
    * 
    * @param leftSide left side of epsilon production
    */
-  public Production(NonTerminalSymbol<?> leftSide) {
+  public Production(NonTerminalSymbol leftSide) {
     this(leftSide, new ArrayList<>());
   }
 
-  public NonTerminalSymbol<?> getLeftSide() {
+  public NonTerminalSymbol getLeftSide() {
     return leftSide;
   }
 
-  public List<Symbol<?>> getRightSide() {
+  public List<Symbol> getRightSide() {
     return rightSide;
   }
 

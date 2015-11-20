@@ -26,13 +26,13 @@ public class GrammarEpsilonNFAConverterTest {
 
   @Test
   public void convertTest() {
-    NonTerminalSymbol<Character> S = new NonTerminalSymbol<>('S');
-    NonTerminalSymbol<Character> A = new NonTerminalSymbol<>('A');
-    NonTerminalSymbol<Character> B = new NonTerminalSymbol<>('B');
-    TerminalSymbol<Character> a = new TerminalSymbol<>('a');
-    TerminalSymbol<Character> b = new TerminalSymbol<>('b');
+    NonTerminalSymbol S = new NonTerminalSymbol('S');
+    NonTerminalSymbol A = new NonTerminalSymbol('A');
+    NonTerminalSymbol B = new NonTerminalSymbol('B');
+    TerminalSymbol a = new TerminalSymbol('a');
+    TerminalSymbol b = new TerminalSymbol('b');
 
-    TerminalSymbol<Character> end = new TerminalSymbol<>('\\');
+    TerminalSymbol end = new TerminalSymbol('\\');
 
     List<Production> productions = new ArrayList<>();
     productions.add(new Production(S, A));
@@ -44,7 +44,7 @@ public class GrammarEpsilonNFAConverterTest {
     Grammar grammar = new Grammar(productions, S);
     
     LRItem initialState = new LRItem(new Production(null, new ArrayList<>()), 0, Arrays.asList());
-    TransitionFunction<LRItem, Symbol<Character>> transitionFunction =
+    TransitionFunction<LRItem, Symbol> transitionFunction =
         new TransitionFunction<>();
     
     transitionFunction.addEpsilonTransition(
@@ -118,16 +118,16 @@ public class GrammarEpsilonNFAConverterTest {
     Set<LRItem> states = new HashSet<>(acceptableStates);
     states.add(initialState);
     
-    List<Symbol<Character>> alphabet = Arrays.asList(S, A, B, a, b);
+    List<Symbol> alphabet = Arrays.asList(S, A, B, a, b);
     
-    TransitionFunction<LRItem, Symbol<?>> actualTransitionFunction = new TransitionFunction<>();
+    TransitionFunction<LRItem, Symbol> actualTransitionFunction = new TransitionFunction<>();
     actualTransitionFunction.addEpsilonTransition(initialState, new LRItem(new Production(S, A), 0, Arrays.asList(end)));
     Set<LRItem> visited = new HashSet<>();
     visited.add(new LRItem(new Production(S, A), 0, Arrays.asList(end)));
     GrammarEpsilonNFAConverter.buildTransitions(new LRItem(new Production(S, A), 0, Arrays.asList(end)), actualTransitionFunction, grammar, visited);
     assertEquals(transitionFunction, actualTransitionFunction);
     
-    Automaton<LRItem, Symbol<Character>> expectedAutomaton = new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
+    Automaton<LRItem, Symbol> expectedAutomaton = new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
     assertEquals(expectedAutomaton, GrammarEpsilonNFAConverter.convert(grammar, end));
   }
 }
