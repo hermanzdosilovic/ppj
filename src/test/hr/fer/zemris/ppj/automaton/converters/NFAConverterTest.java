@@ -54,7 +54,7 @@ public class NFAConverterTest {
     states.add(new HashSet<Integer>(Arrays.asList(2)));
 
     assertEquals(new HashSet<Integer>(Arrays.asList(1)),
-        NFAConverter.findInitialState(states, new Integer(1)));
+        NFAConverter.findInitialState(new Integer(1)));
   }
 
   @Test

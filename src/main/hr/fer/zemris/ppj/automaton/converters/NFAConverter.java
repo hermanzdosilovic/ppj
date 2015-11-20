@@ -2,26 +2,26 @@ package hr.fer.zemris.ppj.automaton.converters;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
-import hr.fer.zemris.ppj.helpers.SubsetHelper;
 
-public class NFAConverter {
+public class NFAConverter<S, C> {
 
   public static <S, C> Automaton<Set<S>, C> convertToDFA(Automaton<S, C> automaton) {
-    Set<Set<S>> newStates = SubsetHelper.getAllSubsets(automaton.getStates());
+    Set<S> initialState = findInitialState(automaton.getInitialState());
+    Set<C> alphabet = automaton.getAlphabet();
+    Set<Set<S>> newStates = groFindStates(alphabet, initialState, automaton.getTransitionFunction());
     Set<Set<S>> newAcceptibleStates =
         findAcceptableStates(newStates, automaton.getAcceptableStates());
-    Set<S> initialState = findInitialState(newStates, automaton.getInitialState());
-    Set<C> alphabet = automaton.getAlphabet();
     TransitionFunction<Set<S>, C> newTransitionFunction =
         findTransitions(automaton.getTransitionFunction(), newStates, alphabet);
-    
-    return new Automaton<Set<S>, C>(newTransitionFunction.getAllSources(), alphabet, newTransitionFunction, initialState,
-        newAcceptibleStates);
 
+    return new Automaton<Set<S>, C>(newTransitionFunction.getAllSources(), alphabet,
+        newTransitionFunction, initialState, newAcceptibleStates);
   }
 
   static <S> Set<Set<S>> findAcceptableStates(Set<Set<S>> newStates, Set<S> acceptibleStates) {
@@ -38,16 +38,8 @@ public class NFAConverter {
     return newAcceptibleStates;
   }
 
-  static <S> Set<S> findInitialState(Set<Set<S>> newStates, S initalState) {
-    Set<S> newInitialState = new HashSet<S>();
-
-    for (Set<S> newState : newStates) {
-      if (newState.equals(new HashSet<S>(Arrays.asList(initalState)))) {
-        newInitialState = newState;
-        break;
-      }
-    }
-    return newInitialState;
+  static <S> Set<S> findInitialState(S initalState) {
+    return new HashSet<S>(Arrays.asList(initalState));
   }
 
   static <S, C> TransitionFunction<Set<S>, C> findTransitions(
@@ -64,6 +56,26 @@ public class NFAConverter {
       }
     }
     return newTransitionFunction;
+  }
+
+  static <S, C> Set<Set<S>> groFindStates(Set<C> alphabet, Set<S> initialState,
+      TransitionFunction<S, C> transitionFunction) {
+    Set<Set<S>> groNewStates = new HashSet<Set<S>>();
+    Queue<Set<S>> queue = new LinkedList<Set<S>>();
+    queue.add(initialState);
+    while(!queue.isEmpty()){
+      Set<S> currentState = queue.remove();
+      groNewStates.add(currentState);
+      for(C symbol : alphabet){
+        Set<S> newState = new HashSet<S>();
+        for(S state : currentState){
+          newState.addAll(transitionFunction.getTransitionResult(state, symbol));
+        }
+        if(!groNewStates.contains(newState) && !newState.isEmpty())
+          queue.add(newState);
+      }
+    }
+    return groNewStates;
   }
 
 }
