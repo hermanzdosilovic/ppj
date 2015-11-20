@@ -149,4 +149,28 @@ public class GrammarEpsilonNFAConverterTest {
     assertEquals(11, eNFA.getNumberOfStates());
     assertEquals(14, eNFA.getNumberOfTransitions());
   }
+  
+  @Test
+  public void minusLangGrammarTest() throws Exception {
+    List<String> inputLines = new ArrayList<>();
+    inputLines.add("%V <expr> <atom>");
+    inputLines.add("%T OPERAND OP_MINUS UMINUS LIJEVA_ZAGRADA DESNA_ZAGRADA");
+    inputLines.add("%Syn OPERAND UMINUS LIJEVA_ZAGRADA");
+    inputLines.add("<atom>");
+    inputLines.add(" OPERAND");
+    inputLines.add(" UMINUS <atom>");
+    inputLines.add(" LIJEVA_ZAGRADA <expr> DESNA_ZAGRADA");
+    inputLines.add("<expr>");
+    inputLines.add(" <atom>");
+    inputLines.add(" <expr> OP_MINUS <atom>");
+    
+    GeneratorInputDefinition generatorInputDefinition = new GeneratorInputDefinition(inputLines);
+    generatorInputDefinition.readDefinition();
+    generatorInputDefinition.parseDefinition();
+    
+    Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
+    Automaton<LRItem, Symbol> eNFA = GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
+    assertEquals(47 , eNFA.getNumberOfStates());
+    assertEquals(72, eNFA.getNumberOfTransitions());
+  }
 }
