@@ -54,7 +54,7 @@ public class NFAConverterTest {
     states.add(new HashSet<Integer>(Arrays.asList(2)));
 
     assertEquals(new HashSet<Integer>(Arrays.asList(1)),
-        NFAConverter.findInitialState(states, new Integer(1)));
+        NFAConverter.findInitialState(new Integer(1)));
   }
 
   @Test
@@ -73,18 +73,12 @@ public class NFAConverterTest {
         new HashSet<Integer>(Arrays.asList(0, 1)));
     dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(0)), 1,
         new HashSet<Integer>(Arrays.asList(1)));
-    dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(1)), 0,
-        new HashSet<Integer>(Arrays.asList()));
     dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(1)), 1,
         new HashSet<Integer>(Arrays.asList(0, 1)));
     dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(0, 1)), 0,
         new HashSet<Integer>(Arrays.asList(0, 1)));
     dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(0, 1)), 1,
         new HashSet<Integer>(Arrays.asList(0, 1)));
-    dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList()), 0,
-        new HashSet<Integer>(Arrays.asList()));
-    dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList()), 1,
-        new HashSet<Integer>(Arrays.asList()));
 
     Set<Set<Integer>> dkaStates = new HashSet<Set<Integer>>();
     dkaStates.add(new HashSet<Integer>(Arrays.asList()));
@@ -114,21 +108,14 @@ public class NFAConverterTest {
         new HashSet<Integer>(Arrays.asList(0, 1)));
     dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(0)), 1,
         new HashSet<Integer>(Arrays.asList(1)));
-    dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(1)), 0,
-        new HashSet<Integer>(Arrays.asList()));
     dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(1)), 1,
         new HashSet<Integer>(Arrays.asList(0, 1)));
     dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(0, 1)), 0,
         new HashSet<Integer>(Arrays.asList(0, 1)));
     dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList(0, 1)), 1,
         new HashSet<Integer>(Arrays.asList(0, 1)));
-    dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList()), 0,
-        new HashSet<Integer>(Arrays.asList()));
-    dkaTransitionFunction.addTransition(new HashSet<Integer>(Arrays.asList()), 1,
-        new HashSet<Integer>(Arrays.asList()));
 
     Set<Set<Integer>> dkaStates = new HashSet<Set<Integer>>();
-    dkaStates.add(new HashSet<Integer>(Arrays.asList()));
     dkaStates.add(new HashSet<Integer>(Arrays.asList(0)));
     dkaStates.add(new HashSet<Integer>(Arrays.asList(1)));
     dkaStates.add(new HashSet<Integer>(Arrays.asList(0, 1)));
