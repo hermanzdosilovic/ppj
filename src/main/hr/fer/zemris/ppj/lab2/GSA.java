@@ -95,7 +95,7 @@ public final class GSA {
         ParserDeserializer.SYN_STRINGS);
   }
 
-  public Automaton<LRItem, Symbol> geteNFA() {
+  public Automaton<LRItem, Symbol> getENFA() {
     return eNFA;
   }
 

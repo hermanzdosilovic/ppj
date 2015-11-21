@@ -62,7 +62,7 @@ public class GSATest {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
     gsa.start();
 
-    Automaton<LRItem, Symbol> actualENFA = gsa.geteNFA();
+    Automaton<LRItem, Symbol> actualENFA = gsa.getENFA();
     assertEquals(kanonGrammar.expectedENFA, actualENFA);
   }
 
