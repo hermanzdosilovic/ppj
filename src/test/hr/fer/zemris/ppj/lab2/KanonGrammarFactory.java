@@ -10,6 +10,7 @@ import java.util.Set;
 import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
+import hr.fer.zemris.ppj.grammar.Grammar;
 import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.lab2.analyzer.SA;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
@@ -35,6 +36,7 @@ public class KanonGrammarFactory {
   public Map<Pair<Set<LRItem>, TerminalSymbol>, Action> expectedActionTable;
   public Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> expectedNewStateTable;
 
+  public Grammar grammar;
   public Production initialProduction;
   public LRItem initialCompleteLRItem;
 
@@ -44,6 +46,7 @@ public class KanonGrammarFactory {
 
   private void createGrammarObjects() {
     createSymbols();
+    createGrammar();
 
     initialProduction = new Production(S, A);
     initialCompleteLRItem = new LRItem(initialProduction, 1, Arrays.asList(end));
@@ -64,6 +67,12 @@ public class KanonGrammarFactory {
     a = new TerminalSymbol("a");
     b = new TerminalSymbol("b");
     end = new TerminalSymbol(SA.END_STRING);
+  }
+
+  private void createGrammar() {
+    grammar =
+        new Grammar(Arrays.asList(new Production(S, A), new Production(A, B, A), new Production(A),
+            new Production(B, a, B), new Production(B, a, B), new Production(B, b)), S);
   }
 
   private void createAlphabet() {
@@ -134,7 +143,7 @@ public class KanonGrammarFactory {
 
     Set<LRItem> states = new HashSet<>(Arrays.asList(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10));
     Set<LRItem> acceptableStates = states;
-    LRItem initialState = i0;
+    Set<LRItem> initialState = new HashSet<>(Arrays.asList(i0));
 
     expectedENFA =
         new Automaton<>(states, alphabet, ENFAtransitionFunction, initialState, acceptableStates);
@@ -156,7 +165,7 @@ public class KanonGrammarFactory {
 
     Set<Set<LRItem>> states = new HashSet<>(Arrays.asList(s0, s1, s2, s3, s4, s5, s6));
     Set<Set<LRItem>> acceptableStates = states;
-    Set<LRItem> initialState = s0;
+    Set<Set<LRItem>> initialState = new HashSet<>(Arrays.asList(s0));
 
     expectedDFA =
         new Automaton<>(states, alphabet, DFATransitionFunction, initialState, acceptableStates);
