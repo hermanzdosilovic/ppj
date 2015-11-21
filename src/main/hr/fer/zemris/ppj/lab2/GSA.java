@@ -1,11 +1,11 @@
 package hr.fer.zemris.ppj.lab2;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +15,7 @@ import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.converters.EpsilonNFAConverter;
 import hr.fer.zemris.ppj.automaton.converters.NFAConverter;
 import hr.fer.zemris.ppj.grammar.Grammar;
+import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.grammar.converters.GrammarEpsilonNFAConverter;
 import hr.fer.zemris.ppj.helpers.Stopwatch;
 import hr.fer.zemris.ppj.lab2.analyzer.SA;
@@ -30,14 +31,12 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  */
 public final class GSA {
   private GeneratorInputDefinition generatorInputDefinition;
+  private Automaton<Set<LRItem>, Symbol> DFA;
+  private Automaton<LRItem, Symbol> eNFA;
 
   public static void main(String[] args) throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("simplePpjLang.san")));
-    // GSA gsa = new GSA(new FileInputStream(new File("example.san")));
-
-    Stopwatch.start();
+    GSA gsa = new GSA();
     gsa.start();
-    System.err.println("\n - Total Time: " + Stopwatch.end());
   }
 
   public GSA() throws IOException {
@@ -53,16 +52,17 @@ public final class GSA {
   }
 
   public void start() throws Exception {
+    Stopwatch.start();
+
     generatorInputDefinition.readDefinition();
     generatorInputDefinition.parseDefinition();
 
     Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(),
-        new NonTerminalSymbol(generatorInputDefinition.getInitialNonTerminalSymbol() + "'"));
+        new NonTerminalSymbol(generatorInputDefinition.getInitialNonTerminalSymbol() + "++"));
 
     String time;
     Stopwatch.start();
-    Automaton<LRItem, Symbol> eNFA =
-        GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol(SA.END_STRING));
+    eNFA = GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol(SA.END_STRING));
     time = Stopwatch.end();
     System.err.println("eNFA:\n states: " + eNFA.getNumberOfStates() + "\n transitions: "
         + eNFA.getNumberOfTransitions() + "\n time: " + time);
@@ -74,20 +74,15 @@ public final class GSA {
         + NFA.getNumberOfTransitions() + "\n time: " + time);
 
     Stopwatch.start();
-    Automaton<Set<LRItem>, Symbol> DFA = NFAConverter.convertToDFA(NFA);
+    DFA = NFAConverter.convertToDFA(NFA);
     time = Stopwatch.end();
     System.err.println("\nDFA:\n states: " + DFA.getNumberOfStates() + "\n transitions: "
         + DFA.getNumberOfTransitions() + "\n time: " + time);
 
-    // Stopwatch.start();
-    // Automaton<Set<Set<LRItem>>, Symbol> minDFA = DFAMinimizer.minimize(DFA);
-    // time = Stopwatch.end();
-    // System.err.println("\nminDFA:\n states: " + minDFA.getNumberOfStates() + "\n transitions: "
-    // + minDFA.getNumberOfTransitions() + "\n time: " + time);
-
+    LRItem initialCompleteLRItem = createInitialCompleteLRItem(grammar.getInitialProduction());
     Stopwatch.start();
     Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable =
-        TableBuilder.buildActionTable(DFA, grammar.getInitialProduction());
+        TableBuilder.buildActionTable(DFA, initialCompleteLRItem);
     time = Stopwatch.end();
     System.err.println("\nActionTable:\n time: " + time);
 
@@ -99,14 +94,28 @@ public final class GSA {
 
     serialize(actionTable, ParserDeserializer.ACTION_TABLE);
     serialize(newStateTable, ParserDeserializer.NEW_STATE_TABLE);
-    serialize(DFA.getInitialState(), ParserDeserializer.START_STATE);
+    serialize(new ArrayList<>(DFA.getInitialState()).get(0), ParserDeserializer.START_STATE);
     serialize(generatorInputDefinition.getSynchronousTerminalSymbols(),
         ParserDeserializer.SYN_STRINGS);
+    System.err.println("\n - Total Time: " + Stopwatch.end());
+  }
+
+  public Automaton<LRItem, Symbol> getENFA() {
+    return eNFA;
+  }
+
+  public Automaton<Set<LRItem>, Symbol> getDFA() {
+    return DFA;
   }
 
   void serialize(Object object, String path) throws IOException {
     ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(path));
     objectOutputStream.writeObject(object);
     objectOutputStream.close();
+  }
+
+  private LRItem createInitialCompleteLRItem(Production initialProduction) {
+    return new LRItem(initialProduction, initialProduction.getRightSide().size(),
+        Arrays.asList(new TerminalSymbol(SA.END_STRING)));
   }
 }

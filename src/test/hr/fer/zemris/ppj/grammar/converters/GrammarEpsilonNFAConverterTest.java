@@ -3,18 +3,15 @@ package hr.fer.zemris.ppj.grammar.converters;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import hr.fer.zemris.ppj.automaton.Automaton;
-import hr.fer.zemris.ppj.automaton.TransitionFunction;
 import hr.fer.zemris.ppj.grammar.Grammar;
-import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.lab2.GeneratorInputDefinition;
+import hr.fer.zemris.ppj.lab2.KanonGrammarFactory;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
@@ -24,107 +21,17 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  * @author Herman Zvonimir Dosilovic
  */
 public class GrammarEpsilonNFAConverterTest {
+  private KanonGrammarFactory kanonGrammarFactory;
+
+  @Before
+  public void buildKanonGrammarFactory() {
+    kanonGrammarFactory = new KanonGrammarFactory();
+  }
 
   @Test
   public void convertTest() {
-    NonTerminalSymbol S = new NonTerminalSymbol('S');
-    NonTerminalSymbol A = new NonTerminalSymbol('A');
-    NonTerminalSymbol B = new NonTerminalSymbol('B');
-    TerminalSymbol a = new TerminalSymbol('a');
-    TerminalSymbol b = new TerminalSymbol('b');
-
-    TerminalSymbol end = new TerminalSymbol('\\');
-
-    List<Production> productions = new ArrayList<>();
-    productions.add(new Production(S, A));
-    productions.add(new Production(A, B, A));
-    productions.add(new Production(A));
-    productions.add(new Production(B, a, B));
-    productions.add(new Production(B, b));
-
-    Grammar grammar = new Grammar(productions, S);
-
-    LRItem initialState = new LRItem(new Production(S, A), 0, Arrays.asList(end));
-    TransitionFunction<LRItem, Symbol> transitionFunction = new TransitionFunction<>();
-
-    transitionFunction.addTransition(new LRItem(new Production(S, A), 0, Arrays.asList(end)), A,
-        new LRItem(new Production(S, A), 1, Arrays.asList(end)));
-
-    transitionFunction.addEpsilonTransition(new LRItem(new Production(S, A), 0, Arrays.asList(end)),
-        new LRItem(new Production(A, B, A), 0, Arrays.asList(end)));
-
-    transitionFunction.addEpsilonTransition(new LRItem(new Production(S, A), 0, Arrays.asList(end)),
-        new LRItem(new Production(A), 0, Arrays.asList(end)));
-
-    transitionFunction.addTransition(new LRItem(new Production(A, B, A), 0, Arrays.asList(end)), B,
-        new LRItem(new Production(A, B, A), 1, Arrays.asList(end)));
-
-    transitionFunction.addEpsilonTransition(
-        new LRItem(new Production(A, B, A), 0, Arrays.asList(end)),
-        new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end)));
-
-    transitionFunction.addEpsilonTransition(
-        new LRItem(new Production(A, B, A), 0, Arrays.asList(end)),
-        new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end)));
-
-    transitionFunction.addEpsilonTransition(
-        new LRItem(new Production(A, B, A), 1, Arrays.asList(end)),
-        new LRItem(new Production(A, B, A), 0, Arrays.asList(end)));
-
-    transitionFunction.addEpsilonTransition(
-        new LRItem(new Production(A, B, A), 1, Arrays.asList(end)),
-        new LRItem(new Production(A), 0, Arrays.asList(end)));
-
-    transitionFunction.addTransition(new LRItem(new Production(A, B, A), 1, Arrays.asList(end)), A,
-        new LRItem(new Production(A, B, A), 2, Arrays.asList(end)));
-
-    transitionFunction.addTransition(
-        new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end)), a,
-        new LRItem(new Production(B, a, B), 1, Arrays.asList(a, b, end)));
-
-    transitionFunction.addTransition(new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end)),
-        b, new LRItem(new Production(B, b), 1, Arrays.asList(a, b, end)));
-
-    transitionFunction.addEpsilonTransition(
-        new LRItem(new Production(B, a, B), 1, Arrays.asList(a, b, end)),
-        new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end)));
-
-    transitionFunction.addEpsilonTransition(
-        new LRItem(new Production(B, a, B), 1, Arrays.asList(a, b, end)),
-        new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end)));
-
-    transitionFunction.addTransition(
-        new LRItem(new Production(B, a, B), 1, Arrays.asList(a, b, end)), B,
-        new LRItem(new Production(B, a, B), 2, Arrays.asList(a, b, end)));
-
-    Set<LRItem> acceptableStates = new HashSet<>();
-    acceptableStates.add(new LRItem(new Production(S, A), 0, Arrays.asList(end)));
-    acceptableStates.add(new LRItem(new Production(S, A), 1, Arrays.asList(end)));
-    acceptableStates.add(new LRItem(new Production(A, B, A), 0, Arrays.asList(end)));
-    acceptableStates.add(new LRItem(new Production(A), 0, Arrays.asList(end)));
-    acceptableStates.add(new LRItem(new Production(A, B, A), 1, Arrays.asList(end)));
-    acceptableStates.add(new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end)));
-    acceptableStates.add(new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end)));
-    acceptableStates.add(new LRItem(new Production(A, B, A), 2, Arrays.asList(end)));
-    acceptableStates.add(new LRItem(new Production(B, a, B), 1, Arrays.asList(a, b, end)));
-    acceptableStates.add(new LRItem(new Production(B, b), 1, Arrays.asList(a, b, end)));
-    acceptableStates.add(new LRItem(new Production(B, a, B), 2, Arrays.asList(a, b, end)));
-
-    Set<LRItem> states = new HashSet<>(acceptableStates);
-
-    List<Symbol> alphabet = Arrays.asList(S, A, B, a, b);
-
-    TransitionFunction<LRItem, Symbol> actualTransitionFunction = new TransitionFunction<>();
-    Set<LRItem> visited = new HashSet<>();
-    visited.add(new LRItem(new Production(S, A), 0, Arrays.asList(end)));
-    GrammarEpsilonNFAConverter.buildTransitions(
-        new LRItem(new Production(S, A), 0, Arrays.asList(end)), actualTransitionFunction, grammar,
-        visited);
-    assertEquals(transitionFunction, actualTransitionFunction);
-
-    Automaton<LRItem, Symbol> expectedAutomaton =
-        new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
-    assertEquals(expectedAutomaton, GrammarEpsilonNFAConverter.convert(grammar, end));
+    assertEquals(kanonGrammarFactory.expectedENFA,
+        GrammarEpsilonNFAConverter.convert(kanonGrammarFactory.grammar, kanonGrammarFactory.end));
   }
 
   @Test
@@ -143,13 +50,15 @@ public class GrammarEpsilonNFAConverterTest {
     GeneratorInputDefinition generatorInputDefinition = new GeneratorInputDefinition(inputLines);
     generatorInputDefinition.readDefinition();
     generatorInputDefinition.parseDefinition();
-    
-    Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
-    Automaton<LRItem, Symbol> eNFA = GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
+
+    Grammar grammar =
+        Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
+    Automaton<LRItem, Symbol> eNFA =
+        GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
     assertEquals(11, eNFA.getNumberOfStates());
     assertEquals(14, eNFA.getNumberOfTransitions());
   }
-  
+
   @Test
   public void minusLangGrammarTest() throws Exception {
     List<String> inputLines = new ArrayList<>();
@@ -163,22 +72,26 @@ public class GrammarEpsilonNFAConverterTest {
     inputLines.add("<expr>");
     inputLines.add(" <atom>");
     inputLines.add(" <expr> OP_MINUS <atom>");
-    
+
     GeneratorInputDefinition generatorInputDefinition = new GeneratorInputDefinition(inputLines);
     generatorInputDefinition.readDefinition();
     generatorInputDefinition.parseDefinition();
-    
-    Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
-    Automaton<LRItem, Symbol> eNFA = GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
-    assertEquals(47 , eNFA.getNumberOfStates());
+
+    Grammar grammar =
+        Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
+    Automaton<LRItem, Symbol> eNFA =
+        GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
+    assertEquals(47, eNFA.getNumberOfStates());
     assertEquals(72, eNFA.getNumberOfTransitions());
   }
-  
+
   @Test
   public void simplePpjLangGrammarTest() throws Exception {
     List<String> inputLines = new ArrayList<>();
-    inputLines.add("%V <prijevodna_jedinica> <vanjska_deklaracija> <deklaracija> <definicija_funkcije> <specifikatori_deklaracije> <primarni_izraz> <izraz> <postfiks_izraz> <lista_argumenata> <izraz_pridruzivanja> <unarni_izraz> <unarni_operator> <cast_izraz> <ime_tipa> <multiplikativni_izraz> <aditivni_izraz> <odnosni_izraz> <jednakosni_izraz> <bin_i_izraz> <bin_xili_izraz> <bin_ili_izraz> <log_i_izraz> <log_ili_izraz> <specifikator_tipa> <lista_init_deklaratora> <init_deklarator> <inicijalizator> <lista_specifikatora_kvalifikatora> <izravni_deklarator> <lista_parametara> <deklaracija_parametra> <lista_izraza_pridruzivanja> <naredba> <slozena_naredba> <izraz_naredba> <naredba_grananja> <naredba_petlje> <naredba_skoka> <lista_naredbi> <lista_deklaracija>");
-    inputLines.add("%T IDN BROJ ZNAK NIZ_ZNAKOVA KR_BREAK KR_CHAR KR_CONST KR_CONTINUE KR_ELSE KR_FOR KR_IF KR_INT KR_RETURN KR_VOID KR_WHILE PLUS OP_INC MINUS OP_DEC OP_PUTA OP_DIJELI OP_MOD OP_PRIDRUZI OP_LT OP_LTE OP_GT OP_GTE OP_EQ OP_NEQ OP_NEG OP_TILDA OP_I OP_ILI OP_BIN_I OP_BIN_ILI OP_BIN_XILI ZAREZ TOCKAZAREZ L_ZAGRADA D_ZAGRADA L_UGL_ZAGRADA D_UGL_ZAGRADA L_VIT_ZAGRADA D_VIT_ZAGRADA");
+    inputLines.add(
+        "%V <prijevodna_jedinica> <vanjska_deklaracija> <deklaracija> <definicija_funkcije> <specifikatori_deklaracije> <primarni_izraz> <izraz> <postfiks_izraz> <lista_argumenata> <izraz_pridruzivanja> <unarni_izraz> <unarni_operator> <cast_izraz> <ime_tipa> <multiplikativni_izraz> <aditivni_izraz> <odnosni_izraz> <jednakosni_izraz> <bin_i_izraz> <bin_xili_izraz> <bin_ili_izraz> <log_i_izraz> <log_ili_izraz> <specifikator_tipa> <lista_init_deklaratora> <init_deklarator> <inicijalizator> <lista_specifikatora_kvalifikatora> <izravni_deklarator> <lista_parametara> <deklaracija_parametra> <lista_izraza_pridruzivanja> <naredba> <slozena_naredba> <izraz_naredba> <naredba_grananja> <naredba_petlje> <naredba_skoka> <lista_naredbi> <lista_deklaracija>");
+    inputLines.add(
+        "%T IDN BROJ ZNAK NIZ_ZNAKOVA KR_BREAK KR_CHAR KR_CONST KR_CONTINUE KR_ELSE KR_FOR KR_IF KR_INT KR_RETURN KR_VOID KR_WHILE PLUS OP_INC MINUS OP_DEC OP_PUTA OP_DIJELI OP_MOD OP_PRIDRUZI OP_LT OP_LTE OP_GT OP_GTE OP_EQ OP_NEQ OP_NEG OP_TILDA OP_I OP_ILI OP_BIN_I OP_BIN_ILI OP_BIN_XILI ZAREZ TOCKAZAREZ L_ZAGRADA D_ZAGRADA L_UGL_ZAGRADA D_UGL_ZAGRADA L_VIT_ZAGRADA D_VIT_ZAGRADA");
     inputLines.add("%Syn TOCKAZAREZ D_VIT_ZAGRADA");
     inputLines.add("<prijevodna_jedinica>");
     inputLines.add(" <vanjska_deklaracija>");
@@ -332,13 +245,16 @@ public class GrammarEpsilonNFAConverterTest {
     inputLines.add("<lista_izraza_pridruzivanja>");
     inputLines.add(" <izraz_pridruzivanja>");
     inputLines.add(" <lista_izraza_pridruzivanja> ZAREZ <izraz_pridruzivanja>");
-    
+
     GeneratorInputDefinition generatorInputDefinition = new GeneratorInputDefinition(inputLines);
     generatorInputDefinition.readDefinition();
     generatorInputDefinition.parseDefinition();
-    
-    Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
-    Automaton<LRItem, Symbol> eNFA = GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
+
+    Grammar grammar =
+        Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
+    Automaton<LRItem, Symbol> eNFA =
+        GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
+
     assertEquals(3115, eNFA.getNumberOfStates());
     assertEquals(6343, eNFA.getNumberOfTransitions());
   }

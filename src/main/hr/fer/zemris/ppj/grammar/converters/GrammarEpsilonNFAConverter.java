@@ -32,7 +32,7 @@ public class GrammarEpsilonNFAConverter {
 
     Set<Symbol> alphabet = new HashSet<>(transitionFunction.getAllInputSymbols());
 
-    return new Automaton<>(states, alphabet, transitionFunction, firstLRState, acceptableStates);
+    return new Automaton<>(states, alphabet, transitionFunction, new HashSet<>(Arrays.asList(firstLRState)), acceptableStates);
   }
 
   static void buildTransitions(LRItem item, TransitionFunction<LRItem, Symbol> transitionFunction,

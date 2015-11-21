@@ -153,11 +153,11 @@ public class SA {
 
           currentInput = input.get(index);
           splitInput = currentInput.split(" ");
-          if (synStrings.contains(splitInput[0])) {
+          if (synStrings.contains(new TerminalSymbol(splitInput[0]))) {
 
             pair = new Pair<>(stackState.peek(), new TerminalSymbol(splitInput[0]));
             while (!stackState.isEmpty()) {
-              if (!(actions.get(pair) instanceof RejectAction)) {
+              if (actions.containsKey(pair)) {
                 break;
               } else {
                 stackState.pop();
