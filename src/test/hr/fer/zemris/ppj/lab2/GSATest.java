@@ -166,25 +166,71 @@ public class GSATest {
 
     assertEquals(actionTable, actualActionTable);
   }
-  
+
   @Test
   public void geteNFATest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
     gsa.start();
-    
+
     Automaton<LRItem, Symbol> actualeNFA = gsa.geteNFA();
-    
     assertEquals(11, actualeNFA.getNumberOfStates());
-    assertEquals(automaton, actualDFA);
+
+    LRItem s0 = new LRItem(new Production(S, A), 0, Arrays.asList(end)); // <%> -> * <A>, { # }
+    LRItem s1 = new LRItem(new Production(S, A), 1, Arrays.asList(end)); // <%> -> <A> *, { # }
+    LRItem s2 = new LRItem(new Production(A, B, A), 0, Arrays.asList(end)); // <A> -> * <B> <A>, { #
+                                                                            // }
+    LRItem s3 = new LRItem(new Production(A), 0, Arrays.asList(end)); // <A> -> *, { # }
+    LRItem s4 = new LRItem(new Production(A, B, A), 1, Arrays.asList(end)); // <A> -> <B> * <A>, { #
+                                                                            // }
+    LRItem s5 = new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end)); // <B> -> * a <B>,
+                                                                                  // { a b # }
+    LRItem s6 = new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end)); // <B> -> * b, { a b
+                                                                               // # }
+    LRItem s7 = new LRItem(new Production(A, B, A), 2, Arrays.asList(end)); // <A> -> <B> <A> *, { #
+                                                                            // }
+    LRItem s8 = new LRItem(new Production(B, a, B), 1, Arrays.asList(a, b, end)); // <B> -> a * <B>,
+                                                                                  // { a b # }
+    LRItem s9 = new LRItem(new Production(B, b), 1, Arrays.asList(a, b, end)); // <B> -> b *, { a b
+                                                                               // # }
+    LRItem s10 = new LRItem(new Production(B, a, B), 2, Arrays.asList(a, b, end)); // <B> -> a <B>
+                                                                                   // *, { a b # }
+
+    Set<LRItem> states = new HashSet<>(Arrays.asList(s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10));
+    Set<LRItem> acceptableStates = states;
+    LRItem initialState = s0;
+
+    TransitionFunction<LRItem, Symbol> transitionFunction = new TransitionFunction<>();
+    transitionFunction.addEpsilonTransition(s0, s2);
+    transitionFunction.addEpsilonTransition(s0, s3);
+    transitionFunction.addTransition(s0, A, s1);
+
+    transitionFunction.addEpsilonTransition(s2, s5);
+    transitionFunction.addEpsilonTransition(s2, s6);
+    transitionFunction.addTransition(s2, B, s4);
+
+    transitionFunction.addEpsilonTransition(s4, s2);
+    transitionFunction.addEpsilonTransition(s4, s3);
+    transitionFunction.addTransition(s4, A, s7);
+
+    transitionFunction.addTransition(s5, a, s8);
+
+    transitionFunction.addTransition(s6, b, s9);
+
+    transitionFunction.addEpsilonTransition(s8, s5);
+    transitionFunction.addEpsilonTransition(s8, s6);
+    transitionFunction.addTransition(s8, B, s10);
+
+    assertEquals(new Automaton<>(states, Arrays.asList(S, A, B, a, b), transitionFunction,
+        initialState, acceptableStates), actualeNFA);
   }
-  
+
   @Test
   public void getDFATest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
     gsa.start();
-    
+
     Automaton<Set<LRItem>, Symbol> actualDFA = gsa.getDFA();
-    
+
     assertEquals(7, actualDFA.getNumberOfStates());
     assertEquals(automaton, actualDFA);
   }
