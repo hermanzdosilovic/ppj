@@ -55,7 +55,7 @@ public final class GSA {
     generatorInputDefinition.parseDefinition();
 
     Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(),
-        new NonTerminalSymbol(generatorInputDefinition.getInitialNonTerminalSymbol() + "'"));
+        new NonTerminalSymbol(generatorInputDefinition.getInitialNonTerminalSymbol() + "++"));
 
     String time;
     Stopwatch.start();

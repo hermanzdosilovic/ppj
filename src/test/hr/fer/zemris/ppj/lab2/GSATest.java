@@ -6,155 +6,45 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.Automaton;
-import hr.fer.zemris.ppj.automaton.TransitionFunction;
-import hr.fer.zemris.ppj.grammar.Production;
-import hr.fer.zemris.ppj.lab2.analyzer.SA;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
-import hr.fer.zemris.ppj.lab2.parser.action.AcceptAction;
 import hr.fer.zemris.ppj.lab2.parser.action.Action;
-import hr.fer.zemris.ppj.lab2.parser.action.MoveAction;
-import hr.fer.zemris.ppj.lab2.parser.action.PutAction;
-import hr.fer.zemris.ppj.lab2.parser.action.ReduceAction;
 import hr.fer.zemris.ppj.lab2.parser.deserializer.ParserDeserializer;
-import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class GSATest {
-  private static NonTerminalSymbol S, A, B;
-  private static TerminalSymbol a, b;
-  private static TerminalSymbol end;
-
-  private Automaton<Set<LRItem>, Symbol> automaton;
-  private Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable;
-  private Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> newStateTable;
-
-  @BeforeClass
-  public static void createSymbols() {
-    S = new NonTerminalSymbol("<A>'");
-    A = new NonTerminalSymbol("<A>");
-    B = new NonTerminalSymbol("<B>");
-    a = new TerminalSymbol("a");
-    b = new TerminalSymbol("b");
-    end = new TerminalSymbol(SA.END_STRING);
-  }
-
+  private KanonGrammarFactory kanonGrammar;
+  
   @Before
-  public void buildTables() {
-    LRItem i00 = new LRItem(new Production(S, A), 0, Arrays.asList(end));
-    LRItem i01 = new LRItem(new Production(A, B, A), 0, Arrays.asList(end));
-    LRItem i02 = new LRItem(new Production(A), 0, Arrays.asList(end));
-    LRItem i03 = new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end));
-    LRItem i04 = new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end));
-    Set<LRItem> s0 = new HashSet<>(Arrays.asList(i00, i01, i02, i03, i04));
+  public void createKanonGrammarFactory() {
+    kanonGrammar = new KanonGrammarFactory();
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test
+  public void serializeActionTableTest() throws IOException, ClassNotFoundException {
+    new GSA().serialize(kanonGrammar.expectedActionTable, ParserDeserializer.ACTION_TABLE);
 
-    LRItem i10 = new LRItem(new Production(S, A), 1, Arrays.asList(end));
-    Set<LRItem> s1 = new HashSet<>(Arrays.asList(i10));
+    ObjectInputStream objectInputStream =
+        new ObjectInputStream(new FileInputStream(ParserDeserializer.ACTION_TABLE));
+    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
+        (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
+    objectInputStream.close();
 
-    LRItem i20 = new LRItem(new Production(A, B, A), 1, Arrays.asList(end));
-    LRItem i21 = new LRItem(new Production(A, B, A), 0, Arrays.asList(end));
-    LRItem i22 = new LRItem(new Production(A), 0, Arrays.asList(end));
-    LRItem i23 = new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end));
-    LRItem i24 = new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end));
-    Set<LRItem> s2 = new HashSet<>(Arrays.asList(i20, i21, i22, i23, i24));
-
-    LRItem i30 = new LRItem(new Production(B, a, B), 1, Arrays.asList(a, b, end));
-    LRItem i31 = new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end));
-    LRItem i32 = new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end));
-    Set<LRItem> s3 = new HashSet<>(Arrays.asList(i30, i31, i32));
-
-    LRItem i40 = new LRItem(new Production(B, b), 1, Arrays.asList(a, b, end));
-    Set<LRItem> s4 = new HashSet<>(Arrays.asList(i40));
-
-    LRItem i50 = new LRItem(new Production(A, B, A), 2, Arrays.asList(end));
-    Set<LRItem> s5 = new HashSet<>(Arrays.asList(i50));
-
-    LRItem i60 = new LRItem(new Production(B, a, B), 2, Arrays.asList(a, b, end));
-    Set<LRItem> s6 = new HashSet<>(Arrays.asList(i60));
-
-    Set<Set<LRItem>> states = new HashSet<>(Arrays.asList(s0, s1, s2, s3, s4, s5, s6));
-    Set<Set<LRItem>> acceptableStates = states;
-    Set<Symbol> alphabet = new HashSet<>(Arrays.asList(S, A, B, a, b));
-    Set<LRItem> initialState = s0;
-
-    TransitionFunction<Set<LRItem>, Symbol> transitionFunction = new TransitionFunction<>();
-    transitionFunction.addTransition(s0, A, s1);
-    transitionFunction.addTransition(s0, a, s3);
-    transitionFunction.addTransition(s0, B, s2);
-    transitionFunction.addTransition(s0, b, s4);
-
-    transitionFunction.addTransition(s2, B, s2);
-    transitionFunction.addTransition(s2, A, s5);
-    transitionFunction.addTransition(s2, b, s4);
-    transitionFunction.addTransition(s2, a, s3);
-
-    transitionFunction.addTransition(s3, a, s3);
-    transitionFunction.addTransition(s3, b, s4);
-    transitionFunction.addTransition(s3, B, s6);
-
-    automaton =
-        new Automaton<>(states, alphabet, transitionFunction, initialState, acceptableStates);
-
-    actionTable = new HashMap<>();
-    actionTable.put(new Pair<>(s0, a), new MoveAction<>(s3));
-    actionTable.put(new Pair<>(s0, b), new MoveAction<>(s4));
-    actionTable.put(new Pair<>(s0, end), new ReduceAction(new Production(A)));
-
-    actionTable.put(new Pair<>(s1, end), new AcceptAction());
-
-    actionTable.put(new Pair<>(s2, a), new MoveAction<>(s3));
-    actionTable.put(new Pair<>(s2, b), new MoveAction<>(s4));
-    actionTable.put(new Pair<>(s2, end), new ReduceAction(new Production(A)));
-
-    actionTable.put(new Pair<>(s3, a), new MoveAction<>(s3));
-    actionTable.put(new Pair<>(s3, b), new MoveAction<>(s4));
-
-    actionTable.put(new Pair<>(s4, a), new ReduceAction(new Production(B, b)));
-    actionTable.put(new Pair<>(s4, b), new ReduceAction(new Production(B, b)));
-    actionTable.put(new Pair<>(s4, end), new ReduceAction(new Production(B, b)));
-
-    actionTable.put(new Pair<>(s5, end), new ReduceAction(new Production(A, B, A)));
-
-    actionTable.put(new Pair<>(s6, a), new ReduceAction(new Production(B, a, B)));
-    actionTable.put(new Pair<>(s6, b), new ReduceAction(new Production(B, a, B)));
-    actionTable.put(new Pair<>(s6, end), new ReduceAction(new Production(B, a, B)));
-
-    newStateTable = new HashMap<>();
-    newStateTable.put(new Pair<>(s0, B), new PutAction<>(s2));
-    newStateTable.put(new Pair<>(s0, A), new PutAction<>(s1));
-    newStateTable.put(new Pair<>(s2, B), new PutAction<>(s2));
-    newStateTable.put(new Pair<>(s2, A), new PutAction<>(s5));
-    newStateTable.put(new Pair<>(s3, B), new PutAction<>(s6));
+    assertEquals(kanonGrammar.expectedActionTable, actualActionTable);
   }
 
   @SuppressWarnings("unchecked")
   @Test
-  public void serializeTest() throws IOException, ClassNotFoundException {
-    new GSA().serialize(actionTable, ParserDeserializer.ACTION_TABLE);
-
-    ObjectInputStream objectInputStream =
-        new ObjectInputStream(new FileInputStream(ParserDeserializer.ACTION_TABLE));
-    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
-        (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
-    objectInputStream.close();
-
-    assertEquals(actionTable, actualActionTable);
-  }
-
-  @Test
-  public void kanonGrammarTest() throws Exception {
+  public void actionTableTest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
     gsa.start();
 
@@ -164,64 +54,16 @@ public class GSATest {
         (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
     objectInputStream.close();
 
-    assertEquals(actionTable, actualActionTable);
+    assertEquals(kanonGrammar.expectedActionTable, actualActionTable);
   }
 
   @Test
-  public void geteNFATest() throws Exception {
+  public void getENFATest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
     gsa.start();
 
-    Automaton<LRItem, Symbol> actualeNFA = gsa.geteNFA();
-    assertEquals(11, actualeNFA.getNumberOfStates());
-
-    LRItem s0 = new LRItem(new Production(S, A), 0, Arrays.asList(end)); // <%> -> * <A>, { # }
-    LRItem s1 = new LRItem(new Production(S, A), 1, Arrays.asList(end)); // <%> -> <A> *, { # }
-    LRItem s2 = new LRItem(new Production(A, B, A), 0, Arrays.asList(end)); // <A> -> * <B> <A>, { #
-                                                                            // }
-    LRItem s3 = new LRItem(new Production(A), 0, Arrays.asList(end)); // <A> -> *, { # }
-    LRItem s4 = new LRItem(new Production(A, B, A), 1, Arrays.asList(end)); // <A> -> <B> * <A>, { #
-                                                                            // }
-    LRItem s5 = new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end)); // <B> -> * a <B>,
-                                                                                  // { a b # }
-    LRItem s6 = new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end)); // <B> -> * b, { a b
-                                                                               // # }
-    LRItem s7 = new LRItem(new Production(A, B, A), 2, Arrays.asList(end)); // <A> -> <B> <A> *, { #
-                                                                            // }
-    LRItem s8 = new LRItem(new Production(B, a, B), 1, Arrays.asList(a, b, end)); // <B> -> a * <B>,
-                                                                                  // { a b # }
-    LRItem s9 = new LRItem(new Production(B, b), 1, Arrays.asList(a, b, end)); // <B> -> b *, { a b
-                                                                               // # }
-    LRItem s10 = new LRItem(new Production(B, a, B), 2, Arrays.asList(a, b, end)); // <B> -> a <B>
-                                                                                   // *, { a b # }
-
-    Set<LRItem> states = new HashSet<>(Arrays.asList(s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10));
-    Set<LRItem> acceptableStates = states;
-    LRItem initialState = s0;
-
-    TransitionFunction<LRItem, Symbol> transitionFunction = new TransitionFunction<>();
-    transitionFunction.addEpsilonTransition(s0, s2);
-    transitionFunction.addEpsilonTransition(s0, s3);
-    transitionFunction.addTransition(s0, A, s1);
-
-    transitionFunction.addEpsilonTransition(s2, s5);
-    transitionFunction.addEpsilonTransition(s2, s6);
-    transitionFunction.addTransition(s2, B, s4);
-
-    transitionFunction.addEpsilonTransition(s4, s2);
-    transitionFunction.addEpsilonTransition(s4, s3);
-    transitionFunction.addTransition(s4, A, s7);
-
-    transitionFunction.addTransition(s5, a, s8);
-
-    transitionFunction.addTransition(s6, b, s9);
-
-    transitionFunction.addEpsilonTransition(s8, s5);
-    transitionFunction.addEpsilonTransition(s8, s6);
-    transitionFunction.addTransition(s8, B, s10);
-
-    assertEquals(new Automaton<>(states, Arrays.asList(S, A, B, a, b), transitionFunction,
-        initialState, acceptableStates), actualeNFA);
+    Automaton<LRItem, Symbol> actualENFA = gsa.geteNFA();
+    assertEquals(kanonGrammar.expectedENFA, actualENFA);
   }
 
   @Test
@@ -231,7 +73,6 @@ public class GSATest {
 
     Automaton<Set<LRItem>, Symbol> actualDFA = gsa.getDFA();
 
-    assertEquals(7, actualDFA.getNumberOfStates());
-    assertEquals(automaton, actualDFA);
+    assertEquals(kanonGrammar.expectedDFA, actualDFA);
   }
 }
