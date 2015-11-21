@@ -40,7 +40,7 @@ public class SATest {
     List<TerminalSymbol> syn = Arrays.asList(kanonGrammar.b);
 
     SA sa = new SA(kanonGrammar.expectedActionTable, kanonGrammar.expectedNewStateTable, syn,
-        kanonGrammar.expectedDFA.getInitialState());
+        new ArrayList<>(kanonGrammar.expectedDFA.getInitialState()).get(0));
 
     StringBuilder expectedOutput = new StringBuilder();
     expectedOutput.append("<A>").append(System.lineSeparator()).append(" <B>")
@@ -64,7 +64,8 @@ public class SATest {
     input.add(SA.END_STRING + " kraj T");
 
     SA sa = new SA(kanonGrammar.expectedActionTable, kanonGrammar.expectedNewStateTable,
-        Arrays.asList(kanonGrammar.b), kanonGrammar.expectedDFA.getInitialState());
+        Arrays.asList(kanonGrammar.b),
+        new ArrayList<>(kanonGrammar.expectedDFA.getInitialState()).get(0));
 
     Node node = sa.LR(input);
 

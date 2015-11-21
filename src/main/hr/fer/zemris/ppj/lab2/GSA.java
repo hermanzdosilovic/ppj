@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +94,7 @@ public final class GSA {
 
     serialize(actionTable, ParserDeserializer.ACTION_TABLE);
     serialize(newStateTable, ParserDeserializer.NEW_STATE_TABLE);
-    serialize(DFA.getInitialState(), ParserDeserializer.START_STATE);
+    serialize(new ArrayList<>(DFA.getInitialState()).get(0), ParserDeserializer.START_STATE);
     serialize(generatorInputDefinition.getSynchronousTerminalSymbols(),
         ParserDeserializer.SYN_STRINGS);
   }

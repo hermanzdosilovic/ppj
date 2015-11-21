@@ -72,10 +72,10 @@ public class DFAMinimizerTest {
     secondAcceptableStates.add(new HashSet<>(Arrays.asList(3)));
 
     Automaton<Integer, Character> automaton = new Automaton<>(firstStates, Arrays.asList('a', 'b'),
-        firstTransitionFunction, 1, Arrays.asList(3));
-    Automaton<Set<Integer>, Character> expectedAutomaton =
-        new Automaton<>(secondStates, Arrays.asList('a', 'b'), secondTransitionFunction,
-            new HashSet<>(Arrays.asList(1, 5)), secondAcceptableStates);
+        firstTransitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(3));
+    Automaton<Set<Integer>, Character> expectedAutomaton = new Automaton<>(secondStates,
+        Arrays.asList('a', 'b'), secondTransitionFunction,
+        new HashSet<>(Arrays.asList(new HashSet<>(Arrays.asList(1, 5)))), secondAcceptableStates);
 
     Automaton<Set<Integer>, Character> actualAutomaton = DFAMinimizer.minimize(automaton);
     assertEquals(expectedAutomaton, actualAutomaton);
@@ -88,20 +88,22 @@ public class DFAMinimizerTest {
     transitionFunction.addTransition(2, 'b', 3);
     transitionFunction.addTransition(4, 'b', 5);
 
-    Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4, 5),
-        Arrays.asList('a', 'b'), transitionFunction, 1, Arrays.asList(1));
+    Automaton<Integer, Character> automaton =
+        new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), Arrays.asList('a', 'b'), transitionFunction,
+            new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
 
-    Automaton<Integer, Character> expectedAutomaton =
-        new Automaton<>(Arrays.asList(1, 2, 3), Arrays.asList('a', 'b'),
-            transitionFunction.remove(Arrays.asList(4, 5)), 1, Arrays.asList(1));
+    Automaton<Integer, Character> expectedAutomaton = new Automaton<>(Arrays.asList(1, 2, 3),
+        Arrays.asList('a', 'b'), transitionFunction.remove(Arrays.asList(4, 5)),
+        new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
 
     assertEquals(expectedAutomaton, DFAMinimizer.removeUnreachableStates(automaton));
   }
 
   @Test
   public void getUnequalStatesByMatchingRequirement() {
-    Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3),
-        Arrays.asList(), new TransitionFunction<>(), 1, Arrays.asList(1, 3));
+    Automaton<Integer, Character> automaton =
+        new Automaton<>(Arrays.asList(1, 2, 3), Arrays.asList(), new TransitionFunction<>(),
+            new HashSet<>(Arrays.asList(1)), Arrays.asList(1, 3));
     Set<Pair<Integer, Integer>> expectedResult = new HashSet<>(
         Arrays.asList(new Pair<>(1, 2), new Pair<>(2, 1), new Pair<>(2, 3), new Pair<>(3, 2)));
     assertEquals(expectedResult, DFAMinimizer.getUnequalStatesByIdentity(automaton));
@@ -156,8 +158,9 @@ public class DFAMinimizerTest {
     transitionFunction.addTransition(4, 'a', 1);
     transitionFunction.addTransition(4, 'b', 3);
 
-    Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4),
-        Arrays.asList('a', 'b'), transitionFunction, 1, Arrays.asList(2));
+    Automaton<Integer, Character> automaton =
+        new Automaton<>(Arrays.asList(1, 2, 3, 4), Arrays.asList('a', 'b'), transitionFunction,
+            new HashSet<>(Arrays.asList(1)), Arrays.asList(2));
     Set<Pair<Integer, Integer>> expectedResult = new HashSet<>(Arrays.asList(new Pair<>(1, 2),
         new Pair<>(2, 1), new Pair<>(2, 3), new Pair<>(3, 2), new Pair<>(2, 4), new Pair<>(4, 2),
         new Pair<>(1, 3), new Pair<>(3, 1), new Pair<>(1, 4), new Pair<>(4, 1)));
@@ -269,7 +272,9 @@ public class DFAMinimizerTest {
     groups.add(new HashSet<>(Arrays.asList(1)));
     groups.add(new HashSet<>(Arrays.asList(6, 7)));
 
-    assertEquals(new HashSet<>(Arrays.asList(6, 7)), DFAMinimizer.getNewInitialState(groups, 6));
-    assertEquals(new HashSet<>(Arrays.asList(1)), DFAMinimizer.getNewInitialState(groups, 1));
+    assertEquals(new HashSet<>(Arrays.asList(new HashSet<>(Arrays.asList(6, 7)))),
+        DFAMinimizer.getNewInitialState(groups, new HashSet<>(Arrays.asList(6))));
+    assertEquals(new HashSet<>(Arrays.asList(new HashSet<>(Arrays.asList(1)))),
+        DFAMinimizer.getNewInitialState(groups, new HashSet<>(Arrays.asList(1))));
   }
 }
