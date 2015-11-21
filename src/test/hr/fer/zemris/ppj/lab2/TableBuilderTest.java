@@ -7,29 +7,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import hr.fer.zemris.ppj.Pair;
-import hr.fer.zemris.ppj.automaton.Automaton;
-import hr.fer.zemris.ppj.automaton.TransitionFunction;
-import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
-import hr.fer.zemris.ppj.lab2.parser.action.AcceptAction;
 import hr.fer.zemris.ppj.lab2.parser.action.Action;
-import hr.fer.zemris.ppj.lab2.parser.action.MoveAction;
-import hr.fer.zemris.ppj.lab2.parser.action.PutAction;
-import hr.fer.zemris.ppj.lab2.parser.action.ReduceAction;
 import hr.fer.zemris.ppj.lab2.parser.deserializer.ParserDeserializer;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
-import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class TableBuilderTest {
