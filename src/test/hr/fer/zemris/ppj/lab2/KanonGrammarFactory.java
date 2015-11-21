@@ -23,12 +23,12 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class KanonGrammarFactory {
-  private NonTerminalSymbol S, A, B;
-  private TerminalSymbol a, b;
-  private TerminalSymbol end;
-  private List<Symbol> alphabet;
-  private LRItem i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10;
-  private Set<LRItem> s0, s1, s2, s3, s4, s5, s6;
+  public NonTerminalSymbol S, A, B;
+  public TerminalSymbol a, b;
+  public TerminalSymbol end;
+  public List<Symbol> alphabet;
+  public LRItem i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10;
+  public Set<LRItem> s0, s1, s2, s3, s4, s5, s6;
 
   public Automaton<LRItem, Symbol> expectedENFA;
   public Automaton<Set<LRItem>, Symbol> expectedDFA;
