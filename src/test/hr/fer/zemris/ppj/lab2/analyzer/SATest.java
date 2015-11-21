@@ -79,6 +79,29 @@ public class SATest {
   }
 
   @Test
+  public void kanonGrammarWithGSATest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
+    gsa.start();
+
+    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/kanon_gramatika.in")));
+    input.add(SA.END_STRING + " kraj T");
+    ParserDeserializer deserializer = new ParserDeserializer();
+    deserializer.deserializeParserStructures();
+    SA sa = new SA(deserializer.deserializeActions(), deserializer.deserializeNewState(),
+        deserializer.deserializeSynStrings(), deserializer.deserializeStartState());
+
+    Node node = sa.LR(input);
+
+    StringBuilder expectedOutput = new StringBuilder();
+    input = SA.readInput(new FileInputStream(new File("langdefs/kanon_gramatika.out")));
+    for (String line : input) {
+      expectedOutput.append(line).append(System.lineSeparator());
+    }
+
+    assertEquals(expectedOutput.toString(), Node.printTree(node));
+  }
+  
+  @Test
   public void minusLangWithGSATest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/minusLang.san")));
     gsa.start();
@@ -101,14 +124,15 @@ public class SATest {
 
     assertEquals(expectedOutput.toString(), Node.printTree(node));
   }
-
+  
   @Test
-  public void kanonGrammarWithGSATest() throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
+  public void simplePpjLangErrTest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
     gsa.start();
 
-    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/kanon_gramatika.in")));
+    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_err.in")));
     input.add(SA.END_STRING + " kraj T");
+
     ParserDeserializer deserializer = new ParserDeserializer();
     deserializer.deserializeParserStructures();
     SA sa = new SA(deserializer.deserializeActions(), deserializer.deserializeNewState(),
@@ -117,7 +141,79 @@ public class SATest {
     Node node = sa.LR(input);
 
     StringBuilder expectedOutput = new StringBuilder();
-    input = SA.readInput(new FileInputStream(new File("langdefs/kanon_gramatika.out")));
+    input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_err.out")));
+    for (String line : input) {
+      expectedOutput.append(line).append(System.lineSeparator());
+    }
+
+    assertEquals(expectedOutput.toString(), Node.printTree(node));
+  }
+  
+  @Test
+  public void simplePpjLangManjiTest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
+    gsa.start();
+
+    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_manji.in")));
+    input.add(SA.END_STRING + " kraj T");
+
+    ParserDeserializer deserializer = new ParserDeserializer();
+    deserializer.deserializeParserStructures();
+    SA sa = new SA(deserializer.deserializeActions(), deserializer.deserializeNewState(),
+        deserializer.deserializeSynStrings(), deserializer.deserializeStartState());
+
+    Node node = sa.LR(input);
+
+    StringBuilder expectedOutput = new StringBuilder();
+    input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_manji.out")));
+    for (String line : input) {
+      expectedOutput.append(line).append(System.lineSeparator());
+    }
+
+    assertEquals(expectedOutput.toString(), Node.printTree(node));
+  }
+  
+  @Test
+  public void simplePpjLangNajmanjiTest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
+    gsa.start();
+
+    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_najmanji.in")));
+    input.add(SA.END_STRING + " kraj T");
+
+    ParserDeserializer deserializer = new ParserDeserializer();
+    deserializer.deserializeParserStructures();
+    SA sa = new SA(deserializer.deserializeActions(), deserializer.deserializeNewState(),
+        deserializer.deserializeSynStrings(), deserializer.deserializeStartState());
+
+    Node node = sa.LR(input);
+
+    StringBuilder expectedOutput = new StringBuilder();
+    input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_najmanji.out")));
+    for (String line : input) {
+      expectedOutput.append(line).append(System.lineSeparator());
+    }
+
+    assertEquals(expectedOutput.toString(), Node.printTree(node));
+  }
+  
+  @Test
+  public void simplePpjLangVeciTest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
+    gsa.start();
+
+    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_veci.in")));
+    input.add(SA.END_STRING + " kraj T");
+
+    ParserDeserializer deserializer = new ParserDeserializer();
+    deserializer.deserializeParserStructures();
+    SA sa = new SA(deserializer.deserializeActions(), deserializer.deserializeNewState(),
+        deserializer.deserializeSynStrings(), deserializer.deserializeStartState());
+
+    Node node = sa.LR(input);
+
+    StringBuilder expectedOutput = new StringBuilder();
+    input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_veci.out")));
     for (String line : input) {
       expectedOutput.append(line).append(System.lineSeparator());
     }

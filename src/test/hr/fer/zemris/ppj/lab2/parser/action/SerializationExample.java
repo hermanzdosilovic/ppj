@@ -19,7 +19,7 @@ public class SerializationExample {
   @Test
   public void test() {
     Map<String, Action> m = new HashMap<String, Action>();
-    Action a = new MoveAction(5);
+    Action a = new MoveAction<>(5);
     m.put("action", a);
     try {
        FileOutputStream fileOut =
@@ -48,7 +48,7 @@ public class SerializationExample {
     Action a2 = m2.get("action");
     assertEquals(a1 instanceof MoveAction, a2 instanceof MoveAction);
     if (a1 instanceof MoveAction && a2 instanceof MoveAction) {
-      assertEquals(((MoveAction) a1).getState(), ((MoveAction) a2).getState());
+      assertEquals(((MoveAction<?>) a1).getState(), ((MoveAction<?>) a2).getState());
     }
   }
 

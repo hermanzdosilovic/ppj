@@ -36,9 +36,7 @@ public final class GSA {
 
   public static void main(String[] args) throws Exception {
     GSA gsa = new GSA();
-    Stopwatch.start();
     gsa.start();
-    System.err.println("\n - Total Time: " + Stopwatch.end());
   }
 
   public GSA() throws IOException {
@@ -54,6 +52,8 @@ public final class GSA {
   }
 
   public void start() throws Exception {
+    Stopwatch.start();
+
     generatorInputDefinition.readDefinition();
     generatorInputDefinition.parseDefinition();
 
@@ -97,6 +97,7 @@ public final class GSA {
     serialize(new ArrayList<>(DFA.getInitialState()).get(0), ParserDeserializer.START_STATE);
     serialize(generatorInputDefinition.getSynchronousTerminalSymbols(),
         ParserDeserializer.SYN_STRINGS);
+    System.err.println("\n - Total Time: " + Stopwatch.end());
   }
 
   public Automaton<LRItem, Symbol> getENFA() {
