@@ -29,6 +29,7 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 public final class GSA {
   private GeneratorInputDefinition generatorInputDefinition;
   private Automaton<Set<LRItem>, Symbol> DFA;
+  private Automaton<LRItem, Symbol> eNFA;
 
   public static void main(String[] args) throws Exception {
     GSA gsa = new GSA();
@@ -58,8 +59,7 @@ public final class GSA {
 
     String time;
     Stopwatch.start();
-    Automaton<LRItem, Symbol> eNFA =
-        GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol(SA.END_STRING));
+    eNFA = GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol(SA.END_STRING));
     time = Stopwatch.end();
     System.err.println("eNFA:\n states: " + eNFA.getNumberOfStates() + "\n transitions: "
         + eNFA.getNumberOfTransitions() + "\n time: " + time);
@@ -93,6 +93,10 @@ public final class GSA {
     serialize(DFA.getInitialState(), ParserDeserializer.START_STATE);
     serialize(generatorInputDefinition.getSynchronousTerminalSymbols(),
         ParserDeserializer.SYN_STRINGS);
+  }
+
+  public Automaton<LRItem, Symbol> geteNFA() {
+    return eNFA;
   }
 
   public Automaton<Set<LRItem>, Symbol> getDFA() {

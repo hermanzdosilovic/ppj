@@ -166,7 +166,18 @@ public class GSATest {
 
     assertEquals(actionTable, actualActionTable);
   }
-
+  
+  @Test
+  public void geteNFATest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
+    gsa.start();
+    
+    Automaton<LRItem, Symbol> actualeNFA = gsa.geteNFA();
+    
+    assertEquals(11, actualeNFA.getNumberOfStates());
+    assertEquals(automaton, actualDFA);
+  }
+  
   @Test
   public void getDFATest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
