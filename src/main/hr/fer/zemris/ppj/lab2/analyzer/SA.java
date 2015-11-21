@@ -97,12 +97,13 @@ public class SA {
   public Node LR(List<String> input) {
 
     Node root = null;
-
+    Node asdf = new Node("asdf");
+    
     Deque<Set<LRItem>> stackState = new ArrayDeque<>();
     Deque<Node> stackValue = new ArrayDeque<Node>();
 
     stackState.push(startState);
-
+    stackValue.push(asdf);
     for (int index = 0; index < input.size() && !stackState.isEmpty();) {
 
       String currentInput = input.get(index);
@@ -113,7 +114,7 @@ public class SA {
       Node node = new Node(currentInput);
 
       Action action = actions.get(pair);
-
+      
       if (action instanceof MoveAction<?>) {
         stackValue.push(node);
 
@@ -143,9 +144,9 @@ public class SA {
 
         stackState.push(moveAction.getState());
         stackValue.push(parent);
+        root = parent;
       } else if (action instanceof AcceptAction) {
-        index++;
-        root = stackValue.pop();
+        break;
       } else {
         errorOutput(stackState.peek(), splitInput);
 
@@ -154,10 +155,10 @@ public class SA {
           currentInput = input.get(index);
           splitInput = currentInput.split(" ");
           if (synStrings.contains(new TerminalSymbol(splitInput[0]))) {
-
-            pair = new Pair<>(stackState.peek(), new TerminalSymbol(splitInput[0]));
             while (!stackState.isEmpty()) {
+              pair = new Pair<>(stackState.peek(), new TerminalSymbol(splitInput[0]));
               if (actions.containsKey(pair)) {
+                root = stackValue.peek();
                 break;
               } else {
                 stackState.pop();
@@ -168,9 +169,6 @@ public class SA {
           }
         }
       }
-    }
-    if (root == null && !stackValue.isEmpty()) {
-      return stackValue.getLast();
     }
     return root;
   }
