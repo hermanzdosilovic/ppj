@@ -182,8 +182,8 @@ public class SATest {
   
   @Test
   public void kanonGrammarTest() throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
-    gsa.start();
+//    GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
+//    gsa.start();
     
     List<String> input = SA.readInput(new FileInputStream(new File("langdefs/kanon_gramatika.in")));
     input.add(SA.END_STRING + " kraj T");

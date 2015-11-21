@@ -2,6 +2,7 @@ package hr.fer.zemris.ppj.lab2;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -19,6 +20,7 @@ import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
 import hr.fer.zemris.ppj.grammar.Production;
+import hr.fer.zemris.ppj.lab2.analyzer.SA;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
 import hr.fer.zemris.ppj.lab2.parser.action.AcceptAction;
 import hr.fer.zemris.ppj.lab2.parser.action.Action;
@@ -41,23 +43,22 @@ public class GSATest {
 
   @BeforeClass
   public static void createSymbols() {
-    S = new NonTerminalSymbol("S");
-    A = new NonTerminalSymbol("A");
-    B = new NonTerminalSymbol("B");
+    S = new NonTerminalSymbol("<A>'");
+    A = new NonTerminalSymbol("<A>");
+    B = new NonTerminalSymbol("<B>");
     a = new TerminalSymbol("a");
     b = new TerminalSymbol("b");
-    end = new TerminalSymbol("END");
+    end = new TerminalSymbol(SA.END_STRING);
   }
 
   @Before
   public void buildTables() {
-    LRItem i00 = new LRItem(new Production(null, Arrays.asList()), 0, Arrays.asList()); // q0 state
-    LRItem i01 = new LRItem(new Production(S, A), 0, Arrays.asList(end));
-    LRItem i02 = new LRItem(new Production(A, B, A), 0, Arrays.asList(end));
-    LRItem i03 = new LRItem(new Production(A), 0, Arrays.asList(end));
-    LRItem i04 = new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end));
-    LRItem i05 = new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end));
-    Set<LRItem> s0 = new HashSet<>(Arrays.asList(i00, i01, i02, i03, i04, i05));
+    LRItem i00 = new LRItem(new Production(S, A), 0, Arrays.asList(end));
+    LRItem i01 = new LRItem(new Production(A, B, A), 0, Arrays.asList(end));
+    LRItem i02 = new LRItem(new Production(A), 0, Arrays.asList(end));
+    LRItem i03 = new LRItem(new Production(B, a, B), 0, Arrays.asList(a, b, end));
+    LRItem i04 = new LRItem(new Production(B, b), 0, Arrays.asList(a, b, end));
+    Set<LRItem> s0 = new HashSet<>(Arrays.asList(i00, i01, i02, i03, i04));
 
     LRItem i10 = new LRItem(new Production(S, A), 1, Arrays.asList(end));
     Set<LRItem> s1 = new HashSet<>(Arrays.asList(i10));
@@ -93,10 +94,12 @@ public class GSATest {
     transitionFunction.addTransition(s0, a, s3);
     transitionFunction.addTransition(s0, B, s2);
     transitionFunction.addTransition(s0, b, s4);
+
     transitionFunction.addTransition(s2, B, s2);
     transitionFunction.addTransition(s2, A, s5);
     transitionFunction.addTransition(s2, b, s4);
     transitionFunction.addTransition(s2, a, s3);
+
     transitionFunction.addTransition(s3, a, s3);
     transitionFunction.addTransition(s3, b, s4);
     transitionFunction.addTransition(s3, B, s6);
@@ -149,9 +152,29 @@ public class GSATest {
 
     assertEquals(actionTable, actualActionTable);
   }
-  
+
   @Test
-  public void minusLangTest() {
+  public void kanonGrammarTest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
+    gsa.start();
+
+    ObjectInputStream objectInputStream =
+        new ObjectInputStream(new FileInputStream(ParserDeserializer.ACTION_TABLE));
+    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
+        (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
+    objectInputStream.close();
+
+    assertEquals(actionTable, actualActionTable);
+  }
+
+  @Test
+  public void getDFATest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
+    gsa.start();
     
+    Automaton<Set<LRItem>, Symbol> actualDFA = gsa.getDFA();
+    
+    assertEquals(7, actualDFA.getNumberOfStates());
+    assertEquals(automaton, actualDFA);
   }
 }

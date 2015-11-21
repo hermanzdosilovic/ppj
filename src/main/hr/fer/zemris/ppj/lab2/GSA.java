@@ -28,6 +28,7 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  */
 public final class GSA {
   private GeneratorInputDefinition generatorInputDefinition;
+  private Automaton<Set<LRItem>, Symbol> DFA;
 
   public static void main(String[] args) throws Exception {
     GSA gsa = new GSA();
@@ -70,7 +71,7 @@ public final class GSA {
         + NFA.getNumberOfTransitions() + "\n time: " + time);
 
     Stopwatch.start();
-    Automaton<Set<LRItem>, Symbol> DFA = NFAConverter.convertToDFA(NFA);
+    DFA = NFAConverter.convertToDFA(NFA);
     time = Stopwatch.end();
     System.err.println("\nDFA:\n states: " + DFA.getNumberOfStates() + "\n transitions: "
         + DFA.getNumberOfTransitions() + "\n time: " + time);
@@ -92,6 +93,10 @@ public final class GSA {
     serialize(DFA.getInitialState(), ParserDeserializer.START_STATE);
     serialize(generatorInputDefinition.getSynchronousTerminalSymbols(),
         ParserDeserializer.SYN_STRINGS);
+  }
+
+  public Automaton<Set<LRItem>, Symbol> getDFA() {
+    return DFA;
   }
 
   void serialize(Object object, String path) throws IOException {

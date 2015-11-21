@@ -157,7 +157,6 @@ public class TableBuilderTest {
         TableBuilder.buildNewStateTable(automaton);
     assertEquals(newStateTable, actualNewStateTable);
   }
-
   
   @SuppressWarnings("unchecked")
   @Test
