@@ -25,33 +25,25 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class KanonGrammarFactory {
   public NonTerminalSymbol S, A, B;
-  public TerminalSymbol a, b;
-  public TerminalSymbol end;
+  public TerminalSymbol a, b, end;
   public List<Symbol> alphabet;
+  public Production initialProduction;
+  public LRItem initialCompleteLRItem;
+  public Grammar grammar;
+  
   public LRItem i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10;
   public Set<LRItem> s0, s1, s2, s3, s4, s5, s6;
-
   public Automaton<LRItem, Symbol> expectedENFA;
   public Automaton<Set<LRItem>, Symbol> expectedDFA;
   public Map<Pair<Set<LRItem>, TerminalSymbol>, Action> expectedActionTable;
   public Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> expectedNewStateTable;
 
-  public Grammar grammar;
-  public Production initialProduction;
-  public LRItem initialCompleteLRItem;
-
   public KanonGrammarFactory() {
-    createGrammarObjects();
-  }
-
-  private void createGrammarObjects() {
     createSymbols();
-    createGrammar();
-
-    initialProduction = new Production(S, A);
-    initialCompleteLRItem = new LRItem(initialProduction, 1, Arrays.asList(end));
-
     createAlphabet();
+    createInitialProduction();
+    createInitialCompleteLRItem();
+    createGrammar();
     createLRItems();
     createLRStates();
     createENFA();
@@ -73,6 +65,14 @@ public class KanonGrammarFactory {
     grammar =
         new Grammar(Arrays.asList(new Production(S, A), new Production(A, B, A), new Production(A),
             new Production(B, a, B), new Production(B, a, B), new Production(B, b)), S);
+  }
+
+  private void createInitialProduction() {
+    initialProduction = new Production(S, A);
+  }
+
+  private void createInitialCompleteLRItem() {
+    initialCompleteLRItem = new LRItem(initialProduction, 1, Arrays.asList(end));
   }
 
   private void createAlphabet() {
