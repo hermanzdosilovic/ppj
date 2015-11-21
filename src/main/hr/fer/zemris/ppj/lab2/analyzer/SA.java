@@ -157,7 +157,7 @@ public class SA {
 
             pair = new Pair<>(stackState.peek(), new TerminalSymbol(splitInput[0]));
             while (!stackState.isEmpty()) {
-              if (!(actions.get(pair) instanceof RejectAction)) {
+              if (actions.containsKey(pair)) {
                 break;
               } else {
                 stackState.pop();
