@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +14,7 @@ import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.converters.EpsilonNFAConverter;
 import hr.fer.zemris.ppj.automaton.converters.NFAConverter;
 import hr.fer.zemris.ppj.grammar.Grammar;
+import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.grammar.converters.GrammarEpsilonNFAConverter;
 import hr.fer.zemris.ppj.helpers.Stopwatch;
 import hr.fer.zemris.ppj.lab2.analyzer.SA;
@@ -76,9 +78,10 @@ public final class GSA {
     System.err.println("\nDFA:\n states: " + DFA.getNumberOfStates() + "\n transitions: "
         + DFA.getNumberOfTransitions() + "\n time: " + time);
 
+    LRItem initialCompleteLRItem = createInitialCompleteLRItem(grammar.getInitialProduction());
     Stopwatch.start();
     Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable =
-        TableBuilder.buildActionTable(DFA, grammar.getInitialProduction());
+        TableBuilder.buildActionTable(DFA, initialCompleteLRItem);
     time = Stopwatch.end();
     System.err.println("\nActionTable:\n time: " + time);
 
@@ -107,5 +110,10 @@ public final class GSA {
     ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(path));
     objectOutputStream.writeObject(object);
     objectOutputStream.close();
+  }
+
+  private LRItem createInitialCompleteLRItem(Production initialProduction) {
+    return new LRItem(initialProduction, initialProduction.getRightSide().size(),
+        Arrays.asList(new TerminalSymbol(SA.END_STRING)));
   }
 }

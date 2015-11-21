@@ -8,7 +8,6 @@ import java.util.Set;
 import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
-import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
 import hr.fer.zemris.ppj.lab2.parser.action.AcceptAction;
 import hr.fer.zemris.ppj.lab2.parser.action.Action;
@@ -21,12 +20,18 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class TableBuilder {
   public static Map<Pair<Set<LRItem>, TerminalSymbol>, Action> buildActionTable(
-      Automaton<Set<LRItem>, Symbol> automaton, Production initialProduction) {
-    TransitionFunction<Set<LRItem>, Symbol> transitionFunction =
-        automaton.getTransitionFunction();
+      Automaton<Set<LRItem>, Symbol> automaton, LRItem initialCompleteLRItem) {
+    TransitionFunction<Set<LRItem>, Symbol> transitionFunction = automaton.getTransitionFunction();
 
     Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable = new HashMap<>();
     for (Set<LRItem> state : automaton.getStates()) {
+      if (state.contains(initialCompleteLRItem)) {
+        actionTable.put(new Pair<>(state,
+            (TerminalSymbol) new ArrayList<>(initialCompleteLRItem.getTerminalSymbols()).get(0)),
+            new AcceptAction());
+        continue;
+      }
+
       for (LRItem item : state) {
         Symbol symbol = item.getDotSymbol();
 
@@ -36,16 +41,11 @@ public class TableBuilder {
               new ArrayList<>(transitionFunction.getTransitionResult(state, symbol)).get(0);
           actionTable.put(new Pair<>(state, (TerminalSymbol) symbol),
               new MoveAction<>(destination));
-        } else if (item.isComplete() && !item.getProduction().equals(initialProduction)) {
+        } else if (item.isComplete()) {
           for (Symbol itemSymbol : item.getTerminalSymbols()) {
             actionTable.put(new Pair<>(state, (TerminalSymbol) itemSymbol),
                 new ReduceAction(item.getProduction()));
           }
-        } else if (item.getProduction().equals(initialProduction)) {
-          actionTable.put(
-              new Pair<>(state,
-                  (TerminalSymbol) new ArrayList<>(item.getTerminalSymbols()).get(0)),
-              new AcceptAction());
         }
       }
     }
@@ -55,8 +55,7 @@ public class TableBuilder {
 
   public static Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> buildNewStateTable(
       Automaton<Set<LRItem>, Symbol> automaton) {
-    TransitionFunction<Set<LRItem>, Symbol> transitionFunction =
-        automaton.getTransitionFunction();
+    TransitionFunction<Set<LRItem>, Symbol> transitionFunction = automaton.getTransitionFunction();
     Set<Set<LRItem>> states = automaton.getStates();
     Set<Symbol> alphabet = automaton.getAlphabet();
 

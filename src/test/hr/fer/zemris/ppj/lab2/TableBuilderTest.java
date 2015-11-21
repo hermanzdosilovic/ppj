@@ -31,7 +31,7 @@ public class TableBuilderTest {
   @Test
   public void buildActionTableTest() {
     Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
-        TableBuilder.buildActionTable(kanonGrammar.expectedDFA, kanonGrammar.initialProduction);
+        TableBuilder.buildActionTable(kanonGrammar.expectedDFA, kanonGrammar.initialCompleteLRItem);
 
     assertEquals(kanonGrammar.expectedActionTable, actualActionTable);
   }

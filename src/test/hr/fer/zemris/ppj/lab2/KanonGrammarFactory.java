@@ -34,17 +34,20 @@ public class KanonGrammarFactory {
   public Automaton<Set<LRItem>, Symbol> expectedDFA;
   public Map<Pair<Set<LRItem>, TerminalSymbol>, Action> expectedActionTable;
   public Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> expectedNewStateTable;
-  
+
   public Production initialProduction;
-  
+  public LRItem initialCompleteLRItem;
+
   public KanonGrammarFactory() {
     createGrammarObjects();
   }
 
   private void createGrammarObjects() {
     createSymbols();
+
     initialProduction = new Production(S, A);
-    
+    initialCompleteLRItem = new LRItem(initialProduction, 1, Arrays.asList(end));
+
     createAlphabet();
     createLRItems();
     createLRStates();
