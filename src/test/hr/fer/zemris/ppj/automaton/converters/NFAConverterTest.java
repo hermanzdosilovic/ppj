@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import hr.fer.zemris.ppj.automaton.Automaton;
@@ -17,6 +18,7 @@ import hr.fer.zemris.ppj.automaton.TransitionFunction;
 import hr.fer.zemris.ppj.grammar.Grammar;
 import hr.fer.zemris.ppj.grammar.converters.GrammarEpsilonNFAConverter;
 import hr.fer.zemris.ppj.lab2.GeneratorInputDefinition;
+import hr.fer.zemris.ppj.lab2.KanonGrammarFactory;
 import hr.fer.zemris.ppj.lab2.analyzer.SA;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
@@ -24,7 +26,14 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class NFAConverterTest {
-
+  
+  private KanonGrammarFactory kanonGrammarFactory;
+  
+  @Before
+  public void createKanonGrammarFactory() {
+    kanonGrammarFactory = new KanonGrammarFactory();
+  }
+  
   @Test
   public void findAcceptableStatesTest() {
     Set<Integer> acceptibleStates = new HashSet<>();
@@ -161,31 +170,12 @@ public class NFAConverterTest {
 
   @Test
   public void kanonGrammarTest() throws Exception {
-    List<String> inputLines = new ArrayList<>();
-    inputLines.add("%V <A> <B>");
-    inputLines.add("%T a b");
-    inputLines.add("%Syn b");
-    inputLines.add("<A>");
-    inputLines.add(" <B> <A>");
-    inputLines.add("<B>");
-    inputLines.add(" a <B>");
-    inputLines.add(" b");
-    inputLines.add("<A>");
-    inputLines.add(" $");
-    GeneratorInputDefinition generatorInputDefinition = new GeneratorInputDefinition(inputLines);
-    generatorInputDefinition.readDefinition();
-    generatorInputDefinition.parseDefinition();
-
-    Grammar grammar =
-        Grammar.extendGrammar(generatorInputDefinition.getGrammar(), new NonTerminalSymbol("<%>"));
-    Automaton<LRItem, Symbol> eNFA =
-        GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
-
-    Automaton<LRItem, Symbol> NFA = EpsilonNFAConverter.convertToNFA(eNFA);
+    Automaton<LRItem, Symbol> NFA = EpsilonNFAConverter.convertToNFA(kanonGrammarFactory.expectedENFA);
     Automaton<Set<LRItem>, Symbol> DFA = NFAConverter.convertToDFA(NFA);
 
     assertEquals(7, DFA.getNumberOfStates());
     assertEquals(11, DFA.getNumberOfTransitions());
+    assertEquals(kanonGrammarFactory.expectedDFA, DFA);
   }
 
   @Test
