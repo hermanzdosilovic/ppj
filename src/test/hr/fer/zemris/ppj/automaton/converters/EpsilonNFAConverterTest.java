@@ -1,16 +1,20 @@
 package hr.fer.zemris.ppj.automaton.converters;
 
 import static org.junit.Assert.assertEquals;
-import hr.fer.zemris.ppj.automaton.Automaton;
-import hr.fer.zemris.ppj.automaton.TransitionFunction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
+import hr.fer.zemris.ppj.automaton.Automaton;
+import hr.fer.zemris.ppj.automaton.TransitionFunction;
+
 /**
+ * These tests will fail due to change of logics in <code>EpsilonNFAConverter</code> class.
+ * 
  * @author Ivan Trubic
  */
 public class EpsilonNFAConverterTest {
@@ -22,10 +26,9 @@ public class EpsilonNFAConverterTest {
     transitionFunction.addEpsilonTransition("1", "2");
     transitionFunction.addTransition("2", "a", "3");
 
-    Automaton<String, String> enka =
-        new Automaton<String, String>(Arrays.asList("1", "2", "3"), Arrays.asList("a"),
-            transitionFunction, "1", Arrays.asList("2"));
-    Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
+    Automaton<String, String> enka = new Automaton<String, String>(Arrays.asList("1", "2", "3"),
+        Arrays.asList("a"), transitionFunction, "1", Arrays.asList("2"));
+    Automaton<Set<String>, String> nka = EpsilonNFAConverter.convertToNFA(enka);
 
     TransitionFunction<String, String> expectedTransitionFunction =
         new TransitionFunction<String, String>();
@@ -47,10 +50,9 @@ public class EpsilonNFAConverterTest {
     transitionFunction.addEpsilonTransition("q0", "q1");
     transitionFunction.addEpsilonTransition("q1", "q2");
 
-    Automaton<String, String> enka =
-        new Automaton<String, String>(Arrays.asList("q0", "q1", "q2"), Arrays.asList("0", "1", "2"),
-            transitionFunction, "q0", Arrays.asList("q2"));
-    Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
+    Automaton<String, String> enka = new Automaton<String, String>(Arrays.asList("q0", "q1", "q2"),
+        Arrays.asList("0", "1", "2"), transitionFunction, "q0", Arrays.asList("q2"));
+    Automaton<Set<String>, String> nka = EpsilonNFAConverter.convertToNFA(enka);
 
     TransitionFunction<String, String> expectedTransitionFunction =
         new TransitionFunction<String, String>();
@@ -73,10 +75,9 @@ public class EpsilonNFAConverterTest {
 
   @Test
   public void oneState() {
-    Automaton<String, String> enka =
-        new Automaton<String, String>(Arrays.asList("q0"), new HashSet<String>(),
-            new TransitionFunction<>(), "q0", Arrays.asList("q0"));
-    Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
+    Automaton<String, String> enka = new Automaton<String, String>(Arrays.asList("q0"),
+        new HashSet<String>(), new TransitionFunction<>(), "q0", Arrays.asList("q0"));
+    Automaton<Set<String>, String> nka = EpsilonNFAConverter.convertToNFA(enka);
 
     assertEquals(Arrays.asList("q0"), new ArrayList<>(nka.getStates()));
     assertEquals(Arrays.asList("q0"), new ArrayList<>(nka.getAcceptableStates()));
@@ -86,7 +87,7 @@ public class EpsilonNFAConverterTest {
   public void noStates() {
     Automaton<String, String> enka = new Automaton<String, String>(new HashSet<>(), new HashSet<>(),
         new TransitionFunction<>(), "q0", new HashSet<>());
-    Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
+    Automaton<Set<String>, String> nka = EpsilonNFAConverter.convertToNFA(enka);
 
     assertEquals(Arrays.asList(), new ArrayList<>(nka.getStates()));
   }
@@ -111,10 +112,10 @@ public class EpsilonNFAConverterTest {
     transitionFunction.addTransition("q3", "a", "q2");
 
 
-    Automaton<String, String> enka = new Automaton<String, String>(
-        Arrays.asList("q0", "q1", "q2", "q3"), Arrays.asList("a", "b", "c"), transitionFunction,
-        "q0", Arrays.asList("q2"));
-    Automaton<String, String> nka = EpsilonNFAConverter.convertToNFA(enka);
+    Automaton<String, String> enka =
+        new Automaton<String, String>(Arrays.asList("q0", "q1", "q2", "q3"),
+            Arrays.asList("a", "b", "c"), transitionFunction, "q0", Arrays.asList("q2"));
+    Automaton<Set<String>, String> nka = EpsilonNFAConverter.convertToNFA(enka);
 
     TransitionFunction<String, String> expectedTransitionFunction =
         new TransitionFunction<String, String>();
