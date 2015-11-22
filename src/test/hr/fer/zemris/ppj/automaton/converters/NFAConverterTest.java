@@ -17,6 +17,7 @@ import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
 import hr.fer.zemris.ppj.grammar.Grammar;
 import hr.fer.zemris.ppj.grammar.converters.GrammarEpsilonNFAConverter;
+import hr.fer.zemris.ppj.lab2.GSA;
 import hr.fer.zemris.ppj.lab2.GeneratorInputDefinition;
 import hr.fer.zemris.ppj.lab2.KanonGrammarFactory;
 import hr.fer.zemris.ppj.lab2.analyzer.SA;
@@ -157,23 +158,23 @@ public class NFAConverterTest {
     Grammar grammar = Grammar.extendGrammar(generatorInputDefinition.getGrammar(),
         new NonTerminalSymbol(generatorInputDefinition.getInitialNonTerminalSymbol() + "'"));
 
-    Automaton<LRItem, Symbol> automaton =
+    Automaton<LRItem, Symbol> eNFA =
         GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol(SA.END_STRING));
-    assertEquals(3115, automaton.getNumberOfStates());
-    assertEquals(6343, automaton.getNumberOfTransitions());
+    assertEquals(3115, eNFA.getNumberOfStates());
+    assertEquals(6343, eNFA.getNumberOfTransitions());
 
-    automaton = EpsilonNFAConverter.convertToNFA(automaton);
+    Automaton<Set<LRItem>, Symbol> NFA = EpsilonNFAConverter.convertToNFA(eNFA);
 
-    Automaton<Set<LRItem>, Symbol> DFA = NFAConverter.convertToDFA(automaton);
+    Automaton<Set<LRItem>, Symbol> DFA = GSA.mergeStates(NFAConverter.convertToDFA(NFA));
     assertEquals(691, DFA.getNumberOfStates());
     assertEquals(5404, DFA.getNumberOfTransitions());
   }
 
   @Test
   public void kanonGrammarTest() throws Exception {
-    Automaton<LRItem, Symbol> NFA =
+    Automaton<Set<LRItem>, Symbol> NFA =
         EpsilonNFAConverter.convertToNFA(kanonGrammarFactory.expectedENFA);
-    Automaton<Set<LRItem>, Symbol> DFA = NFAConverter.convertToDFA(NFA);
+    Automaton<Set<LRItem>, Symbol> DFA = GSA.mergeStates(NFAConverter.convertToDFA(NFA));
 
     assertEquals(7, DFA.getNumberOfStates());
     assertEquals(11, DFA.getNumberOfTransitions());
@@ -203,8 +204,8 @@ public class NFAConverterTest {
     Automaton<LRItem, Symbol> eNFA =
         GrammarEpsilonNFAConverter.convert(grammar, new TerminalSymbol("END"));
 
-    Automaton<LRItem, Symbol> NFA = EpsilonNFAConverter.convertToNFA(eNFA);
-    Automaton<Set<LRItem>, Symbol> DFA = NFAConverter.convertToDFA(NFA);
+    Automaton<Set<LRItem>, Symbol> NFA = EpsilonNFAConverter.convertToNFA(eNFA);
+    Automaton<Set<LRItem>, Symbol> DFA = GSA.mergeStates(NFAConverter.convertToDFA(NFA));
 
     assertEquals(20, DFA.getNumberOfStates());
     assertEquals(36, DFA.getNumberOfTransitions());
