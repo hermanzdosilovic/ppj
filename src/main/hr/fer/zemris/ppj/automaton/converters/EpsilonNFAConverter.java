@@ -55,10 +55,13 @@ public class EpsilonNFAConverter {
     }
 
     TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<>();
+
     Map<Pair<S, C>, Collection<S>> transitionTable = helperTransitionFunction.getTransitionTable();
-    for (Pair<S, C> pair : transitionTable.keySet()) {
-      for (S destination : transitionTable.get(pair)) {
-        newTransitionFunction.addTransition(groupStateTable.get(pair.getFirst()), pair.getSecond(), groupStateTable.get(destination));
+    for (Map.Entry<Pair<S, C>, Collection<S>> entry : transitionTable.entrySet()) {
+      Set<S> source = groupStateTable.get(entry.getKey().getFirst());
+      C symbol = entry.getKey().getSecond();
+      for (S destination : entry.getValue()) {
+        newTransitionFunction.addTransition(source, symbol, groupStateTable.get(destination));
       }
     }
 
