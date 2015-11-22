@@ -20,7 +20,7 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  */
 public class GrammarEpsilonNFAConverter {
   public static Automaton<LRItem, Symbol> convert(Grammar grammar, TerminalSymbol endSymbol) {
-    LRItem firstLRState = new LRItem(grammar.getInitialProduction(), 0, Arrays.asList(endSymbol));
+    LRItem firstLRState = new LRItem(grammar.getInitialProduction(), 0, Arrays.asList((Symbol)endSymbol));
 
     TransitionFunction<LRItem, Symbol> transitionFunction = new TransitionFunction<>();
 

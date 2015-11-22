@@ -118,7 +118,7 @@ public final class GSA {
 
   private LRItem createInitialCompleteLRItem(Production initialProduction) {
     return new LRItem(initialProduction, initialProduction.getRightSide().size(),
-        Arrays.asList(new TerminalSymbol(SA.END_STRING)));
+        Arrays.asList((Symbol) new TerminalSymbol(SA.END_STRING)));
   }
 
   public static Automaton<Set<LRItem>, Symbol> mergeStates(
