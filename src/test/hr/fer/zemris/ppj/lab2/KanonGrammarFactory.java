@@ -143,7 +143,7 @@ public class KanonGrammarFactory {
 
     Set<LRItem> states = new HashSet<>(Arrays.asList(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10));
     Set<LRItem> acceptableStates = states;
-    Set<LRItem> initialState = new HashSet<>(Arrays.asList(i0));
+    LRItem initialState = i0;
 
     expectedENFA =
         new Automaton<>(states, alphabet, ENFAtransitionFunction, initialState, acceptableStates);
@@ -165,7 +165,7 @@ public class KanonGrammarFactory {
 
     Set<Set<LRItem>> states = new HashSet<>(Arrays.asList(s0, s1, s2, s3, s4, s5, s6));
     Set<Set<LRItem>> acceptableStates = states;
-    Set<Set<LRItem>> initialState = new HashSet<>(Arrays.asList(s0));
+    Set<LRItem> initialState = s0;
 
     expectedDFA =
         new Automaton<>(states, alphabet, DFATransitionFunction, initialState, acceptableStates);

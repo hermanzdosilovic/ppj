@@ -137,11 +137,11 @@ public class NFAConverterTest {
 
     Automaton<Integer, Integer> nka =
         new Automaton<Integer, Integer>(Arrays.asList(0, 1), Arrays.asList(0, 1),
-            nkaTransitionFunction, new HashSet<>(Arrays.asList(0)), Arrays.asList(1));
+            nkaTransitionFunction, 0, Arrays.asList(1));
     Automaton<Set<Integer>, Integer> dka = NFAConverter.convertToDFA(nka);
     Automaton<Set<Integer>, Integer> expectedDKA =
         new Automaton<Set<Integer>, Integer>(dkaStates, Arrays.asList(0, 1), dkaTransitionFunction,
-            new HashSet<>(Arrays.asList(new HashSet<>(Arrays.asList(0)))), dkaAcceptableStates);
+            new HashSet<>(Arrays.asList(0)), dkaAcceptableStates);
 
     assertEquals(expectedDKA, dka);
   }

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -23,7 +22,7 @@ public class AutomatonTest {
 
     Automaton<Integer, Character> automaton =
         new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), Arrays.asList('a', 'b'), transitionFunction,
-            new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+            1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2, 5), new ArrayList<>(automaton.epsilonClosure(1)));
     assertEquals(Arrays.asList(2, 5), new ArrayList<>(automaton.epsilonClosure(2)));
     assertEquals(Arrays.asList(2, 3, 4, 5), new ArrayList<>(automaton.epsilonClosure(3)));
@@ -43,7 +42,7 @@ public class AutomatonTest {
 
     Automaton<Integer, String> automaton =
         new Automaton<>(Arrays.asList(1, 2, 3), Arrays.asList("b", "c"), transitionFunction,
-            new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+            1, Arrays.asList(1));
     assertEquals(Arrays.asList(1), new ArrayList<>(automaton.epsilonClosure(1)));
     assertEquals(Arrays.asList(1, 2), new ArrayList<>(automaton.epsilonClosure(2)));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(3)));
@@ -62,7 +61,7 @@ public class AutomatonTest {
 
     Automaton<Integer, Character> automaton =
         new Automaton<>(Arrays.asList(1, 2, 3, 4, 5), Arrays.asList('a', 'b'), transitionFunction,
-            new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+            1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2, 5),
         new ArrayList<>(automaton.epsilonClosure(Arrays.asList(1, 2))));
     assertEquals(Arrays.asList(1, 2, 3, 4, 5),
@@ -97,7 +96,7 @@ public class AutomatonTest {
 
     Automaton<Integer, Character> automaton =
         new Automaton<>(Arrays.asList(1, 2, 3), Arrays.asList('b', 'c'), transitionFunction,
-            new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+            1, Arrays.asList(1));
     assertEquals(Arrays.asList(1), new ArrayList<>(automaton.epsilonClosure(1)));
   }
 
@@ -110,7 +109,7 @@ public class AutomatonTest {
     transitionFunction.addEpsilonTransition(3, 1);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3),
-        Arrays.asList(), transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        Arrays.asList(), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(1)));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(2)));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.epsilonClosure(3)));
@@ -122,11 +121,11 @@ public class AutomatonTest {
     transitionFunction.addEpsilonTransition(1, 2);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2), Arrays.asList(),
-        transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2), new ArrayList<>(automaton.getCurrentStates()));
 
     transitionFunction.addTransition(2, 'a', 1);
-    automaton = new Automaton<>(Arrays.asList(1, 2), Arrays.asList('a'), transitionFunction, new HashSet<>(Arrays.asList(2)),
+    automaton = new Automaton<>(Arrays.asList(1, 2), Arrays.asList('a'), transitionFunction, 2,
         Arrays.asList(1));
     assertEquals(Arrays.asList(2), new ArrayList<>(automaton.getCurrentStates()));
   }
@@ -140,7 +139,7 @@ public class AutomatonTest {
     transitionFunction.addTransition(3, 'c', 2);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3),
-        Arrays.asList('c'), transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        Arrays.asList('c'), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(3, 4), new ArrayList<>(automaton.read('c')));
     assertEquals(Arrays.asList(2), new ArrayList<>(automaton.read('c')));
   }
@@ -151,7 +150,7 @@ public class AutomatonTest {
     transitionFunction.addTransition(1, 'c', 1);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1), Arrays.asList('c'),
-        transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1), new ArrayList<>(automaton.read('c')));
   }
 
@@ -161,7 +160,7 @@ public class AutomatonTest {
     transitionFunction.addTransition(1, 'c', 1);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1), Arrays.asList('c'),
-        transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(), new ArrayList<>(automaton.read('d')));
   }
 
@@ -172,7 +171,7 @@ public class AutomatonTest {
     transitionFunction.addEpsilonTransition(2, 1);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2),
-        Arrays.asList('a'), transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        Arrays.asList('a'), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2), new ArrayList<>(automaton.read('a')));
   }
 
@@ -184,7 +183,7 @@ public class AutomatonTest {
     transitionFunction.addTransition(3, 'a', 1);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3),
-        Arrays.asList('a'), transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        Arrays.asList('a'), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(2, 3), new ArrayList<>(automaton.read('a')));
     assertEquals(Arrays.asList(1), new ArrayList<>(automaton.read('a')));
   }
@@ -197,7 +196,7 @@ public class AutomatonTest {
     transitionFunction.addTransition(2, 'b', 4);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4),
-        Arrays.asList('a'), transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        Arrays.asList('a'), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(4), new ArrayList<>(automaton.read(Arrays.asList('a', 'b'))));
   }
 
@@ -207,7 +206,7 @@ public class AutomatonTest {
     transitionFunction.addTransition(1, 'a', 2);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2),
-        Arrays.asList('a'), transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        Arrays.asList('a'), transitionFunction, 1, Arrays.asList(1));
     automaton.read('a');
     automaton.reload();
     assertEquals(Arrays.asList(1), new ArrayList<>(automaton.getCurrentStates()));
@@ -226,7 +225,7 @@ public class AutomatonTest {
     transitionFunction.addEpsilonTransition(5, 2);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4, 5),
-        Arrays.asList('a', 'b', 'c', 'd', 'e'), transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        Arrays.asList('a', 'b', 'c', 'd', 'e'), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(1, 2, 3), new ArrayList<>(automaton.getReachableStates()));
   }
 
@@ -243,7 +242,7 @@ public class AutomatonTest {
     transitionFunction.addEpsilonTransition(5, 2);
 
     Automaton<Integer, Character> automaton = new Automaton<>(Arrays.asList(1, 2, 3, 4, 5),
-        Arrays.asList('a', 'b', 'c', 'd', 'e'), transitionFunction, new HashSet<>(Arrays.asList(1)), Arrays.asList(1));
+        Arrays.asList('a', 'b', 'c', 'd', 'e'), transitionFunction, 1, Arrays.asList(1));
     assertEquals(Arrays.asList(4, 5), new ArrayList<>(automaton.getUnreachableStates()));
   }
 }

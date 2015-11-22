@@ -94,7 +94,7 @@ public final class GSA {
 
     serialize(actionTable, ParserDeserializer.ACTION_TABLE);
     serialize(newStateTable, ParserDeserializer.NEW_STATE_TABLE);
-    serialize(new ArrayList<>(DFA.getInitialState()).get(0), ParserDeserializer.START_STATE);
+    serialize(DFA.getInitialState(), ParserDeserializer.START_STATE);
     serialize(generatorInputDefinition.getSynchronousTerminalSymbols(),
         ParserDeserializer.SYN_STRINGS);
     System.err.println("\n - Total Time: " + Stopwatch.end());

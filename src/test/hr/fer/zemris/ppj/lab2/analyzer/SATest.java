@@ -40,7 +40,7 @@ public class SATest {
     List<TerminalSymbol> syn = Arrays.asList(kanonGrammar.b);
 
     SA sa = new SA(kanonGrammar.expectedActionTable, kanonGrammar.expectedNewStateTable, syn,
-        new ArrayList<>(kanonGrammar.expectedDFA.getInitialState()).get(0));
+        kanonGrammar.expectedDFA.getInitialState());
 
     StringBuilder expectedOutput = new StringBuilder();
     expectedOutput.append("<A>").append(System.lineSeparator()).append(" <B>")
@@ -64,8 +64,7 @@ public class SATest {
     input.add(SA.END_STRING + " kraj T");
 
     SA sa = new SA(kanonGrammar.expectedActionTable, kanonGrammar.expectedNewStateTable,
-        Arrays.asList(kanonGrammar.b),
-        new ArrayList<>(kanonGrammar.expectedDFA.getInitialState()).get(0));
+        Arrays.asList(kanonGrammar.b), kanonGrammar.expectedDFA.getInitialState());
 
     Node node = sa.LR(input);
 
@@ -100,7 +99,7 @@ public class SATest {
 
     assertEquals(expectedOutput.toString(), Node.printTree(node));
   }
-  
+
   @Test
   public void minusLangWithGSATest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/minusLang.san")));
@@ -124,13 +123,14 @@ public class SATest {
 
     assertEquals(expectedOutput.toString(), Node.printTree(node));
   }
-  
+
   @Test
   public void simplePpjLangErrTest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
     gsa.start();
 
-    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_err.in")));
+    List<String> input =
+        SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_err.in")));
     input.add(SA.END_STRING + " kraj T");
 
     ParserDeserializer deserializer = new ParserDeserializer();
@@ -148,13 +148,14 @@ public class SATest {
 
     assertEquals(expectedOutput.toString(), Node.printTree(node));
   }
-  
+
   @Test
   public void simplePpjLangManjiTest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
     gsa.start();
 
-    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_manji.in")));
+    List<String> input =
+        SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_manji.in")));
     input.add(SA.END_STRING + " kraj T");
 
     ParserDeserializer deserializer = new ParserDeserializer();
@@ -172,13 +173,14 @@ public class SATest {
 
     assertEquals(expectedOutput.toString(), Node.printTree(node));
   }
-  
+
   @Test
   public void simplePpjLangNajmanjiTest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
     gsa.start();
 
-    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_najmanji.in")));
+    List<String> input =
+        SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_najmanji.in")));
     input.add(SA.END_STRING + " kraj T");
 
     ParserDeserializer deserializer = new ParserDeserializer();
@@ -196,13 +198,14 @@ public class SATest {
 
     assertEquals(expectedOutput.toString(), Node.printTree(node));
   }
-  
+
   @Test
   public void simplePpjLangVeciTest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
     gsa.start();
 
-    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_veci.in")));
+    List<String> input =
+        SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_veci.in")));
     input.add(SA.END_STRING + " kraj T");
 
     ParserDeserializer deserializer = new ParserDeserializer();
