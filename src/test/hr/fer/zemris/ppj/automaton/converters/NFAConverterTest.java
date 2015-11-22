@@ -165,7 +165,7 @@ public class NFAConverterTest {
 
     Automaton<Set<LRItem>, Symbol> NFA = EpsilonNFAConverter.convertToNFA(eNFA);
 
-    Automaton<Set<LRItem>, Symbol> DFA = GSA.mergeStates(NFAConverter.convertToDFA(NFA));
+    Automaton<Set<Set<LRItem>>, Symbol> DFA = NFAConverter.convertToDFA(NFA);
     assertEquals(691, DFA.getNumberOfStates());
     assertEquals(5404, DFA.getNumberOfTransitions());
   }
@@ -174,7 +174,7 @@ public class NFAConverterTest {
   public void kanonGrammarTest() throws Exception {
     Automaton<Set<LRItem>, Symbol> NFA =
         EpsilonNFAConverter.convertToNFA(kanonGrammarFactory.expectedENFA);
-    Automaton<Set<LRItem>, Symbol> DFA = GSA.mergeStates(NFAConverter.convertToDFA(NFA));
+    Automaton<Set<Set<LRItem>>, Symbol> DFA = NFAConverter.convertToDFA(NFA);
 
     assertEquals(7, DFA.getNumberOfStates());
     assertEquals(11, DFA.getNumberOfTransitions());

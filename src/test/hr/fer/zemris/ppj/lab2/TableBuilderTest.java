@@ -30,7 +30,7 @@ public class TableBuilderTest {
 
   @Test
   public void buildActionTableTest() {
-    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
+    Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action> actualActionTable =
         TableBuilder.buildActionTable(kanonGrammar.expectedDFA, kanonGrammar.initialCompleteLRItem);
 
     assertEquals(kanonGrammar.expectedActionTable, actualActionTable);
@@ -38,7 +38,7 @@ public class TableBuilderTest {
 
   @Test
   public void buildNewStateTableTest() {
-    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable =
+    Map<Pair<Set<Set<LRItem>>, NonTerminalSymbol>, Action> actualNewStateTable =
         TableBuilder.buildNewStateTable(kanonGrammar.expectedDFA);
 
     assertEquals(kanonGrammar.expectedNewStateTable, actualNewStateTable);
@@ -54,8 +54,8 @@ public class TableBuilderTest {
 
     ObjectInputStream objectInputStream =
         new ObjectInputStream(new FileInputStream(ParserDeserializer.ACTION_TABLE));
-    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
-        (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
+    Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action> actualActionTable =
+        (Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action>) objectInputStream.readObject();
     objectInputStream.close();
 
     assertEquals(kanonGrammar.expectedActionTable, actualActionTable);
@@ -71,8 +71,8 @@ public class TableBuilderTest {
 
     ObjectInputStream objectInputStream =
         new ObjectInputStream(new FileInputStream(ParserDeserializer.NEW_STATE_TABLE));
-    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> actualNewStateTable =
-        (Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action>) objectInputStream.readObject();
+    Map<Pair<Set<Set<LRItem>>, NonTerminalSymbol>, Action> actualNewStateTable =
+        (Map<Pair<Set<Set<LRItem>>, NonTerminalSymbol>, Action>) objectInputStream.readObject();
     objectInputStream.close();
 
     assertEquals(kanonGrammar.expectedNewStateTable, actualNewStateTable);

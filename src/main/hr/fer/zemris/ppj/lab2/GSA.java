@@ -33,7 +33,7 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  */
 public final class GSA {
   private GeneratorInputDefinition generatorInputDefinition;
-  private Automaton<Set<LRItem>, Symbol> DFA;
+  private Automaton<Set<Set<LRItem>>, Symbol> DFA;
   private Automaton<LRItem, Symbol> eNFA;
 
   public static void main(String[] args) throws Exception {
@@ -76,20 +76,20 @@ public final class GSA {
         + NFA.getNumberOfTransitions() + "\n time: " + time);
 
     Stopwatch.start();
-    DFA = mergeStates(NFAConverter.convertToDFA(NFA));
+    DFA = NFAConverter.convertToDFA(NFA);
     time = Stopwatch.end();
     System.err.println("\nDFA:\n states: " + DFA.getNumberOfStates() + "\n transitions: "
         + DFA.getNumberOfTransitions() + "\n time: " + time);
 
     LRItem initialCompleteLRItem = createInitialCompleteLRItem(grammar.getInitialProduction());
     Stopwatch.start();
-    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actionTable =
+    Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action> actionTable =
         TableBuilder.buildActionTable(DFA, initialCompleteLRItem);
     time = Stopwatch.end();
     System.err.println("\nActionTable:\n time: " + time);
 
     Stopwatch.start();
-    Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> newStateTable =
+    Map<Pair<Set<Set<LRItem>>, NonTerminalSymbol>, Action> newStateTable =
         TableBuilder.buildNewStateTable(DFA);
     time = Stopwatch.end();
     System.err.println("\nNewStateTable:\n time: " + time);
@@ -106,7 +106,7 @@ public final class GSA {
     return eNFA;
   }
 
-  public Automaton<Set<LRItem>, Symbol> getDFA() {
+  public Automaton<Set<Set<LRItem>>, Symbol> getDFA() {
     return DFA;
   }
 
@@ -120,10 +120,11 @@ public final class GSA {
     return new LRItem(initialProduction, initialProduction.getRightSide().size(),
         Arrays.asList(new TerminalSymbol(SA.END_STRING)));
   }
-  
-  public static Automaton<Set<LRItem>, Symbol> mergeStates(Automaton<Set<Set<LRItem>>, Symbol> automaton) {
+
+  public static Automaton<Set<LRItem>, Symbol> mergeStates(
+      Automaton<Set<Set<LRItem>>, Symbol> automaton) {
     Map<Set<Set<LRItem>>, Set<LRItem>> groupStateTable = new HashMap<>();
-    
+
     Set<Set<LRItem>> newStates = new HashSet<>();
     for (Set<Set<LRItem>> state : automaton.getStates()) {
       Set<LRItem> newState = new HashSet<>();
@@ -133,12 +134,12 @@ public final class GSA {
       newStates.add(newState);
       groupStateTable.put(state, newState);
     }
-    
+
     Set<LRItem> newInitialState = new HashSet<>();
     for (Set<LRItem> initialStateComponent : automaton.getInitialState()) {
       newInitialState.addAll(initialStateComponent);
     }
-    
+
     Set<Set<LRItem>> newAcceptableStates = new HashSet<>();
     for (Set<Set<LRItem>> state : automaton.getAcceptableStates()) {
       Set<LRItem> newAcceptableState = new HashSet<>();
@@ -147,8 +148,9 @@ public final class GSA {
       }
       newAcceptableStates.add(newAcceptableState);
     }
-    
-    TransitionFunction<Set<Set<LRItem>>, Symbol> transitionFunction = automaton.getTransitionFunction();
+
+    TransitionFunction<Set<Set<LRItem>>, Symbol> transitionFunction =
+        automaton.getTransitionFunction();
     TransitionFunction<Set<LRItem>, Symbol> newTransitionFunction = new TransitionFunction<>();
     for (Set<Set<LRItem>> state : automaton.getStates()) {
       for (Symbol symbol : automaton.getAlphabet()) {
@@ -158,7 +160,8 @@ public final class GSA {
         }
       }
     }
-    
-    return new Automaton<>(newStates, automaton.getAlphabet(), newTransitionFunction, newInitialState, newAcceptableStates);
+
+    return new Automaton<>(newStates, automaton.getAlphabet(), newTransitionFunction,
+        newInitialState, newAcceptableStates);
   }
 }

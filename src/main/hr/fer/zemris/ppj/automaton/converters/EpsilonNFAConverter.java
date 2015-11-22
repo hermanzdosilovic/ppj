@@ -9,6 +9,7 @@ import java.util.Set;
 
 import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
+import hr.fer.zemris.ppj.helpers.Stopwatch;
 
 /**
  * @author Ivan Trubic
@@ -19,30 +20,39 @@ public class EpsilonNFAConverter {
     Set<S> states = automata.getStates();
     Set<C> alphabet = automata.getAlphabet();
     TransitionFunction<S, C> transitionFunction = automata.getTransitionFunction();
-
+    
     Map<S, Set<S>> groupStateTable = new HashMap<>();
     Set<Set<S>> newStates = new HashSet<>();
+    Map<S, Set<S>> epsilonClosureTable = new HashMap<>();
+    
+    Stopwatch.start();
     for (S state : automata.getStates()) {
-      newStates.add(automata.epsilonClosure(state));
-      groupStateTable.put(state, automata.epsilonClosure(state));
+      Set<S> epsilonClosure = automata.epsilonClosure(state);
+      epsilonClosureTable.put(state, epsilonClosure);
+      newStates.add(epsilonClosure);
+      groupStateTable.put(state, epsilonClosure);
     }
+    System.err.println("\nepsilonClosure: " + Stopwatch.end());
 
-    Set<S> newInitialState = new HashSet<>(automata.epsilonClosure(automata.getInitialState()));
-
+    Set<S> newInitialState = new HashSet<>(epsilonClosureTable.get(automata.getInitialState()));
+    
+    Stopwatch.start();
     Set<Set<S>> newAcceptableStates = new HashSet<>();
     for (S state : automata.getAcceptableStates()) {
-      newAcceptableStates.add(automata.epsilonClosure(state));
+      newAcceptableStates.add(epsilonClosureTable.get(state));
       if (newInitialState.contains(state)) {
         newAcceptableStates.add(newInitialState);
       }
     }
-
+    System.err.println("\nacceptableStates: " + Stopwatch.end());
+    
+    Stopwatch.start();
     TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<>();
     for (S state : states) {
-      for (S epsilonState : automata.epsilonClosure(state)) {
+      for (S epsilonState : epsilonClosureTable.get(state)) {
         for (C symbol : alphabet) {
           for (S destination : transitionFunction.getTransitionResult(epsilonState, symbol)) {
-            for (S epsilonDestination : automata.epsilonClosure(destination)) {
+            for (S epsilonDestination : epsilonClosureTable.get(destination)) {
               newTransitionFunction.addTransition(groupStateTable.get(state), symbol,
                   groupStateTable.get(epsilonDestination));
             }
@@ -50,6 +60,7 @@ public class EpsilonNFAConverter {
         }
       }
     }
+    System.err.println("\ntransitionFunction: " + Stopwatch.end());
 
     return new Automaton<>(newStates, alphabet, newTransitionFunction, newInitialState,
         newAcceptableStates);
