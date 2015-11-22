@@ -11,7 +11,7 @@ import hr.fer.zemris.ppj.automaton.TransitionFunction;
 public class NFAConverter {
 
   public static <S, C> Automaton<Set<S>, C> convertToDFA(Automaton<S, C> automaton) {
-    Set<Set<S>> initialState = findInitialState(automaton.getInitialState());
+    Set<S> initialState = findInitialState(automaton.getInitialState());
     Set<C> alphabet = automaton.getAlphabet();
 
     Set<Set<S>> states = findStates(alphabet, initialState, automaton.getTransitionFunction());
@@ -37,8 +37,8 @@ public class NFAConverter {
     return newAcceptibleStates;
   }
 
-  static <S> Set<Set<S>> findInitialState(Set<S> initalState) {
-    Set<Set<S>> newInitialState = new HashSet<>();
+  static <S> Set<S> findInitialState(S initalState) {
+    Set<S> newInitialState = new HashSet<>();
     newInitialState.add(initalState);
     return newInitialState;
   }
@@ -61,11 +61,11 @@ public class NFAConverter {
     return newTransitionFunction;
   }
 
-  static <S, C> Set<Set<S>> findStates(Set<C> alphabet, Set<Set<S>> initialState,
+  static <S, C> Set<Set<S>> findStates(Set<C> alphabet, Set<S> initialState,
       TransitionFunction<S, C> transitionFunction) {
     Set<Set<S>> newStates = new HashSet<Set<S>>();
     Queue<Set<S>> queue = new LinkedList<Set<S>>();
-    queue.addAll(initialState);
+    queue.add(initialState);
 
     TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<>();
     while (!queue.isEmpty()) {

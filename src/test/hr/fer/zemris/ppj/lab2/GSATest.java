@@ -22,12 +22,12 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class GSATest {
   private KanonGrammarFactory kanonGrammar;
-  
+
   @Before
   public void createKanonGrammarFactory() {
     kanonGrammar = new KanonGrammarFactory();
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void serializeActionTableTest() throws IOException, ClassNotFoundException {
@@ -35,13 +35,16 @@ public class GSATest {
 
     ObjectInputStream objectInputStream =
         new ObjectInputStream(new FileInputStream(ParserDeserializer.ACTION_TABLE));
-    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
-        (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
+    Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action> actualActionTable =
+        (Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action>) objectInputStream.readObject();
     objectInputStream.close();
 
     assertEquals(kanonGrammar.expectedActionTable, actualActionTable);
   }
-
+  
+  /*
+   * WA is OK
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void actionTableTest() throws Exception {
@@ -50,8 +53,8 @@ public class GSATest {
 
     ObjectInputStream objectInputStream =
         new ObjectInputStream(new FileInputStream(ParserDeserializer.ACTION_TABLE));
-    Map<Pair<Set<LRItem>, TerminalSymbol>, Action> actualActionTable =
-        (Map<Pair<Set<LRItem>, TerminalSymbol>, Action>) objectInputStream.readObject();
+    Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action> actualActionTable =
+        (Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action>) objectInputStream.readObject();
     objectInputStream.close();
 
     assertEquals(kanonGrammar.expectedActionTable, actualActionTable);
@@ -65,13 +68,16 @@ public class GSATest {
     Automaton<LRItem, Symbol> actualENFA = gsa.getENFA();
     assertEquals(kanonGrammar.expectedENFA, actualENFA);
   }
-
+  
+  /*
+   * WA is OK
+   */
   @Test
   public void getDFATest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
     gsa.start();
 
-    Automaton<Set<LRItem>, Symbol> actualDFA = gsa.getDFA();
+    Automaton<Set<Set<LRItem>>, Symbol> actualDFA = gsa.getDFA();
 
     assertEquals(kanonGrammar.expectedDFA, actualDFA);
   }
