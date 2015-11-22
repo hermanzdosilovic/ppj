@@ -75,4 +75,13 @@ public class GSATest {
 
     assertEquals(kanonGrammar.expectedDFA, actualDFA);
   }
+  
+  @Test
+  public void getENFAMinusLangTest() throws Exception {
+    GSA gsa = new GSA(new FileInputStream(new File("langdefs/minusLang.san")));
+    gsa.start();
+
+    Automaton<LRItem, Symbol> actualENFA = gsa.getENFA();
+//    assertEquals(kanonGrammar.expectedENFA, actualENFA);
+  }
 }

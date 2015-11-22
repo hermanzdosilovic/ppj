@@ -123,6 +123,7 @@ public final class GSA {
   
   public static Automaton<Set<LRItem>, Symbol> mergeStates(Automaton<Set<Set<LRItem>>, Symbol> automaton) {
     Map<Set<Set<LRItem>>, Set<LRItem>> groupStateTable = new HashMap<>();
+    
     Set<Set<LRItem>> newStates = new HashSet<>();
     for (Set<Set<LRItem>> state : automaton.getStates()) {
       Set<LRItem> newState = new HashSet<>();

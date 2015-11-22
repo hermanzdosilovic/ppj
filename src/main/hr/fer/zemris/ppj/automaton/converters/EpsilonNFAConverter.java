@@ -20,30 +20,11 @@ public class EpsilonNFAConverter {
     Set<C> alphabet = automata.getAlphabet();
     TransitionFunction<S, C> transitionFunction = automata.getTransitionFunction();
 
-
-    Set<Set<S>> newPossibleStates = new HashSet<>();
-    for (S state : automata.getStates()) {
-      newPossibleStates.add(automata.epsilonClosure(state));
-    }
-
-    Map<S, List<Set<S>>> groupStateTable = new HashMap<>();
+    Map<S, Set<S>> groupStateTable = new HashMap<>();
     Set<Set<S>> newStates = new HashSet<>();
-    for (Set<S> firstSet : newPossibleStates) {
-      boolean isSubset = false;
-      for (Set<S> secondSet : newPossibleStates) {
-        if (secondSet.containsAll(firstSet) && !secondSet.equals(firstSet)) {
-          isSubset = true;
-        }
-      }
-      if (!isSubset) {
-        newStates.add(firstSet);
-        for (S state : firstSet) {
-          if (!groupStateTable.containsKey(state)) {
-            groupStateTable.put(state, new ArrayList<>());
-          }
-          groupStateTable.get(state).add(firstSet);
-        }
-      }
+    for (S state : automata.getStates()) {
+      newStates.add(automata.epsilonClosure(state));
+      groupStateTable.put(state, automata.epsilonClosure(state));
     }
 
     Set<S> newInitialState = new HashSet<>(automata.epsilonClosure(automata.getInitialState()));
@@ -58,11 +39,12 @@ public class EpsilonNFAConverter {
 
     TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<>();
     for (S state : states) {
-      for (C symbol : alphabet) {
-        for (S destination : transitionFunction.getTransitionResult(state, symbol)) {
-          for (Set<S> firstGroup : groupStateTable.get(state)) {
-            for (Set<S> secondGroup : groupStateTable.get(destination)) {
-              newTransitionFunction.addTransition(firstGroup, symbol, secondGroup);
+      for (S epsilonState : automata.epsilonClosure(state)) {
+        for (C symbol : alphabet) {
+          for (S destination : transitionFunction.getTransitionResult(epsilonState, symbol)) {
+            for (S epsilonDestination : automata.epsilonClosure(destination)) {
+              newTransitionFunction.addTransition(groupStateTable.get(state), symbol,
+                  groupStateTable.get(epsilonDestination));
             }
           }
         }
