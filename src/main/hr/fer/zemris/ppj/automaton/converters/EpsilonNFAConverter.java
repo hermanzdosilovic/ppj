@@ -20,23 +20,20 @@ public class EpsilonNFAConverter {
     Set<S> states = automata.getStates();
     Set<C> alphabet = automata.getAlphabet();
     TransitionFunction<S, C> transitionFunction = automata.getTransitionFunction();
-    
+
     Map<S, Set<S>> groupStateTable = new HashMap<>();
     Set<Set<S>> newStates = new HashSet<>();
     Map<S, Set<S>> epsilonClosureTable = new HashMap<>();
-    
-    Stopwatch.start();
+
     for (S state : automata.getStates()) {
       Set<S> epsilonClosure = automata.epsilonClosure(state);
       epsilonClosureTable.put(state, epsilonClosure);
       newStates.add(epsilonClosure);
       groupStateTable.put(state, epsilonClosure);
     }
-    System.err.println("\nepsilonClosure: " + Stopwatch.end());
 
     Set<S> newInitialState = new HashSet<>(epsilonClosureTable.get(automata.getInitialState()));
-    
-    Stopwatch.start();
+
     Set<Set<S>> newAcceptableStates = new HashSet<>();
     for (S state : automata.getAcceptableStates()) {
       newAcceptableStates.add(epsilonClosureTable.get(state));
@@ -44,9 +41,7 @@ public class EpsilonNFAConverter {
         newAcceptableStates.add(newInitialState);
       }
     }
-    System.err.println("\nacceptableStates: " + Stopwatch.end());
-    
-    Stopwatch.start();
+
     TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<>();
     for (S state : states) {
       for (S epsilonState : epsilonClosureTable.get(state)) {
@@ -60,7 +55,6 @@ public class EpsilonNFAConverter {
         }
       }
     }
-    System.err.println("\ntransitionFunction: " + Stopwatch.end());
 
     return new Automaton<>(newStates, alphabet, newTransitionFunction, newInitialState,
         newAcceptableStates);

@@ -22,12 +22,12 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class GSATest {
   private KanonGrammarFactory kanonGrammar;
-  
+
   @Before
   public void createKanonGrammarFactory() {
     kanonGrammar = new KanonGrammarFactory();
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void serializeActionTableTest() throws IOException, ClassNotFoundException {
@@ -41,7 +41,10 @@ public class GSATest {
 
     assertEquals(kanonGrammar.expectedActionTable, actualActionTable);
   }
-
+  
+  /*
+   * WA is OK
+   */
   @SuppressWarnings("unchecked")
   @Test
   public void actionTableTest() throws Exception {
@@ -65,7 +68,10 @@ public class GSATest {
     Automaton<LRItem, Symbol> actualENFA = gsa.getENFA();
     assertEquals(kanonGrammar.expectedENFA, actualENFA);
   }
-
+  
+  /*
+   * WA is OK
+   */
   @Test
   public void getDFATest() throws Exception {
     GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
@@ -74,14 +80,5 @@ public class GSATest {
     Automaton<Set<Set<LRItem>>, Symbol> actualDFA = gsa.getDFA();
 
     assertEquals(kanonGrammar.expectedDFA, actualDFA);
-  }
-  
-  @Test
-  public void getENFAMinusLangTest() throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("langdefs/minusLang.san")));
-    gsa.start();
-
-    Automaton<LRItem, Symbol> actualENFA = gsa.getENFA();
-//    assertEquals(kanonGrammar.expectedENFA, actualENFA);
   }
 }
