@@ -146,7 +146,7 @@ public final class DFAMinimizer {
       if (!nextFirst.equals(nextSecond)) {
         Pair<S, S> nextPair = new Pair<>(nextFirst, nextSecond);
         if (!dependencyTable.containsKey(nextPair)) {
-          dependencyTable.put(nextPair, new HashSet<>());
+          dependencyTable.put(nextPair, new HashSet<Pair<S, S>>());
         }
         dependencyTable.get(nextPair).add(pair);
       }
@@ -164,7 +164,7 @@ public final class DFAMinimizer {
           continue;
         }
         if (!groupedStatesTable.containsKey(first)) {
-          groupedStatesTable.put(first, new HashSet<>());
+          groupedStatesTable.put(first, new HashSet<S>());
         }
         groupedStatesTable.get(first).add(second);
       }

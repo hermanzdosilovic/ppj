@@ -23,7 +23,6 @@ public class Production implements Serializable {
     this.rightSide = new ArrayList<>(rightSide);
   }
 
-  @SafeVarargs
   public Production(NonTerminalSymbol leftSide, Symbol... rightSide) {
     this(leftSide, Arrays.asList(rightSide));
   }
@@ -34,7 +33,7 @@ public class Production implements Serializable {
    * @param leftSide left side of epsilon production
    */
   public Production(NonTerminalSymbol leftSide) {
-    this(leftSide, new ArrayList<>());
+    this(leftSide, new ArrayList<Symbol>());
   }
 
   public NonTerminalSymbol getLeftSide() {

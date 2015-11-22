@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.automaton;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class TransitionFunction<S, C> {
   private Map<S, Collection<S>> neighbourTable;
 
   public TransitionFunction(TransitionFunction<S, C> transitionFunction) {
-    TransitionFunction<S, C> copy = transitionFunction.remove(Arrays.asList());
+    TransitionFunction<S, C> copy = transitionFunction.remove(new ArrayList<S>());
     this.transitionTable = copy.transitionTable;
     this.epsilonTransitionTable = copy.epsilonTransitionTable;
     this.neighbourTable = copy.neighbourTable;
@@ -36,7 +37,7 @@ public class TransitionFunction<S, C> {
   public boolean addTransition(S source, C input, S destination) {
     Pair<S, C> pair = new Pair<>(source, input);
     if (!transitionTable.containsKey(pair)) {
-      transitionTable.put(pair, new HashSet<>());
+      transitionTable.put(pair, new HashSet<S>());
     }
     addNeighbour(source, destination);
     return transitionTable.get(pair).add(destination);
@@ -44,7 +45,7 @@ public class TransitionFunction<S, C> {
 
   public boolean addEpsilonTransition(S source, S destination) {
     if (!epsilonTransitionTable.containsKey(source)) {
-      epsilonTransitionTable.put(source, new HashSet<>());
+      epsilonTransitionTable.put(source, new HashSet<S>());
     }
     addNeighbour(source, destination);
     return epsilonTransitionTable.get(source).add(destination);
@@ -53,21 +54,21 @@ public class TransitionFunction<S, C> {
   public Collection<S> getTransitionResult(S source, C input) {
     Pair<S, C> pair = new Pair<>(source, input);
     if (!transitionTable.containsKey(pair)) {
-      return new HashSet<>();
+      return new HashSet<S>();
     }
     return transitionTable.get(pair);
   }
 
   public Collection<S> getEpsilonTransitionResult(S source) {
     if (!epsilonTransitionTable.containsKey(source)) {
-      return new HashSet<>();
+      return new HashSet<S>();
     }
     return epsilonTransitionTable.get(source);
   }
 
   public Collection<S> getDestinations(S source) {
     if (!neighbourTable.containsKey(source)) {
-      return new HashSet<>();
+      return new HashSet<S>();
     }
     return neighbourTable.get(source);
   }
@@ -82,7 +83,7 @@ public class TransitionFunction<S, C> {
 
   private void addNeighbour(S source, S destination) {
     if (!neighbourTable.containsKey(source)) {
-      neighbourTable.put(source, new HashSet<>());
+      neighbourTable.put(source, new HashSet<S>());
     }
     neighbourTable.get(source).add(destination);
   }
