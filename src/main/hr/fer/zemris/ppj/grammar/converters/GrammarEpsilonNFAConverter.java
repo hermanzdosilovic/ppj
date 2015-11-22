@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.grammar.converters;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +57,7 @@ public class GrammarEpsilonNFAConverter {
         nextTerminalSymbols.addAll(item.getTerminalSymbols());
       }
       for (Production production : grammar.getSymbolProductions(symbol)) {
-        LRItem nextLRItem = new LRItem(production, 0, nextTerminalSymbols);
+        LRItem nextLRItem = new LRItem(production, 0, new ArrayList<>(nextTerminalSymbols));
         transitionFunction.addEpsilonTransition(item, nextLRItem);
         if (!visited.contains(nextLRItem)) {
           buildTransitions(nextLRItem, transitionFunction, grammar, visited);

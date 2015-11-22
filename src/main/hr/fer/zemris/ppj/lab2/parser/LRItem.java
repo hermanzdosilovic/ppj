@@ -22,7 +22,7 @@ public class LRItem implements Serializable {
 
   private LRItem nextLRItem;
 
-  public LRItem(Production production, Integer dotIndex, Collection<Symbol> terminalSymbols) {
+  public LRItem(Production production, Integer dotIndex, List<Symbol> terminalSymbols) {
     this.production = production;
     this.dotIndex = dotIndex;
     this.terminalSymbols = new HashSet<>(terminalSymbols);
@@ -57,7 +57,7 @@ public class LRItem implements Serializable {
     } else if (nextLRItem != null) {
       return nextLRItem;
     }
-    nextLRItem = new LRItem(production, dotIndex + 1, terminalSymbols);
+    nextLRItem = new LRItem(production, dotIndex + 1, new ArrayList<>(terminalSymbols));
     return nextLRItem;
   }
 
