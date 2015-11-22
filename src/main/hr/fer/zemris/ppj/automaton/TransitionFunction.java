@@ -141,6 +141,10 @@ public class TransitionFunction<S, C> {
     }
     return numberOfTransitions;
   }
+  
+  public Map<Pair<S, C>, Collection<S>> getTransitionTable() {
+    return transitionTable;
+  }
 
   @Override
   public int hashCode() {
