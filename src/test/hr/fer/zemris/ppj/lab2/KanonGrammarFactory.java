@@ -30,13 +30,13 @@ public class KanonGrammarFactory {
   public Production initialProduction;
   public LRItem initialCompleteLRItem;
   public Grammar grammar;
-  
+
   public LRItem i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10;
   public Set<LRItem> s0, s1, s2, s3, s4, s5, s6;
   public Automaton<LRItem, Symbol> expectedENFA;
-  public Automaton<Set<LRItem>, Symbol> expectedDFA;
-  public Map<Pair<Set<LRItem>, TerminalSymbol>, Action> expectedActionTable;
-  public Map<Pair<Set<LRItem>, NonTerminalSymbol>, Action> expectedNewStateTable;
+  public Automaton<Set<Set<LRItem>>, Symbol> expectedDFA;
+  public Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action> expectedActionTable;
+  public Map<Pair<Set<Set<LRItem>>, NonTerminalSymbol>, Action> expectedNewStateTable;
 
   public KanonGrammarFactory() {
     createSymbols();
@@ -143,28 +143,42 @@ public class KanonGrammarFactory {
 
     Set<LRItem> states = new HashSet<>(Arrays.asList(i0, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10));
     Set<LRItem> acceptableStates = states;
-    Set<LRItem> initialState = new HashSet<>(Arrays.asList(i0));
+    LRItem initialState = i0;
 
     expectedENFA =
         new Automaton<>(states, alphabet, ENFAtransitionFunction, initialState, acceptableStates);
   }
 
   private void createDFA() {
-    TransitionFunction<Set<LRItem>, Symbol> DFATransitionFunction = new TransitionFunction<>();
-    DFATransitionFunction.addTransition(s0, A, s1);
-    DFATransitionFunction.addTransition(s0, a, s3);
-    DFATransitionFunction.addTransition(s0, B, s2);
-    DFATransitionFunction.addTransition(s0, b, s4);
-    DFATransitionFunction.addTransition(s2, B, s2);
-    DFATransitionFunction.addTransition(s2, A, s5);
-    DFATransitionFunction.addTransition(s2, b, s4);
-    DFATransitionFunction.addTransition(s2, a, s3);
-    DFATransitionFunction.addTransition(s3, a, s3);
-    DFATransitionFunction.addTransition(s3, b, s4);
-    DFATransitionFunction.addTransition(s3, B, s6);
+    TransitionFunction<Set<Set<LRItem>>, Symbol> DFATransitionFunction = new TransitionFunction<>();
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s0)), A,
+        new HashSet<>(Arrays.asList(s1)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s0)), a,
+        new HashSet<>(Arrays.asList(s3)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s0)), B,
+        new HashSet<>(Arrays.asList(s2)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s0)), b,
+        new HashSet<>(Arrays.asList(s4)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s2)), B,
+        new HashSet<>(Arrays.asList(s2)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s2)), A,
+        new HashSet<>(Arrays.asList(s5)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s2)), b,
+        new HashSet<>(Arrays.asList(s4)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s2)), a,
+        new HashSet<>(Arrays.asList(s3)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s3)), a,
+        new HashSet<>(Arrays.asList(s3)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s3)), b,
+        new HashSet<>(Arrays.asList(s4)));
+    DFATransitionFunction.addTransition(new HashSet<>(Arrays.asList(s3)), B,
+        new HashSet<>(Arrays.asList(s6)));
 
-    Set<Set<LRItem>> states = new HashSet<>(Arrays.asList(s0, s1, s2, s3, s4, s5, s6));
-    Set<Set<LRItem>> acceptableStates = states;
+    Set<Set<Set<LRItem>>> states = new HashSet<>(Arrays.asList(new HashSet<>(Arrays.asList(s0)),
+        new HashSet<>(Arrays.asList(s1)), new HashSet<>(Arrays.asList(s2)),
+        new HashSet<>(Arrays.asList(s3)), new HashSet<>(Arrays.asList(s4)),
+        new HashSet<>(Arrays.asList(s5)), new HashSet<>(Arrays.asList(s6))));
+    Set<Set<Set<LRItem>>> acceptableStates = states;
     Set<Set<LRItem>> initialState = new HashSet<>(Arrays.asList(s0));
 
     expectedDFA =
@@ -173,30 +187,50 @@ public class KanonGrammarFactory {
 
   private void createActionTable() {
     expectedActionTable = new HashMap<>();
-    expectedActionTable.put(new Pair<>(s0, a), new MoveAction<>(s3));
-    expectedActionTable.put(new Pair<>(s0, b), new MoveAction<>(s4));
-    expectedActionTable.put(new Pair<>(s0, end), new ReduceAction(new Production(A)));
-    expectedActionTable.put(new Pair<>(s1, end), new AcceptAction());
-    expectedActionTable.put(new Pair<>(s2, a), new MoveAction<>(s3));
-    expectedActionTable.put(new Pair<>(s2, b), new MoveAction<>(s4));
-    expectedActionTable.put(new Pair<>(s2, end), new ReduceAction(new Production(A)));
-    expectedActionTable.put(new Pair<>(s3, a), new MoveAction<>(s3));
-    expectedActionTable.put(new Pair<>(s3, b), new MoveAction<>(s4));
-    expectedActionTable.put(new Pair<>(s4, a), new ReduceAction(new Production(B, b)));
-    expectedActionTable.put(new Pair<>(s4, b), new ReduceAction(new Production(B, b)));
-    expectedActionTable.put(new Pair<>(s4, end), new ReduceAction(new Production(B, b)));
-    expectedActionTable.put(new Pair<>(s5, end), new ReduceAction(new Production(A, B, A)));
-    expectedActionTable.put(new Pair<>(s6, a), new ReduceAction(new Production(B, a, B)));
-    expectedActionTable.put(new Pair<>(s6, b), new ReduceAction(new Production(B, a, B)));
-    expectedActionTable.put(new Pair<>(s6, end), new ReduceAction(new Production(B, a, B)));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s0)), a),
+        new MoveAction<>(new HashSet<>(Arrays.asList(s3))));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s0)), b),
+        new MoveAction<>(new HashSet<>(Arrays.asList(s4))));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s0)), end),
+        new ReduceAction(new Production(A)));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s1)), end), new AcceptAction());
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s2)), a),
+        new MoveAction<>(new HashSet<>(Arrays.asList(s3))));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s2)), b),
+        new MoveAction<>(new HashSet<>(Arrays.asList(s4))));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s2)), end),
+        new ReduceAction(new Production(A)));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s3)), a),
+        new MoveAction<>(new HashSet<>(Arrays.asList(s3))));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s3)), b),
+        new MoveAction<>(new HashSet<>(Arrays.asList(s4))));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s4)), a),
+        new ReduceAction(new Production(B, b)));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s4)), b),
+        new ReduceAction(new Production(B, b)));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s4)), end),
+        new ReduceAction(new Production(B, b)));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s5)), end),
+        new ReduceAction(new Production(A, B, A)));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s6)), a),
+        new ReduceAction(new Production(B, a, B)));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s6)), b),
+        new ReduceAction(new Production(B, a, B)));
+    expectedActionTable.put(new Pair<>(new HashSet<>(Arrays.asList(s6)), end),
+        new ReduceAction(new Production(B, a, B)));
   }
 
   private void createNewStateTable() {
     expectedNewStateTable = new HashMap<>();
-    expectedNewStateTable.put(new Pair<>(s0, B), new PutAction<>(s2));
-    expectedNewStateTable.put(new Pair<>(s0, A), new PutAction<>(s1));
-    expectedNewStateTable.put(new Pair<>(s2, B), new PutAction<>(s2));
-    expectedNewStateTable.put(new Pair<>(s2, A), new PutAction<>(s5));
-    expectedNewStateTable.put(new Pair<>(s3, B), new PutAction<>(s6));
+    expectedNewStateTable.put(new Pair<>(new HashSet<>(Arrays.asList(s0)), B),
+        new PutAction<>(new HashSet<>(Arrays.asList(s2))));
+    expectedNewStateTable.put(new Pair<>(new HashSet<>(Arrays.asList(s0)), A),
+        new PutAction<>(new HashSet<>(Arrays.asList(s1))));
+    expectedNewStateTable.put(new Pair<>(new HashSet<>(Arrays.asList(s2)), B),
+        new PutAction<>(new HashSet<>(Arrays.asList(s2))));
+    expectedNewStateTable.put(new Pair<>(new HashSet<>(Arrays.asList(s2)), A),
+        new PutAction<>(new HashSet<>(Arrays.asList(s5))));
+    expectedNewStateTable.put(new Pair<>(new HashSet<>(Arrays.asList(s3)), B),
+        new PutAction<>(new HashSet<>(Arrays.asList(s6))));
   }
 }

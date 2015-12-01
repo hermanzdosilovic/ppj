@@ -16,13 +16,13 @@ public class Automaton<S, C> {
   private Set<S> states;
   private Set<C> alphabet;
   private TransitionFunction<S, C> transitionFunction;
-  private Set<S> initialState;
+  private S initialState;
   private Set<S> currentStates;
   private Set<S> acceptableStates;
   private Set<S> reachableStates;
 
   public Automaton(final Collection<S> states, final Collection<C> alphabet,
-      final TransitionFunction<S, C> transitionFunction, final Set<S> initialState,
+      final TransitionFunction<S, C> transitionFunction, final S initialState,
       final Collection<S> acceptableStates) {
     if (states == null || alphabet == null || transitionFunction == null || initialState == null
         || acceptableStates == null) {
@@ -31,7 +31,7 @@ public class Automaton<S, C> {
     this.states = new HashSet<>(states);
     this.alphabet = new HashSet<>(alphabet);
     this.transitionFunction = new TransitionFunction<S, C>(transitionFunction);
-    this.initialState = new HashSet<>(initialState);
+    this.initialState = initialState;
     this.acceptableStates = new HashSet<>(acceptableStates);
     this.currentStates = new HashSet<>(epsilonClosure(initialState));
   }
@@ -100,8 +100,8 @@ public class Automaton<S, C> {
 
     reachableStates = new HashSet<>();
     Queue<S> queue = new LinkedList<>();
-    queue.addAll(initialState);
-    reachableStates.addAll(initialState);
+    queue.add(initialState);
+    reachableStates.add(initialState);
     while (!queue.isEmpty()) {
       S head = queue.poll();
       for (S neighbour : transitionFunction.getDestinations(head)) {
@@ -129,7 +129,7 @@ public class Automaton<S, C> {
     return acceptableStates;
   }
 
-  public Set<S> getInitialState() {
+  public S getInitialState() {
     return initialState;
   }
 

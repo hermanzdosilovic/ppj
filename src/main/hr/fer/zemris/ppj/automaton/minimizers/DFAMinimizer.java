@@ -31,7 +31,7 @@ public final class DFAMinimizer {
         newGroupedStates, states, alphabet, automaton.getTransitionFunction());
     Set<Set<S>> newAcceptableStates =
         getNewAcceptableStates(newGroupedStates, automaton.getAcceptableStates());
-    Set<Set<S>> newInitialState = getNewInitialState(newGroupedStates, automaton.getInitialState());
+    Set<S> newInitialState = getNewInitialState(newGroupedStates, automaton.getInitialState());
 
     return new Automaton<Set<S>, C>(newGroupedStates, alphabet, newTransitionFunction,
         newInitialState, newAcceptableStates);
@@ -41,7 +41,7 @@ public final class DFAMinimizer {
     TransitionFunction<S, C> transitionFunction =
         automaton.getTransitionFunction().remove(automaton.getUnreachableStates());
     Set<S> states = automaton.getReachableStates();
-    Set<S> initialState = automaton.getInitialState();
+    S initialState = automaton.getInitialState();
 
     Set<S> acceptableStates = new HashSet<>(automaton.getAcceptableStates());
     acceptableStates.removeAll(automaton.getUnreachableStates());
@@ -230,15 +230,12 @@ public final class DFAMinimizer {
     return newAcceptableStates;
   }
 
-  static <S> Set<Set<S>> getNewInitialState(Set<Set<S>> groupedStates, Set<S> initalState) {
-    Set<Set<S>> newInitialState = new HashSet<>();
+  static <S> Set<S> getNewInitialState(Set<Set<S>> groupedStates, S initalState) {
     for (Set<S> group : groupedStates) {
-      for (S state : initalState) {
-        if (group.contains(state)) {
-          newInitialState.add(group);
-        }
+      if (group.contains(initalState)) {
+        return new HashSet<>(group);
       }
     }
-    return newInitialState;
+    return new HashSet<>();
   }
 }
