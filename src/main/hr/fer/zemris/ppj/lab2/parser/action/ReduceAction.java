@@ -3,7 +3,15 @@ package hr.fer.zemris.ppj.lab2.parser.action;
 import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
+/**
+ * Represents a reduce action for LR parser. It should be able to answer how many characters should
+ * the LR parser take off it's stack and what's the left hand side of the production that is being
+ * used for this reduction.
+ * 
+ * @author Ivan Krpelnik
+ */
 public final class ReduceAction implements Action {
+
   private static final long serialVersionUID = -6928861363927054533L;
   private Production production;
 

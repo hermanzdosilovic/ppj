@@ -1,6 +1,13 @@
 package hr.fer.zemris.ppj.lab2.parser.action;
 
+/**
+ * Represents a move action for LR parser. It signals the LR parser that it should move it's state
+ * to the state that's held by this class.
+ * 
+ * @author Ivan Krpelnik
+ */
 public final class MoveAction<E> implements Action {
+
   private static final long serialVersionUID = 5192614674806549599L;
   private E state;
 
