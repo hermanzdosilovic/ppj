@@ -34,6 +34,7 @@ public class NFAConverter {
         }
       }
     }
+
     return newAcceptibleStates;
   }
 
@@ -58,6 +59,7 @@ public class NFAConverter {
         }
       }
     }
+
     return newTransitionFunction;
   }
 
@@ -73,8 +75,8 @@ public class NFAConverter {
       newStates.add(currentState);
 
       for (C symbol : alphabet) {
-        Set<S> newState = new HashSet<S>();
         if (!newTransitionFunction.existsTransition(currentState, symbol)) {
+          Set<S> newState = new HashSet<S>();
           for (S state : currentState) {
             newState.addAll(transitionFunction.getTransitionResult(state, symbol));
           }

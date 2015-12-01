@@ -1,15 +1,14 @@
 package hr.fer.zemris.ppj.automaton.converters;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.automaton.TransitionFunction;
-import hr.fer.zemris.ppj.helpers.Stopwatch;
 
 /**
  * @author Ivan Trubic
@@ -42,17 +41,27 @@ public class EpsilonNFAConverter {
       }
     }
 
-    TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<>();
+    TransitionFunction<S, C> helperTransitionFunction = new TransitionFunction<>();
     for (S state : states) {
       for (S epsilonState : epsilonClosureTable.get(state)) {
         for (C symbol : alphabet) {
           for (S destination : transitionFunction.getTransitionResult(epsilonState, symbol)) {
             for (S epsilonDestination : epsilonClosureTable.get(destination)) {
-              newTransitionFunction.addTransition(groupStateTable.get(state), symbol,
-                  groupStateTable.get(epsilonDestination));
+              helperTransitionFunction.addTransition(state, symbol, epsilonDestination);
             }
           }
         }
+      }
+    }
+
+    TransitionFunction<Set<S>, C> newTransitionFunction = new TransitionFunction<>();
+
+    Map<Pair<S, C>, Collection<S>> transitionTable = helperTransitionFunction.getTransitionTable();
+    for (Map.Entry<Pair<S, C>, Collection<S>> entry : transitionTable.entrySet()) {
+      Set<S> source = groupStateTable.get(entry.getKey().getFirst());
+      C symbol = entry.getKey().getSecond();
+      for (S destination : entry.getValue()) {
+        newTransitionFunction.addTransition(source, symbol, groupStateTable.get(destination));
       }
     }
 

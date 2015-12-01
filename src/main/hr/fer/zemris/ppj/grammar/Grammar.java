@@ -31,7 +31,7 @@ public class Grammar {
     this.productionsTable = new HashMap<>();
     for (Production production : productions) {
       if (!productionsTable.containsKey(production.getLeftSide())) {
-        productionsTable.put(production.getLeftSide(), new ArrayList<>());
+        productionsTable.put(production.getLeftSide(), new ArrayList<Production>());
       }
       productionsTable.get(production.getLeftSide()).add(production);
     }
@@ -117,7 +117,7 @@ public class Grammar {
       List<Symbol> rightSide = production.getRightSide();
 
       if (!beginsDirectlyWithSymbolTable.containsKey(leftSide)) {
-        beginsDirectlyWithSymbolTable.put(leftSide, new HashSet<>());
+        beginsDirectlyWithSymbolTable.put(leftSide, new HashSet<Symbol>());
       }
 
       for (Symbol symbol : rightSide) {
@@ -141,7 +141,7 @@ public class Grammar {
 
     Map<Symbol, Set<Symbol>> transitiveClosureMemo = new HashMap<>();
     for (Symbol symbol : beginsDirectlyWithSymbolTable.keySet()) {
-      beginsWithSymbolTable.put(symbol, new HashSet<>());
+      beginsWithSymbolTable.put(symbol, new HashSet<Symbol>());
       beginsWithSymbolTable.get(symbol).add(symbol);
 
       for (Symbol beginSymbol : beginsDirectlyWithSymbolTable.get(symbol)) {
@@ -181,7 +181,7 @@ public class Grammar {
     Map<Symbol, Set<Symbol>> beginsWithSymbolTable = getBeginsWithSymbolTable();
 
     for (Symbol symbol : beginsWithSymbolTable.keySet()) {
-      beginsWithTable.put(symbol, new HashSet<>());
+      beginsWithTable.put(symbol, new HashSet<Symbol>());
       for (Symbol neighbourSymbol : beginsWithSymbolTable.get(symbol)) {
         if (neighbourSymbol instanceof TerminalSymbol) {
           beginsWithTable.get(symbol).add((TerminalSymbol) neighbourSymbol);
