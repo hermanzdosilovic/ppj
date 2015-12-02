@@ -1,9 +1,12 @@
 package hr.fer.zemris.ppj.lab2;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import hr.fer.zemris.ppj.Pair;
@@ -76,5 +79,90 @@ public class AutomatonConverter {
 
     return new Automaton<>(newStates, alphabet, newTransitionFunction, newInitialState,
         newAcceptableStates);
+  }
+
+  public Automaton<LRState, Symbol> convertToDFA(Automaton<LRState, Symbol> nfa) {
+    Set<Symbol> alphabet = nfa.getAlphabet();
+    
+    /* old objects from NFA */
+    Set<LRState> oldStates = nfa.getStates();
+    Set<LRState> oldAcceptableStates = nfa.getAcceptableStates();
+    TransitionFunction<LRState, Symbol> oldTransitionFunction = nfa.getTransitionFunction();
+    LRState oldInitialState = nfa.getInitialState();
+    
+    /* mapping old LRStates with their labels */
+    Map<Integer, LRState> oldLabelLRStateTable = new HashMap<>();
+    for (LRState state : oldStates) {
+      oldLabelLRStateTable.put(state.getLabel(), state);
+    }
+    
+    /* finding new groups by grouping labels and not their LRItems */
+    Set<Set<Integer>> newLabelStates = new HashSet<>();
+    Queue<Set<Integer>> queue = new LinkedList<>();
+    queue.add(new HashSet<>(Arrays.asList(oldInitialState.getLabel())));
+    while (!queue.isEmpty()) {
+      Set<Integer> currentLabelState = queue.remove();
+      newLabelStates.add(currentLabelState);
+
+      for (Symbol symbol : alphabet) {
+        Set<Integer> newLabelState = new HashSet<>();
+        for (Integer labelValue : currentLabelState) {
+          for (LRState destination : oldTransitionFunction
+              .getTransitionResult(oldLabelLRStateTable.get(labelValue), symbol)) {
+            newLabelState.add(destination.getLabel());
+          }
+        }
+        if (!newLabelStates.contains(newLabelState) && !newLabelState.isEmpty()) {
+          queue.add(newLabelState);
+        }
+      }
+    }
+    
+    /* create new LRStates from grouped labels */
+    Map<Set<Integer>, LRState> newLabelStatesLRStateTable = new HashMap<>();
+    int label = 0; // counter for labels of new LRStates
+    for (Set<Integer> newLabelState : newLabelStates) {
+      Set<LRItem> mergedItems = new HashSet<>();
+      for (Integer labelValue : newLabelState) {
+        mergedItems.addAll(oldLabelLRStateTable.get(labelValue).getLRItems());
+      }
+      newLabelStatesLRStateTable.put(newLabelState, new LRState(mergedItems, label++));
+    }
+    
+    /* building new objects for DFA */
+    LRState newInitialState =
+        newLabelStatesLRStateTable.get(new HashSet<>(Arrays.asList(oldInitialState.getLabel())));
+    Set<LRState> newStates = new HashSet<>(newLabelStatesLRStateTable.values());
+    
+    /* building new acceptable states */
+    Set<LRState> newAcceptableStates = new HashSet<>();
+    for (Set<Integer> newLabelState : newLabelStates) {
+      for (Integer labelValue : newLabelState) {
+        if (oldAcceptableStates.contains(newLabelStatesLRStateTable.get(labelValue))) {
+          newAcceptableStates.add(newLabelStatesLRStateTable.get(newLabelState));
+          break;
+        }
+      }
+    }
+    
+    /* building new transition function */
+    TransitionFunction<LRState, Symbol> newTransitionFunction = new TransitionFunction<>();
+    for (Set<Integer> newLabelState : newLabelStates) {
+      for (Symbol symbol : alphabet) {
+        Set<Integer> nextLabelState = new HashSet<>();
+        for (Integer labelValue : newLabelState) {
+          for (LRState destination : oldTransitionFunction
+              .getTransitionResult(oldLabelLRStateTable.get(labelValue), symbol)) {
+            nextLabelState.add(destination.getLabel());
+          }
+        }
+
+        newTransitionFunction.addTransition(newLabelStatesLRStateTable.get(newLabelState), symbol,
+            newLabelStatesLRStateTable.get(nextLabelState));
+      }
+    }
+
+    return new Automaton<LRState, Symbol>(newStates, alphabet, newTransitionFunction,
+        newInitialState, newAcceptableStates);
   }
 }
