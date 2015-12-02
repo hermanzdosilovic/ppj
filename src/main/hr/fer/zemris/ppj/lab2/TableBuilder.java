@@ -26,13 +26,6 @@ public class TableBuilder {
 
     Map<Pair<LRState, TerminalSymbol>, Action> actionTable = new HashMap<>();
     for (LRState state : automaton.getStates()) {
-      if (state.getLRItems().contains(initialCompleteLRItem)) {
-        actionTable.put(new Pair<>(state,
-            (TerminalSymbol) new ArrayList<>(initialCompleteLRItem.getTerminalSymbols()).get(0)),
-            new AcceptAction());
-        continue;
-      }
-
       for (LRItem item : state.getLRItems()) {
         Symbol symbol = item.getDotSymbol();
         if (!item.isComplete() && transitionFunction.existsTransition(state, symbol)
@@ -41,11 +34,15 @@ public class TableBuilder {
               new ArrayList<>(transitionFunction.getTransitionResult(state, symbol)).get(0);
           actionTable.put(new Pair<>(state, (TerminalSymbol) symbol),
               new MoveAction<>(destination));
-        } else if (item.isComplete()) {
+        } else if (item.isComplete() && !item.equals(initialCompleteLRItem)) {
           for (Symbol itemSymbol : item.getTerminalSymbols()) {
             actionTable.put(new Pair<>(state, (TerminalSymbol) itemSymbol),
                 new ReduceAction(item.getProduction()));
           }
+        } else if (item.equals(initialCompleteLRItem)) {
+          actionTable.put(new Pair<>(state,
+              (TerminalSymbol) new ArrayList<>(initialCompleteLRItem.getTerminalSymbols()).get(0)),
+              new AcceptAction());
         }
       }
     }

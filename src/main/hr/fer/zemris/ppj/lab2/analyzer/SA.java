@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import hr.fer.zemris.ppj.Pair;
-import hr.fer.zemris.ppj.lab2.parser.LRItem;
+import hr.fer.zemris.ppj.lab2.parser.LRState;
 import hr.fer.zemris.ppj.lab2.parser.action.AcceptAction;
 import hr.fer.zemris.ppj.lab2.parser.action.Action;
 import hr.fer.zemris.ppj.lab2.parser.action.MoveAction;
@@ -35,10 +34,10 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  */
 
 public class SA {
-  private Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action> actions;
-  private Map<Pair<Set<Set<LRItem>>, NonTerminalSymbol>, Action> newState;
+  private Map<Pair<LRState, TerminalSymbol>, Action> actions;
+  private Map<Pair<LRState, NonTerminalSymbol>, Action> newState;
   private List<TerminalSymbol> synStrings;
-  private Set<Set<LRItem>> startState;
+  private LRState startState;
 
   public static final String EPSILON = "$";
   public static final String END_STRING = "<posljednji_znakic>";
@@ -72,9 +71,9 @@ public class SA {
    * @param synStrings
    * @param startState
    */
-  public SA(Map<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action> actions,
-      Map<Pair<Set<Set<LRItem>>, NonTerminalSymbol>, Action> newState,
-      List<TerminalSymbol> synStrings, Set<Set<LRItem>> startState) {
+  public SA(Map<Pair<LRState, TerminalSymbol>, Action> actions,
+      Map<Pair<LRState, NonTerminalSymbol>, Action> newState,
+      List<TerminalSymbol> synStrings, LRState startState) {
     this.actions = actions;
     this.newState = newState;
     this.synStrings = synStrings;
@@ -99,7 +98,7 @@ public class SA {
     Node root = null;
     Node asdf = new Node("asdf");
 
-    Deque<Set<Set<LRItem>>> stackState = new ArrayDeque<>();
+    Deque<LRState> stackState = new ArrayDeque<>();
     Deque<Node> stackValue = new ArrayDeque<Node>();
 
     stackState.push(startState);
@@ -109,7 +108,7 @@ public class SA {
       String currentInput = input.get(index);
       String[] splitInput = currentInput.split(" ");
 
-      Pair<Set<Set<LRItem>>, TerminalSymbol> pair =
+      Pair<LRState, TerminalSymbol> pair =
           new Pair<>(stackState.peek(), new TerminalSymbol(splitInput[0]));
       Node node = new Node(currentInput);
 
@@ -118,7 +117,7 @@ public class SA {
       if (action instanceof MoveAction<?>) {
         stackValue.push(node);
 
-        stackState.push((Set<Set<LRItem>>) ((MoveAction<?>) action).getState());
+        stackState.push((LRState) ((MoveAction<?>) action).getState());
         index++;
       } else if (action instanceof ReduceAction) {
 
@@ -139,8 +138,8 @@ public class SA {
           parent.addChild(reversedChildren.pop());
         }
 
-        PutAction<Set<Set<LRItem>>> moveAction =
-            (PutAction<Set<Set<LRItem>>>) newState.get(new Pair<>(stackState.peek(), leftSide));
+        PutAction<LRState> moveAction =
+            (PutAction<LRState>) newState.get(new Pair<>(stackState.peek(), leftSide));
 
         stackState.push(moveAction.getState());
         stackValue.push(parent);
@@ -173,12 +172,12 @@ public class SA {
     return root;
   }
 
-  private void errorOutput(Set<Set<LRItem>> state, String[] podjela) {
+  private void errorOutput(LRState state, String[] podjela) {
     System.err.println("Broj retka: " + podjela[1]);
 
 
     System.err.print("Znakovi koji ne bi izazvali pogresku:");
-    for (Map.Entry<Pair<Set<Set<LRItem>>, TerminalSymbol>, Action> entry : actions.entrySet()) {
+    for (Map.Entry<Pair<LRState, TerminalSymbol>, Action> entry : actions.entrySet()) {
       if (entry.getKey().getFirst().equals(state) && !(entry.getValue() instanceof RejectAction)) {
         System.err.print(" " + entry.getKey().getSecond());
       }
