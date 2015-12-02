@@ -21,7 +21,7 @@ import hr.fer.zemris.ppj.symbol.Symbol;
  */
 public class AutomatonConverter {
 
-  public Automaton<LRState, Symbol> convertToNFA(Automaton<LRItem, Symbol> eNFA) {
+  public static Automaton<LRState, Symbol> convertToNFA(Automaton<LRItem, Symbol> eNFA) {
     Set<LRItem> oldStates = eNFA.getStates();
     Set<Symbol> alphabet = eNFA.getAlphabet();
     TransitionFunction<LRItem, Symbol> oldTransitionFunction = eNFA.getTransitionFunction();
@@ -81,7 +81,7 @@ public class AutomatonConverter {
         newAcceptableStates);
   }
 
-  public Automaton<LRState, Symbol> convertToDFA(Automaton<LRState, Symbol> nfa) {
+  public static Automaton<LRState, Symbol> convertToDFA(Automaton<LRState, Symbol> nfa) {
     Set<Symbol> alphabet = nfa.getAlphabet();
     
     /* old objects from NFA */
