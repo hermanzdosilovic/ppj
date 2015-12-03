@@ -7,12 +7,9 @@ import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import hr.fer.zemris.ppj.Pair;
 import hr.fer.zemris.ppj.automaton.Automaton;
-import hr.fer.zemris.ppj.automaton.converters.EpsilonNFAConverter;
-import hr.fer.zemris.ppj.automaton.converters.NFAConverter;
 import hr.fer.zemris.ppj.grammar.Grammar;
 import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.grammar.converters.GrammarEpsilonNFAConverter;
@@ -97,7 +94,7 @@ public final class GSA {
     serialize(DFA.getInitialState(), ParserDeserializer.START_STATE);
     serialize(generatorInputDefinition.getSynchronousTerminalSymbols(),
         ParserDeserializer.SYN_STRINGS);
-    System.err.println("\n - Total Time: " + Stopwatch.end());
+    System.err.println("\n - GSA: Total Time: " + Stopwatch.end());
   }
 
   public Automaton<LRItem, Symbol> getENFA() {

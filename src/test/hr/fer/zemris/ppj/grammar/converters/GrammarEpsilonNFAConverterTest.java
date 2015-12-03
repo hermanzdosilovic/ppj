@@ -5,13 +5,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import hr.fer.zemris.ppj.automaton.Automaton;
 import hr.fer.zemris.ppj.grammar.Grammar;
 import hr.fer.zemris.ppj.lab2.GeneratorInputDefinition;
-import hr.fer.zemris.ppj.lab2.KanonGrammarFactory;
 import hr.fer.zemris.ppj.lab2.parser.LRItem;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
@@ -21,18 +19,6 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
  * @author Herman Zvonimir Dosilovic
  */
 public class GrammarEpsilonNFAConverterTest {
-  private KanonGrammarFactory kanonGrammarFactory;
-
-  @Before
-  public void buildKanonGrammarFactory() {
-    kanonGrammarFactory = new KanonGrammarFactory();
-  }
-
-  @Test
-  public void convertTest() {
-    assertEquals(kanonGrammarFactory.expectedENFA,
-        GrammarEpsilonNFAConverter.convert(kanonGrammarFactory.grammar, kanonGrammarFactory.end));
-  }
 
   @Test
   public void kanonGrammarTest() throws Exception {

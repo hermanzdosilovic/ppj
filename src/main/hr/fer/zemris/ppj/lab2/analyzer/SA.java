@@ -72,8 +72,8 @@ public class SA {
    * @param startState
    */
   public SA(Map<Pair<LRState, TerminalSymbol>, Action> actions,
-      Map<Pair<LRState, NonTerminalSymbol>, Action> newState,
-      List<TerminalSymbol> synStrings, LRState startState) {
+      Map<Pair<LRState, NonTerminalSymbol>, Action> newState, List<TerminalSymbol> synStrings,
+      LRState startState) {
     this.actions = actions;
     this.newState = newState;
     this.synStrings = synStrings;
@@ -96,13 +96,11 @@ public class SA {
   public Node LR(List<String> input) {
 
     Node root = null;
-    Node asdf = new Node("asdf");
 
     Deque<LRState> stackState = new ArrayDeque<>();
     Deque<Node> stackValue = new ArrayDeque<Node>();
 
     stackState.push(startState);
-    stackValue.push(asdf);
     for (int index = 0; index < input.size() && !stackState.isEmpty();) {
 
       String currentInput = input.get(index);

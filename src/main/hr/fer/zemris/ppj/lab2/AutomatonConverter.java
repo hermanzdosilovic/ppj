@@ -83,41 +83,45 @@ public class AutomatonConverter {
 
   public static Automaton<LRState, Symbol> convertToDFA(Automaton<LRState, Symbol> nfa) {
     Set<Symbol> alphabet = nfa.getAlphabet();
-    
+
     /* old objects from NFA */
     Set<LRState> oldStates = nfa.getStates();
     Set<LRState> oldAcceptableStates = nfa.getAcceptableStates();
     TransitionFunction<LRState, Symbol> oldTransitionFunction = nfa.getTransitionFunction();
     LRState oldInitialState = nfa.getInitialState();
-    
+
     /* mapping old LRStates with their labels */
     Map<Integer, LRState> oldLabelLRStateTable = new HashMap<>();
     for (LRState state : oldStates) {
       oldLabelLRStateTable.put(state.getLabel(), state);
     }
-    
+
     /* finding new groups by grouping labels and not their LRItems */
     Set<Set<Integer>> newLabelStates = new HashSet<>();
     Queue<Set<Integer>> queue = new LinkedList<>();
+    TransitionFunction<Set<Integer>, Symbol> transitionMemo = new TransitionFunction<>();
     queue.add(new HashSet<>(Arrays.asList(oldInitialState.getLabel())));
     while (!queue.isEmpty()) {
       Set<Integer> currentLabelState = queue.remove();
       newLabelStates.add(currentLabelState);
 
       for (Symbol symbol : alphabet) {
-        Set<Integer> newLabelState = new HashSet<>();
-        for (Integer labelValue : currentLabelState) {
-          for (LRState destination : oldTransitionFunction
-              .getTransitionResult(oldLabelLRStateTable.get(labelValue), symbol)) {
-            newLabelState.add(destination.getLabel());
+        if (!transitionMemo.existsTransition(currentLabelState, symbol)) {
+          Set<Integer> newLabelState = new HashSet<>();
+          for (Integer labelValue : currentLabelState) {
+            for (LRState destination : oldTransitionFunction
+                .getTransitionResult(oldLabelLRStateTable.get(labelValue), symbol)) {
+              newLabelState.add(destination.getLabel());
+            }
           }
-        }
-        if (!newLabelStates.contains(newLabelState) && !newLabelState.isEmpty()) {
-          queue.add(newLabelState);
+          if (!newLabelStates.contains(newLabelState) && !newLabelState.isEmpty()) {
+            queue.add(newLabelState);
+            transitionMemo.addTransition(currentLabelState, symbol, newLabelState);
+          }
         }
       }
     }
-    
+
     /* create new LRStates from grouped labels */
     Map<Set<Integer>, LRState> newLabelStatesLRStateTable = new HashMap<>();
     int label = 0; // counter for labels of new LRStates
@@ -128,12 +132,12 @@ public class AutomatonConverter {
       }
       newLabelStatesLRStateTable.put(newLabelState, new LRState(mergedItems, label++));
     }
-    
+
     /* building new objects for DFA */
     LRState newInitialState =
         newLabelStatesLRStateTable.get(new HashSet<>(Arrays.asList(oldInitialState.getLabel())));
     Set<LRState> newStates = new HashSet<>(newLabelStatesLRStateTable.values());
-    
+
     /* building new acceptable states */
     Set<LRState> newAcceptableStates = new HashSet<>();
     for (Set<Integer> newLabelState : newLabelStates) {
@@ -144,7 +148,7 @@ public class AutomatonConverter {
         }
       }
     }
-    
+
     /* building new transition function */
     TransitionFunction<LRState, Symbol> newTransitionFunction = new TransitionFunction<>();
     for (Set<Integer> newLabelState : newLabelStates) {

@@ -41,7 +41,6 @@ public class ParserDeserializer {
     return synStrings;
   }
 
-  @SuppressWarnings("unchecked")
   public LRState deserializeStartState() throws IOException, ClassNotFoundException {
     FileInputStream fileIn = new FileInputStream(START_STATE);
     ObjectInputStream in = new ObjectInputStream(fileIn);
