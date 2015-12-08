@@ -1,11 +1,14 @@
 package hr.fer.zemris.ppj;
 
+import java.io.Serializable;
+
 /**
  * Represents a pair of two generic types.
  * 
  * @author Herman Zvonimir Dosilovic
  */
-public class Pair<F, S> {
+public class Pair<F, S> implements Serializable {
+  private static final long serialVersionUID = 2487782845655129721L;
 
   /** First value in pair. */
   private F first;
