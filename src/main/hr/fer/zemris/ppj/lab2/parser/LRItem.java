@@ -10,7 +10,7 @@ import hr.fer.zemris.ppj.grammar.Production;
 import hr.fer.zemris.ppj.symbol.Symbol;
 
 /**
- * @author Herman Zvonimir Dosilovic
+ * @author Ivan Trubic
  */
 public class LRItem implements Serializable {
   private static final long serialVersionUID = -2146573324496034998L;

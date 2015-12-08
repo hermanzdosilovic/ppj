@@ -17,7 +17,7 @@ import hr.fer.zemris.ppj.lab2.parser.LRState;
 import hr.fer.zemris.ppj.symbol.Symbol;
 
 /**
- * @author Herman Zvonimir Dosilovic
+ * @author Ivan Trubic
  */
 public class AutomatonConverter {
 

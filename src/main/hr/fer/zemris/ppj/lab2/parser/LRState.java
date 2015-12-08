@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * @author Herman Zvonimir Dosilovic
+ * @author Ivan Trubic
  */
 public class LRState implements Serializable {
 
