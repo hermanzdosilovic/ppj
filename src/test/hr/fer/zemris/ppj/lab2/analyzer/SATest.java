@@ -16,10 +16,10 @@ public class SATest {
 
   @Test
   public void kanonGrammarWithGSATest() throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("langdefs/kanon_gramatika.san")));
+    GSA gsa = new GSA(new FileInputStream(new File("io/lab-2/kanon_gramatika.san")));
     gsa.start();
 
-    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/kanon_gramatika.in")));
+    List<String> input = SA.readInput(new FileInputStream(new File("io/lab-2/kanon_gramatika.in")));
     input.add(SA.END_STRING + " kraj T");
     ParserDeserializer deserializer = new ParserDeserializer();
     deserializer.deserializeParserStructures();
@@ -29,7 +29,7 @@ public class SATest {
     Node node = sa.LR(input);
 
     StringBuilder expectedOutput = new StringBuilder();
-    input = SA.readInput(new FileInputStream(new File("langdefs/kanon_gramatika.out")));
+    input = SA.readInput(new FileInputStream(new File("io/lab-2/kanon_gramatika.out")));
     for (String line : input) {
       expectedOutput.append(line).append(System.lineSeparator());
     }
@@ -39,10 +39,10 @@ public class SATest {
 
   @Test
   public void minusLangWithGSATest() throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("langdefs/minusLang.san")));
+    GSA gsa = new GSA(new FileInputStream(new File("io/lab-2/minusLang.san")));
     gsa.start();
 
-    List<String> input = SA.readInput(new FileInputStream(new File("langdefs/minusLang.in")));
+    List<String> input = SA.readInput(new FileInputStream(new File("io/lab-2/minusLang.in")));
     input.add(SA.END_STRING + " kraj T");
 
     ParserDeserializer deserializer = new ParserDeserializer();
@@ -53,7 +53,7 @@ public class SATest {
     Node node = sa.LR(input);
 
     StringBuilder expectedOutput = new StringBuilder();
-    input = SA.readInput(new FileInputStream(new File("langdefs/minusLang.out")));
+    input = SA.readInput(new FileInputStream(new File("io/lab-2/minusLang.out")));
     for (String line : input) {
       expectedOutput.append(line).append(System.lineSeparator());
     }
@@ -63,11 +63,11 @@ public class SATest {
 
   @Test
   public void simplePpjLangErrTest() throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
+    GSA gsa = new GSA(new FileInputStream(new File("io/lab-2/simplePpjLang.san")));
     gsa.start();
 
     List<String> input =
-        SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_err.in")));
+        SA.readInput(new FileInputStream(new File("io/lab-2/simplePpjLang_err.in")));
     input.add(SA.END_STRING + " kraj T");
 
     ParserDeserializer deserializer = new ParserDeserializer();
@@ -78,7 +78,7 @@ public class SATest {
     Node node = sa.LR(input);
 
     StringBuilder expectedOutput = new StringBuilder();
-    input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_err.out")));
+    input = SA.readInput(new FileInputStream(new File("io/lab-2/simplePpjLang_err.out")));
     for (String line : input) {
       expectedOutput.append(line).append(System.lineSeparator());
     }
@@ -88,11 +88,11 @@ public class SATest {
 
   @Test
   public void simplePpjLangManjiTest() throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
+    GSA gsa = new GSA(new FileInputStream(new File("io/lab-2/simplePpjLang.san")));
     gsa.start();
 
     List<String> input =
-        SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_manji.in")));
+        SA.readInput(new FileInputStream(new File("io/lab-2/simplePpjLang_manji.in")));
     input.add(SA.END_STRING + " kraj T");
 
     ParserDeserializer deserializer = new ParserDeserializer();
@@ -103,7 +103,7 @@ public class SATest {
     Node node = sa.LR(input);
 
     StringBuilder expectedOutput = new StringBuilder();
-    input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_manji.out")));
+    input = SA.readInput(new FileInputStream(new File("io/lab-2/simplePpjLang_manji.out")));
     for (String line : input) {
       expectedOutput.append(line).append(System.lineSeparator());
     }
@@ -113,11 +113,11 @@ public class SATest {
 
   @Test
   public void simplePpjLangNajmanjiTest() throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
+    GSA gsa = new GSA(new FileInputStream(new File("io/lab-2/simplePpjLang.san")));
     gsa.start();
 
     List<String> input =
-        SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_najmanji.in")));
+        SA.readInput(new FileInputStream(new File("io/lab-2/simplePpjLang_najmanji.in")));
     input.add(SA.END_STRING + " kraj T");
 
     ParserDeserializer deserializer = new ParserDeserializer();
@@ -128,7 +128,7 @@ public class SATest {
     Node node = sa.LR(input);
 
     StringBuilder expectedOutput = new StringBuilder();
-    input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_najmanji.out")));
+    input = SA.readInput(new FileInputStream(new File("io/lab-2/simplePpjLang_najmanji.out")));
     for (String line : input) {
       expectedOutput.append(line).append(System.lineSeparator());
     }
@@ -138,11 +138,11 @@ public class SATest {
 
   @Test
   public void simplePpjLangVeciTest() throws Exception {
-    GSA gsa = new GSA(new FileInputStream(new File("langdefs/simplePpjLang.san")));
+    GSA gsa = new GSA(new FileInputStream(new File("io/lab-2/simplePpjLang.san")));
     gsa.start();
 
     List<String> input =
-        SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_veci.in")));
+        SA.readInput(new FileInputStream(new File("io/lab-2/simplePpjLang_veci.in")));
     input.add(SA.END_STRING + " kraj T");
 
     ParserDeserializer deserializer = new ParserDeserializer();
@@ -153,7 +153,7 @@ public class SATest {
     Node node = sa.LR(input);
 
     StringBuilder expectedOutput = new StringBuilder();
-    input = SA.readInput(new FileInputStream(new File("langdefs/simplePpjLang_veci.out")));
+    input = SA.readInput(new FileInputStream(new File("io/lab-2/simplePpjLang_veci.out")));
     for (String line : input) {
       expectedOutput.append(line).append(System.lineSeparator());
     }

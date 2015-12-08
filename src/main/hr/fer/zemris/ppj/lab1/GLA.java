@@ -41,7 +41,7 @@ public final class GLA {
   }
 
   private void generateAnalyzerDefinition() throws FileNotFoundException {
-    PrintWriter writer = new PrintWriter("analyzer_definition.txt");
+    PrintWriter writer = new PrintWriter("analyzer_definition.ser");
     writer.println(initialState);
     for (LexicalAnalyzerState state : lexicalAnalyzerStateTable.values()) {
       for (Regex regex : state.getRegexes()) {

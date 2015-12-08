@@ -32,7 +32,7 @@ public final class LA {
 
   public static void main(String[] args) throws IOException {
     LA lexicalAnalyzer =
-        new LA(new FileInputStream(new File("analyzer_definition.txt")), System.in);
+        new LA(new FileInputStream(new File("analyzer_definition.ser")), System.in);
     lexicalAnalyzer.analyzeSourceCode();
     lexicalAnalyzer.printOutput();
   }
