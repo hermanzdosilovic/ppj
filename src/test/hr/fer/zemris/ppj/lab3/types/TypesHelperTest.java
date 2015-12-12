@@ -164,4 +164,84 @@ public class TypesHelperTest {
   public void implicitConstIntToVoid() {
     assertEquals(false, TypesHelper.canImplicitlyCast(ConstInt.CONST_INT, Void.VOID));
   }
+  
+  @Test
+  public void implicitCharArrayToConstCharArray() {
+    assertEquals(true, TypesHelper.canImplicitlyCast(new Array(Char.CHAR), new Array(ConstChar.CONST_CHAR)));
+  }
+  
+  @Test
+  public void implicitCharArrayToCharArray() {
+    assertEquals(true, TypesHelper.canImplicitlyCast(new Array(Char.CHAR), new Array(Char.CHAR)));
+  }
+  
+  @Test
+  public void implicitCharArrayToConstIntArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(Char.CHAR), new Array(ConstInt.CONST_INT)));
+  }
+
+  @Test
+  public void implicitCharArrayToIntArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(Char.CHAR), new Array(Int.INT)));
+  }
+
+  @Test
+  public void implicitIntArrayToConstCharArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(Int.INT), new Array(ConstChar.CONST_CHAR)));
+  }
+  
+  @Test
+  public void implicitIntArrayToCharArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(Int.INT), new Array(Char.CHAR)));
+  }
+  
+  @Test
+  public void implicitIntArrayToConstIntArray() {
+    assertEquals(true, TypesHelper.canImplicitlyCast(new Array(Int.INT), new Array(ConstInt.CONST_INT)));
+  }
+
+  @Test
+  public void implicitIntArrayToIntArray() {
+    assertEquals(true, TypesHelper.canImplicitlyCast(new Array(Int.INT), new Array(Int.INT))); 
+  }
+  
+  @Test
+  public void implicitConstIntArrayToConstCharArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(ConstInt.CONST_INT), new Array(ConstChar.CONST_CHAR)));
+  }
+  
+  @Test
+  public void implicitConstIntArrayToCharArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(ConstInt.CONST_INT), new Array(Char.CHAR)));
+  }
+  
+  @Test
+  public void implicitConstIntArrayToConstIntArray() {
+    assertEquals(true, TypesHelper.canImplicitlyCast(new Array(ConstInt.CONST_INT), new Array(ConstInt.CONST_INT)));
+  }
+
+  @Test
+  public void implicitConstIntArrayToIntArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(ConstInt.CONST_INT), new Array(Int.INT))); 
+  }
+  
+  @Test
+  public void implicitConstCharArrayToConstCharArray() {
+    assertEquals(true, TypesHelper.canImplicitlyCast(new Array(ConstChar.CONST_CHAR), new Array(ConstChar.CONST_CHAR)));
+  }
+  
+  @Test
+  public void implicitConstCharArrayToCharArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(ConstChar.CONST_CHAR), new Array(Char.CHAR)));
+  }
+  
+  @Test
+  public void implicitConstCharArrayToConstIntArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(ConstChar.CONST_CHAR), new Array(ConstInt.CONST_INT)));
+  }
+
+  @Test
+  public void implicitConstCharArrayToIntArray() {
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(ConstChar.CONST_CHAR), new Array(Int.INT))); 
+  }
 }
