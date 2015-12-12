@@ -1,28 +1,19 @@
 package hr.fer.zemris.ppj.lab3.types;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FunctionType implements Type {
 
-  private boolean isVoid;
   private List<NumericType> params;
-  private NumericType returnType;
   
-  public FunctionType() {}
+  public FunctionType() {
+    this(new ArrayList<>());
+  }
 
-  public FunctionType(boolean isVoid, List<NumericType> params, NumericType returnType) {
+  public FunctionType(List<NumericType> params) {
     super();
-    this.isVoid = isVoid;
     this.params = params;
-    this.returnType = returnType;
-  }
-  
-  public boolean isVoid() {
-    return isVoid;
-  }
-
-  public void setVoid(boolean isVoid) {
-    this.isVoid = isVoid;
   }
 
   public List<NumericType> getParams() {
@@ -31,17 +22,6 @@ public class FunctionType implements Type {
 
   public void setParams(List<NumericType> params) {
     this.params = params;
-  }
-
-  public void setReturnType(NumericType returnType) {
-    this.returnType = returnType;
-  }
-
-  public Type getReturnType() {
-    if (isVoid) {
-      return Void.VOID;
-    }
-    return returnType;
   }
   
 }
