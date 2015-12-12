@@ -3,7 +3,7 @@ package hr.fer.zemris.ppj.lab3.types;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FunctionType implements Type {
+public abstract class FunctionType implements Type {
 
   private List<NumericType> params;
   

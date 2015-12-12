@@ -4,10 +4,6 @@ import static hr.fer.zemris.ppj.lab3.types.Char.CHAR;
 import static hr.fer.zemris.ppj.lab3.types.Int.INT;
 import static hr.fer.zemris.ppj.lab3.types.ConstChar.CONST_CHAR;
 import static hr.fer.zemris.ppj.lab3.types.ConstInt.CONST_INT;
-import static hr.fer.zemris.ppj.lab3.types.Array.CHAR_ARRAY;
-import static hr.fer.zemris.ppj.lab3.types.Array.INT_ARRAY;
-import static hr.fer.zemris.ppj.lab3.types.Array.CONST_CHAR_ARRAY;
-import static hr.fer.zemris.ppj.lab3.types.Array.CONST_INT_ARRAY;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -21,29 +17,36 @@ import java.util.Set;
 
 public class TypesHelper {
   
-  private static Map<Type, List<Type>> transitions = new HashMap<Type, List<Type>>();
+  private static Map<NumericType, List<NumericType>> transitions = new HashMap<>();
   
   static {
     transitions.put(CONST_INT, Arrays.asList(INT));
     transitions.put(CONST_CHAR, Arrays.asList(CHAR));
     transitions.put(INT, Arrays.asList(CONST_INT));
     transitions.put(CHAR, Arrays.asList(CONST_CHAR, INT));
-    transitions.put(INT_ARRAY, Arrays.asList(CONST_INT_ARRAY));
-    transitions.put(CHAR_ARRAY, Arrays.asList(CONST_CHAR_ARRAY));
   }
   
-  public static boolean canImplicitlyConvert(Type source, Type target) {
+  public static boolean canImplicitlyCast(Type source, Type target) {
+    return false;
+  }
+  
+  public static boolean canImplicitlyCast(NumericType source, NumericType target) {
+
+    if (source == target) {
+      return true;
+    }
+    
     Queue<Type> q = new LinkedList<>();
     Set<Type> visited = new HashSet<>();
     q.add(source);
     while(!q.isEmpty()) {
       Type current = q.remove();
-      if (current == target) {
-        return true;
-      }
       if (transitions.containsKey(current)) {
         for(Type next : transitions.get(current)) {
           if (!visited.contains(next)) {
+            if (next == target) {
+              return true;
+            }
             visited.add(next);
             q.add(next);
           }
@@ -51,6 +54,14 @@ public class TypesHelper {
       }
     }
     return false;
+  }
+  
+  public static boolean canImplicitlyCast(Array source, Array target) {
+    return !isConstT((Type)source.getNumericType()) && constT((Type)source.getNumericType()) == target.getNumericType();
+  }
+  
+  public static boolean canExplicitlyCast(Type source, Type target) {
+    return isX(source) && isX(target);
   }
   
   public static ConstType constT(Type type) {
@@ -64,6 +75,10 @@ public class TypesHelper {
       return CONST_INT;
     }
     return null;
+  }
+  
+  public static boolean isArray(Type type) {
+    return type instanceof Array;
   }
   
   public static boolean isX(Type type) {
