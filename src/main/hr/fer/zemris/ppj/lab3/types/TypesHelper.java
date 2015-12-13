@@ -79,6 +79,10 @@ public class TypesHelper {
     return null;
   }
   
+  public static boolean isLType(Type type) {
+    return type == CHAR || type == INT;
+  }
+  
   public static boolean isArray(Type type) {
     return type instanceof Array;
   }

@@ -1,18 +1,23 @@
 package hr.fer.zemris.ppj.lab3.analyzer;
 
+import hr.fer.zemris.ppj.node.Node;
 import hr.fer.zemris.ppj.node.SNode;
+import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
+import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 public class SemantickiAnalizator {
 
-  public static SNode root;
+  private SNode root;
 
   public static void main(String[] args) throws IOException {
     SemantickiAnalizator sa = new SemantickiAnalizator();
-
+    
   }
 
   public SemantickiAnalizator() throws IOException {
@@ -20,31 +25,37 @@ public class SemantickiAnalizator {
   }
 
   public SemantickiAnalizator(InputStream stream) throws IOException {
-    root = treeBuilder(new SemAnInputDefinition(stream).inputLines, 0);
-
+    root = treeBuilder(new SemAnInputDefinition(stream).getInputLines(), 0);
   }
 
+  public SNode getRoot() {
+    return root;
+  }
+  
   public static SNode treeBuilder(List<String> inputLines, int index) {
-
     int countSpacesIndex = countSpaces(inputLines.get(index));
-    SNode node = new SNode(inputLines.get(index).substring(countSpacesIndex));
+    SNode node = new SNode();
     
-    int i = 1;
-    if (index + i >= inputLines.size()) {
-      return node;
-    }
-
-    for (; index + i < inputLines.size()
+    for (int i = 1; index + i < inputLines.size()
         && countSpacesIndex < countSpaces(inputLines.get(index + i)); i++) {
       if (countSpaces(inputLines.get(index + i)) - countSpacesIndex == 1) {
         node.addChild(treeBuilder(inputLines, index + i));
       }
     }
     
+    String line = inputLines.get(index).trim();
+    if (node.getChildren().isEmpty()) {
+      node.setSymbol(new TerminalSymbol(line.substring(0, line.indexOf(' '))));
+      line = line.substring(line.indexOf(' ') + 1);
+      node.setLineNumber(Integer.valueOf(line.substring(0, line.indexOf(' '))));
+      node.setValue(line.substring(line.indexOf(' ') + 1));
+    } else {
+      node.setSymbol(new NonTerminalSymbol(line));
+    }
     return node;
   }
 
-  static int countSpaces(String line) {
+  public static int countSpaces(String line) {
     int count = 0;
     for (int j = 0; j < line.length(); j++) {
       if (line.charAt(j) == ' ') {
