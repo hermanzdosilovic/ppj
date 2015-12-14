@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import hr.fer.zemris.ppj.lab3.rules.RuleFactory;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
@@ -14,7 +15,8 @@ public class SemantickiAnalizator {
 
   public static void main(String[] args) throws IOException {
     SemantickiAnalizator sa = new SemantickiAnalizator();
-    System.out.println(sa.getRoot());
+    RuleFactory.getRule(sa.root.getSymbol());
+    System.out.println(sa.root);
   }
 
   public SemantickiAnalizator() throws IOException {
@@ -28,18 +30,18 @@ public class SemantickiAnalizator {
   public SNode getRoot() {
     return root;
   }
-  
+
   public static SNode treeBuilder(List<String> inputLines, int index) {
     int countSpacesIndex = countSpaces(inputLines.get(index));
     SNode node = new SNode();
-    
+
     for (int i = 1; index + i < inputLines.size()
         && countSpacesIndex < countSpaces(inputLines.get(index + i)); i++) {
       if (countSpaces(inputLines.get(index + i)) - countSpacesIndex == 1) {
         node.addChild(treeBuilder(inputLines, index + i));
       }
     }
-    
+
     String line = inputLines.get(index).trim();
     if (node.getChildren().isEmpty()) {
       node.setSymbol(new TerminalSymbol(line.substring(0, line.indexOf(' '))));

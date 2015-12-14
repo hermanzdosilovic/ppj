@@ -23,108 +23,73 @@ public class SNode {
 
   public SNode() {}
 
-
-
   public Symbol getSymbol() {
     return symbol;
   }
-
-
 
   public void setSymbol(Symbol symbol) {
     this.symbol = symbol;
   }
 
-
-
   public Type getType() {
     return type;
   }
-
-
 
   public void setType(Type type) {
     this.type = type;
   }
 
-
-
   public List<Type> getTypes() {
     return types;
   }
-
-
 
   public void setTypes(List<Type> types) {
     this.types = types;
   }
 
-
-
   public String getName() {
     return name;
   }
-
-
 
   public void setName(String name) {
     this.name = name;
   }
 
-
-
   public List<String> getNames() {
     return names;
   }
-
-
 
   public void setNames(List<String> names) {
     this.names = names;
   }
 
-
-
   public Type getnType() {
     return nType;
   }
-
-
 
   public void setnType(Type nType) {
     this.nType = nType;
   }
 
-
-
   public String getElemCount() {
     return elemCount;
   }
-
-
 
   public void setElemCount(String elemCount) {
     this.elemCount = elemCount;
   }
 
-
-
   public void setlValue(boolean lValue) {
     this.lValue = lValue;
   }
-
 
   public boolean islValue() {
     return lValue;
   }
 
-
-
   public int getLineNumber() {
     return lineNumber;
   }
-
-
 
   public void setLineNumber(int lineNumber) {
     this.lineNumber = lineNumber;
@@ -136,6 +101,14 @@ public class SNode {
 
   public List<SNode> getChildren() {
     return children;
+  }
+
+  public List<Symbol> getSymbolsOfChildren() {
+    List<Symbol> symbols = new ArrayList<>();
+    for (SNode node : children) {
+      symbols.add(node.getSymbol());
+    }
+    return symbols;
   }
 
   public static String printTree(SNode root) {
