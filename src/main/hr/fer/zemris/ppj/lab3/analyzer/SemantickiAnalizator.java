@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import hr.fer.zemris.ppj.lab3.rules.RuleFactory;
+import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
@@ -13,10 +14,9 @@ public class SemantickiAnalizator {
 
   private SNode root;
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws Exception {
     SemantickiAnalizator sa = new SemantickiAnalizator();
-    RuleFactory.getRule(sa.root.getSymbol());
-    System.out.println(sa.root);
+    RuleFactory.getRule(sa.root.getSymbol()).visit(sa.root, new Scope(null));
   }
 
   public SemantickiAnalizator() throws IOException {

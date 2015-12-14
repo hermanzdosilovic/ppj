@@ -1,14 +1,12 @@
 package hr.fer.zemris.ppj.lab3.rules.structure;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.rules.RuleFactory;
+import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
-import hr.fer.zemris.ppj.symbol.Symbol;
 
 /**
  * @author Herman Zvonimir Dosilovic
@@ -18,22 +16,19 @@ public class PrijevodnaJedinica extends Rule {
 
   private PrijevodnaJedinica() {
     super(new NonTerminalSymbol("<prijevodna_jedinica>"));
-    List<List<Symbol>> productions = new ArrayList<>();
-    productions.add(Arrays.asList(this.getSymbol()));
-    productions
-        .add(Arrays.asList(this.getSymbol(), VanjskaDeklaracija.vanjskaDeklaracija.getSymbol()));
-
-    setProductions(productions);
   }
 
   @Override
-  public void visit(SNode node) throws Exception {
-    if (!getProductions().contains(node.getSymbolsOfChildren())) {
-      throw new Exception("Invalid production!");
+  public void visit(SNode node, Scope scope) throws Exception {
+    if (node.getValuesOfChildren().equals(Arrays.asList("<vanjska_deklaracija>"))) {
+    } else if (node.getValuesOfChildren()
+        .equals(Arrays.asList("<prijevodna_jedinica>", "<vanjska_deklaracija>"))) {
+    } else {
+      throw new Exception("Invalid production.");
     }
 
     for (SNode child : node.getChildren()) {
-      RuleFactory.getRule(child.getSymbol()).visit(child);
+      RuleFactory.getRule(child.getSymbol()).visit(child, new Scope(scope));
     }
   }
 }

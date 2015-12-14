@@ -111,6 +111,14 @@ public class SNode {
     return symbols;
   }
 
+  public List<String> getValuesOfChildren() {
+    List<String> values = new ArrayList<>();
+    for (SNode node : children) {
+      values.add((String) node.getSymbol().getValue());
+    }
+    return values;
+  }
+
   public static String printTree(SNode root) {
     if (root == null) {
       return "";
