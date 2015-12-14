@@ -1,4 +1,0 @@
-#!/bin/bash
-javac -d bin/ -sourcepath src/main/ $(find src/main -name *.java)
-java -cp bin/ hr.fer.zemris.ppj.lab2.GSA < io/lab-2/simplePpjLang.san
-
