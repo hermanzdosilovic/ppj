@@ -14,6 +14,7 @@ public class SemantickiAnalizator {
 
   public static void main(String[] args) throws IOException {
     SemantickiAnalizator sa = new SemantickiAnalizator();
+    System.out.println(sa.getRoot());
   }
 
   public SemantickiAnalizator() throws IOException {
