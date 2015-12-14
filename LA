@@ -1,0 +1,4 @@
+#!/bin/bash
+javac -d bin/ -sourcepath src/main/ $(find src/main -name *.java)
+java -cp bin/ hr.fer.zemris.ppj.lab1.analyzer.LA
+
