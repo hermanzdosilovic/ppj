@@ -1,15 +1,12 @@
 package hr.fer.zemris.ppj.lab3.analyzer;
 
-import hr.fer.zemris.ppj.node.Node;
-import hr.fer.zemris.ppj.node.SNode;
-import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
-import hr.fer.zemris.ppj.symbol.TerminalSymbol;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
+import hr.fer.zemris.ppj.node.SNode;
+import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
+import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class SemantickiAnalizator {
 
@@ -17,7 +14,7 @@ public class SemantickiAnalizator {
 
   public static void main(String[] args) throws IOException {
     SemantickiAnalizator sa = new SemantickiAnalizator();
-    
+    System.out.println(sa.getRoot());
   }
 
   public SemantickiAnalizator() throws IOException {

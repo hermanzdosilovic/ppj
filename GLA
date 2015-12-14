@@ -1,0 +1,5 @@
+#!/bin/bash
+javac -d bin/ -sourcepath src/main/ $(find src/main -name *.java)
+java -cp bin/ hr.fer.zemris.ppj.lab1.GLA < io/lab-3/ppjC.lan
+javac -d bin/ -sourcepath src/main/ src/main/hr/fer/zemris/ppj/lab1/analyzer/AnalyzerAction.java
+

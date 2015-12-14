@@ -1,0 +1,10 @@
+#!/bin/bash
+if [[ $1 == "--build" ]]; then
+  ./GLA && ./GSA
+  if [[ $2 != "" ]]; then
+    ./LA < $2 | ./SA | ./SEM
+  fi
+elif [[ $1 != "" ]]; then
+  ./LA < $1 | ./SA | ./SEM
+fi
+

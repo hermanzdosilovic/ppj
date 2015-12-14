@@ -20,11 +20,10 @@ public class SNode {
   private int lineNumber;
   private String value;
   private List<SNode> children = new ArrayList<>();
-  
-  public SNode() {
-  }
 
-  
+  public SNode() {}
+
+
 
   public Symbol getSymbol() {
     return symbol;
@@ -130,7 +129,7 @@ public class SNode {
   public void setLineNumber(int lineNumber) {
     this.lineNumber = lineNumber;
   }
-  
+
   public void addChild(SNode child) {
     children.add(child);
   }
@@ -138,7 +137,7 @@ public class SNode {
   public List<SNode> getChildren() {
     return children;
   }
-  
+
   public static String printTree(SNode root) {
     if (root == null) {
       return "";
@@ -162,7 +161,10 @@ public class SNode {
     }
   }
 
-
+  @Override
+  public String toString() {
+    return SNode.printTree(this);
+  }
 
   public String getValue() {
     return value;
