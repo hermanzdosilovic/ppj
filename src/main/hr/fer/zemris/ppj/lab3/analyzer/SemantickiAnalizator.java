@@ -13,9 +13,13 @@ import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 public class SemantickiAnalizator {
   private SNode root;
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws IOException {
     SemantickiAnalizator sa = new SemantickiAnalizator();
-    RuleFactory.getRule(sa.root.getSymbol()).visit(sa.root, new Scope());
+    try {
+      sa.root.visit(new Scope());
+    } catch (SemanticException e) {
+      System.out.println(e.getMessage());
+    }
   }
 
   public SemantickiAnalizator() throws IOException {
