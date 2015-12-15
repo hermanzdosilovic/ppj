@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.lab3.rules.structure;
 
+import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.node.SNode;
@@ -13,7 +14,9 @@ public class VanjskaDeklaracija extends Rule {
   }
 
   @Override
-  public void visit(SNode node, Scope scope) {
-    // ...
+  public void visit(SNode node, Scope scope) throws SemanticException {
+    for (SNode child : node.getChildren()) {
+      child.visit(new Scope(scope));
+    }
   }
 }
