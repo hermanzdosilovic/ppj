@@ -1,11 +1,14 @@
 package hr.fer.zemris.ppj.node;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
+import hr.fer.zemris.ppj.lab3.rules.RuleFactory;
+import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SNode {
   private Symbol symbol;
@@ -145,6 +148,10 @@ public class SNode {
 
   public void setValue(String value) {
     this.value = value;
+  }
+
+  public void visit(Scope scope) throws SemanticException {
+    RuleFactory.getRule(symbol).visit(this, scope);
   }
 
   @Override

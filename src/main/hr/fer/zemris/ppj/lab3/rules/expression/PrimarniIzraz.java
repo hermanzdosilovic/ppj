@@ -1,12 +1,7 @@
 package hr.fer.zemris.ppj.lab3.rules.expression;
 
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.util.Arrays;
-
 import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;
-import hr.fer.zemris.ppj.lab3.rules.RuleFactory;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Array;
 import hr.fer.zemris.ppj.lab3.types.Char;
@@ -14,6 +9,10 @@ import hr.fer.zemris.ppj.lab3.types.ConstChar;
 import hr.fer.zemris.ppj.lab3.types.Int;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
+
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.util.Arrays;
 
 public class PrimarniIzraz extends Rule {
   public static PrimarniIzraz PRIMARNI_IZRAZ = new PrimarniIzraz();
@@ -62,7 +61,7 @@ public class PrimarniIzraz extends Rule {
       if (invalidCharacter(value)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
       return;
     } else if (node.getValuesOfChildren().equals(Arrays.asList("NIZ_ZNAKOVA"))) {
       SNode child = node.getChildren().get(0);
@@ -73,7 +72,7 @@ public class PrimarniIzraz extends Rule {
       String value = child.getValue();
       value = value.substring(1, value.length() - 1); // skip ""
       value = value + "!"; // helper symbol if \ is last
-      
+
       for (int i = 0; i < value.length() - 1; i++) {
         if (value.charAt(i) == '\\') {
           if (invalidCharacter(value.substring(i, i + 2))) {
@@ -82,21 +81,23 @@ public class PrimarniIzraz extends Rule {
             i++;
           }
         } else if (invalidCharacter(value.substring(i, i + 1))) {
-            throw new SemanticException(getErrorMessage(node));
+          throw new SemanticException(getErrorMessage(node));
         }
       }
-    } else if (node.getValuesOfChildren().equals(Arrays.asList("L_ZAGRADA", "<izraz>", "D_ZAGRADA"))) {
+    } else if (node.getValuesOfChildren()
+        .equals(Arrays.asList("L_ZAGRADA", "<izraz>", "D_ZAGRADA"))) {
       SNode child = node.getChildren().get(1); // <izraz>
-      
+
       node.setType(child.getType());
       node.setlValue(child.islValue());
-      
-      RuleFactory.getRule(child.getSymbol()).visit(child, new Scope(scope));
+
+      child.visit(new Scope(scope));
     }
   }
-  
+
   /**
    * Returns <code>true</code> if given character is invalid.
+   * 
    * @param character character to analyze
    * @return <code>true</code> if given character is invalid, <code>false</code> otherwise.
    */
@@ -107,7 +108,7 @@ public class PrimarniIzraz extends Rule {
       }
       return false;
     } else if (character.length() == 1 && character.charAt(0) != '\\') {
-     return !asciiEncoder.canEncode(character);
+      return !asciiEncoder.canEncode(character);
     } else {
       return true;
     }

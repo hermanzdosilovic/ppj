@@ -5,6 +5,7 @@ import java.util.Map;
 import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.structure.PrijevodnaJedinica;
 import hr.fer.zemris.ppj.lab3.rules.structure.VanjskaDeklaracija;
+import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.Symbol;
 
 /**
@@ -28,6 +29,10 @@ public final class RuleFactory {
   }
 
   public static Rule getRule(Symbol symbol) {
-    return ruleTable.get(symbol.getValue());
+    return getRule((String) symbol.getValue());
+  }
+  
+  public static Rule getRule(SNode node){
+    return getRule(node.getSymbol());
   }
 }
