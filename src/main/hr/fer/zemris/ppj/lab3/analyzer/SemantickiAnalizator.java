@@ -1,14 +1,13 @@
 package hr.fer.zemris.ppj.lab3.analyzer;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import hr.fer.zemris.ppj.lab3.rules.RuleFactory;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 public class SemantickiAnalizator {
   private SNode root;
