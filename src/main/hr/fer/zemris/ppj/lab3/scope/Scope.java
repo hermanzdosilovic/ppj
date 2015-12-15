@@ -7,11 +7,11 @@ import java.util.Map;
 public class Scope {
   private Scope parentScope;
   private Map<String, ScopeValue> table;
-  
+
   public Scope() {
     this(null);
   }
-  
+
   public Scope(Scope parentScope) {
     this.parentScope = parentScope;
   }
@@ -20,28 +20,47 @@ public class Scope {
     return parentScope;
   }
   
-  public boolean exists(String name) {
-    if (table.containsKey(name)) {
-      return false;
-    } else {
-      return true;
+  public Scope getGlobalScope() {
+    Scope scope = this;
+    while(scope.parentScope != null) {
+      scope = scope.parentScope;
     }
+    return scope;
+  }
+
+  /**
+   * Returns <code>true</code> if there is an <strong>declared</strong> object in this scope.
+   * 
+   * @param name name of wanted object
+   * @return <code>true</code> if there is an <strong>declared</strong> object in this scope,
+   *         <code>false</code> otherwise.
+   */
+  public boolean hasDeclared(String name) {
+    return table.containsKey(name);
   }
 
   public void insert(String name, Type type, boolean isDefined) {
-    ScopeValue value = new ScopeValue(type, isDefined);
-    table.put(name, value);
+    table.put(name, new ScopeValue(type, isDefined));
   }
-
-  public Type returnType(String name) {
+  
+  public Type getType(String name) {
     if (table.containsKey(name)) {
       return table.get(name).type;
     }
     return null;
   }
   
+  public void setType(String name, Type type) {
+    if (table.containsKey(name)) {
+      table.get(name).setType(type);
+    } else {
+      table.put(name, new ScopeValue(type, false));
+    }
+  }
+
   /**
    * Returns true if this scope has defined object with given name.
+   * 
    * @param name name to check in scope definition
    * @return true if this scope has defined object with given name
    */
@@ -69,6 +88,10 @@ public class Scope {
 
     public void setDefined(boolean defined) {
       this.defined = defined;
+    }
+    
+    public void setType(Type type) {
+      this.type = type;
     }
   }
 }

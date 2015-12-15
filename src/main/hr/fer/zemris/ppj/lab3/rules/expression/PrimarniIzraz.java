@@ -13,6 +13,7 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.Arrays;
+import java.util.List;
 
 public class PrimarniIzraz extends Rule {
   public static PrimarniIzraz PRIMARNI_IZRAZ = new PrimarniIzraz();
@@ -24,21 +25,23 @@ public class PrimarniIzraz extends Rule {
 
   @Override
   public void visit(SNode node, Scope scope) throws SemanticException {
-    if (node.getValuesOfChildren().equals(Arrays.asList("IDN"))) {
+    List<String> children = node.getValuesOfChildren();
+
+    if (children.equals(Arrays.asList("IDN"))) {
       SNode child = node.getChildren().get(0);
 
       node.setType(child.getType());
       node.setlValue(child.islValue());
 
       while (scope != null) {
-        if (scope.exists(child.getName())) {
+        if (scope.hasDeclared(child.getName())) {
           return;
         }
         scope = scope.getParentScope();
       }
 
       throw new SemanticException(getErrorMessage(node));
-    } else if (node.getValuesOfChildren().equals(Arrays.asList("BROJ"))) {
+    } else if (children.equals(Arrays.asList("BROJ"))) {
       SNode child = node.getChildren().get(0);
 
       node.setType(Int.INT);
@@ -50,7 +53,7 @@ public class PrimarniIzraz extends Rule {
       }
 
       throw new SemanticException(getErrorMessage(node));
-    } else if (node.getValuesOfChildren().equals(Arrays.asList("ZNAK"))) {
+    } else if (children.equals(Arrays.asList("ZNAK"))) {
       SNode child = node.getChildren().get(0);
 
       node.setType(Char.CHAR);
@@ -63,7 +66,7 @@ public class PrimarniIzraz extends Rule {
       }
 
       return;
-    } else if (node.getValuesOfChildren().equals(Arrays.asList("NIZ_ZNAKOVA"))) {
+    } else if (children.equals(Arrays.asList("NIZ_ZNAKOVA"))) {
       SNode child = node.getChildren().get(0);
 
       node.setType(new Array(ConstChar.CONST_CHAR));
@@ -84,8 +87,7 @@ public class PrimarniIzraz extends Rule {
           throw new SemanticException(getErrorMessage(node));
         }
       }
-    } else if (node.getValuesOfChildren()
-        .equals(Arrays.asList("L_ZAGRADA", "<izraz>", "D_ZAGRADA"))) {
+    } else if (children.equals(Arrays.asList("L_ZAGRADA", "<izraz>", "D_ZAGRADA"))) {
       SNode child = node.getChildren().get(1); // <izraz>
 
       node.setType(child.getType());
