@@ -6,7 +6,7 @@ import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
 public class VanjskaDeklaracija extends Rule {
-  public static VanjskaDeklaracija vanjskaDeklaracija = new VanjskaDeklaracija();
+  public static VanjskaDeklaracija VANJSKA_DEKLARACIJA = new VanjskaDeklaracija();
 
   private VanjskaDeklaracija() {
     super(new NonTerminalSymbol("<vanjska_deklaracija>"));

@@ -11,12 +11,11 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class SemantickiAnalizator {
-
   private SNode root;
 
   public static void main(String[] args) throws Exception {
     SemantickiAnalizator sa = new SemantickiAnalizator();
-    RuleFactory.getRule(sa.root.getSymbol()).visit(sa.root, new Scope(null));
+    RuleFactory.getRule(sa.root.getSymbol()).visit(sa.root, new Scope());
   }
 
   public SemantickiAnalizator() throws IOException {

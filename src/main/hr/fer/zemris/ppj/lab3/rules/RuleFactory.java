@@ -2,6 +2,7 @@ package hr.fer.zemris.ppj.lab3.rules;
 
 import java.util.Map;
 
+import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.structure.PrijevodnaJedinica;
 import hr.fer.zemris.ppj.lab3.rules.structure.VanjskaDeklaracija;
 import hr.fer.zemris.ppj.symbol.Symbol;
@@ -14,8 +15,9 @@ public final class RuleFactory {
   private static Map<String, Rule> ruleTable;
 
   static {
-    ruleTable.put("<prijevodna_jedinica>", PrijevodnaJedinica.prijevodnaJedinica);
-    ruleTable.put("<vanjska_deklaracija>", VanjskaDeklaracija.vanjskaDeklaracija);
+    ruleTable.put("<prijevodna_jedinica>", PrijevodnaJedinica.PRIJEVODNA_JEDINICA);
+    ruleTable.put("<vanjska_deklaracija>", VanjskaDeklaracija.VANJSKA_DEKLARACIJA);
+    ruleTable.put("<primarni_izraz>", PrimarniIzraz.PRIMARNI_IZRAZ);
   }
 
   public static Rule getRule(String name) {

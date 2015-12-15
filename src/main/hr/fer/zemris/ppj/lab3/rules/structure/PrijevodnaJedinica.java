@@ -12,7 +12,7 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
  * @author Herman Zvonimir Dosilovic
  */
 public class PrijevodnaJedinica extends Rule {
-  public static PrijevodnaJedinica prijevodnaJedinica = new PrijevodnaJedinica();
+  public static PrijevodnaJedinica PRIJEVODNA_JEDINICA = new PrijevodnaJedinica();
 
   private PrijevodnaJedinica() {
     super(new NonTerminalSymbol("<prijevodna_jedinica>"));

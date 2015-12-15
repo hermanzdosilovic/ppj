@@ -2,6 +2,7 @@ package hr.fer.zemris.ppj.lab3.rules;
 
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.node.SNode;
+import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.Symbol;
 
 /**
@@ -18,5 +19,23 @@ public abstract class Rule {
 
   public Symbol getSymbol() {
     return symbol;
+  }
+  
+  public String getErrorMessage(SNode node) {
+    StringBuilder message = new StringBuilder();
+    message.append(node.getSymbol());
+    message.append(" ::= ");
+
+    for (SNode child : node.getChildren()) {
+      if (child.getSymbol() instanceof NonTerminalSymbol) {
+        message.append(child.getSymbol());
+      } else {
+        message.append(child.getSymbol() + "(");
+        message.append(node.getLineNumber() + "," + node.getValue() + ")");
+      }
+      message.append(" ");
+    }
+ 
+    return message.toString().trim();
   }
 }

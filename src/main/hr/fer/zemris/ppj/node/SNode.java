@@ -8,7 +8,6 @@ import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
 public class SNode {
-
   private Symbol symbol;
   private Type type;
   private boolean lValue;
@@ -20,8 +19,6 @@ public class SNode {
   private int lineNumber;
   private String value;
   private List<SNode> children = new ArrayList<>();
-
-  public SNode() {}
 
   public Symbol getSymbol() {
     return symbol;
@@ -142,18 +139,16 @@ public class SNode {
     }
   }
 
-  @Override
-  public String toString() {
-    return SNode.printTree(this);
-  }
-
   public String getValue() {
     return value;
   }
 
-
-
   public void setValue(String value) {
     this.value = value;
+  }
+
+  @Override
+  public String toString() {
+    return SNode.printTree(this);
   }
 }
