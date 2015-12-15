@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.lab3.rules;
 
+import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
@@ -15,7 +16,7 @@ public abstract class Rule {
     this.symbol = symbol;
   }
 
-  public abstract void visit(SNode node, Scope scope) throws Exception;
+  public abstract void visit(SNode node, Scope scope) throws SemanticException;
 
   public Symbol getSymbol() {
     return symbol;

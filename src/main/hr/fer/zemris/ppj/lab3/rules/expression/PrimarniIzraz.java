@@ -24,7 +24,7 @@ public class PrimarniIzraz extends Rule {
   }
 
   @Override
-  public void visit(SNode node, Scope scope) throws Exception {
+  public void visit(SNode node, Scope scope) throws SemanticException {
     if (node.getValuesOfChildren().equals(Arrays.asList("IDN"))) {
       SNode child = node.getChildren().get(0);
 

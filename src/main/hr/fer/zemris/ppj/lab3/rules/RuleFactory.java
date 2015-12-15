@@ -15,8 +15,11 @@ public final class RuleFactory {
   private static Map<String, Rule> ruleTable;
 
   static {
+	// Deklaracije i definicije
     ruleTable.put("<prijevodna_jedinica>", PrijevodnaJedinica.PRIJEVODNA_JEDINICA);
     ruleTable.put("<vanjska_deklaracija>", VanjskaDeklaracija.VANJSKA_DEKLARACIJA);
+    
+    // Izrazi
     ruleTable.put("<primarni_izraz>", PrimarniIzraz.PRIMARNI_IZRAZ);
   }
 

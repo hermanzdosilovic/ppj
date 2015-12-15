@@ -2,6 +2,7 @@ package hr.fer.zemris.ppj.lab3.rules.structure;
 
 import java.util.Arrays;
 
+import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.rules.RuleFactory;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
@@ -19,12 +20,12 @@ public class PrijevodnaJedinica extends Rule {
   }
 
   @Override
-  public void visit(SNode node, Scope scope) throws Exception {
+  public void visit(SNode node, Scope scope) throws SemanticException {
     if (node.getValuesOfChildren().equals(Arrays.asList("<vanjska_deklaracija>"))) {
     } else if (node.getValuesOfChildren()
         .equals(Arrays.asList("<prijevodna_jedinica>", "<vanjska_deklaracija>"))) {
     } else {
-      throw new Exception("Invalid production.");
+      throw new SemanticException("Invalid production.");
     }
 
     for (SNode child : node.getChildren()) {
