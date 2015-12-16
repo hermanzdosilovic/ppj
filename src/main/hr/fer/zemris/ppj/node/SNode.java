@@ -1,14 +1,16 @@
 package hr.fer.zemris.ppj.node;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
+import hr.fer.zemris.ppj.lab3.rules.RuleFactory;
+import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
-public class SNode {
+import java.util.ArrayList;
+import java.util.List;
 
+public class SNode {
   private Symbol symbol;
   private Type type;
   private boolean lValue;
@@ -20,111 +22,75 @@ public class SNode {
   private int lineNumber;
   private String value;
   private List<SNode> children = new ArrayList<>();
-
-  public SNode() {}
-
-
+  private Scope scope;
 
   public Symbol getSymbol() {
     return symbol;
   }
 
-
-
   public void setSymbol(Symbol symbol) {
     this.symbol = symbol;
   }
-
-
 
   public Type getType() {
     return type;
   }
 
-
-
   public void setType(Type type) {
     this.type = type;
   }
-
-
 
   public List<Type> getTypes() {
     return types;
   }
 
-
-
   public void setTypes(List<Type> types) {
     this.types = types;
   }
-
-
 
   public String getName() {
     return name;
   }
 
-
-
   public void setName(String name) {
     this.name = name;
   }
-
-
 
   public List<String> getNames() {
     return names;
   }
 
-
-
   public void setNames(List<String> names) {
     this.names = names;
   }
-
-
 
   public Type getnType() {
     return nType;
   }
 
-
-
   public void setnType(Type nType) {
     this.nType = nType;
   }
-
-
 
   public String getElemCount() {
     return elemCount;
   }
 
-
-
   public void setElemCount(String elemCount) {
     this.elemCount = elemCount;
   }
-
-
 
   public void setlValue(boolean lValue) {
     this.lValue = lValue;
   }
 
-
   public boolean islValue() {
     return lValue;
   }
 
-
-
   public int getLineNumber() {
     return lineNumber;
   }
-
-
 
   public void setLineNumber(int lineNumber) {
     this.lineNumber = lineNumber;
@@ -136,6 +102,22 @@ public class SNode {
 
   public List<SNode> getChildren() {
     return children;
+  }
+
+  public List<Symbol> getSymbolsOfChildren() {
+    List<Symbol> symbols = new ArrayList<>();
+    for (SNode node : children) {
+      symbols.add(node.getSymbol());
+    }
+    return symbols;
+  }
+
+  public List<String> getValuesOfChildren() {
+    List<String> values = new ArrayList<>();
+    for (SNode node : children) {
+      values.add((String) node.getSymbol().getValue());
+    }
+    return values;
   }
 
   public static String printTree(SNode root) {
@@ -161,18 +143,29 @@ public class SNode {
     }
   }
 
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
+
+  public void visit(Scope scope) throws SemanticException {
+    RuleFactory.getRule(symbol).visit(this, scope);
+  }
+
+  public Scope getScope() {
+    return scope;
+  }
+
+  public void setScope(Scope scope) {
+    this.scope = scope;
+  }
+  
   @Override
   public String toString() {
     return SNode.printTree(this);
   }
 
-  public String getValue() {
-    return value;
-  }
-
-
-
-  public void setValue(String value) {
-    this.value = value;
-  }
 }
