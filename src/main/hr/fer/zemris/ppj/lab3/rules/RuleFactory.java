@@ -3,6 +3,7 @@ package hr.fer.zemris.ppj.lab3.rules;
 import java.util.Map;
 
 import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
+import hr.fer.zemris.ppj.lab3.rules.definitions.Deklaracija;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
 import hr.fer.zemris.ppj.lab3.rules.definitions.ListaDeklaracija;
 import hr.fer.zemris.ppj.lab3.rules.definitions.ListaParametara;
@@ -32,6 +33,7 @@ public final class RuleFactory {
     ruleTable.put("<deklaracija_parametra>", DeklaracijaParametra.DEKLARACIJA_PARAMETRA);
     ruleTable.put("<lista_parametara>", ListaParametara.LISTA_PARAMETARA);
     ruleTable.put("<lista_deklaracija>", ListaDeklaracija.LISTA_DEKLARACIJA); 
+    ruleTable.put("<deklaracija>", Deklaracija.DEKLARACIJA); 
   }
 
   public static Rule getRule(String name) {
