@@ -4,6 +4,7 @@ import java.util.Map;
 
 import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
+import hr.fer.zemris.ppj.lab3.rules.definitions.ListaParametara;
 import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.structure.PrijevodnaJedinica;
 import hr.fer.zemris.ppj.lab3.rules.structure.VanjskaDeklaracija;
@@ -27,7 +28,8 @@ public final class RuleFactory {
 
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
-    ruleTable.put("<deklaracija parametra>", DeklaracijaParametra.DEKLARACIJA_PARAMETRA);
+    ruleTable.put("<deklaracija_parametra>", DeklaracijaParametra.DEKLARACIJA_PARAMETRA);
+    ruleTable.put("<lista_parametara>", ListaParametara.LISTA_PARAMETARA);
   }
 
   public static Rule getRule(String name) {
