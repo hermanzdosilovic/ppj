@@ -29,13 +29,13 @@ public class PrimarniIzraz extends Rule {
 
     if (children.equals(Arrays.asList("IDN"))) {
       SNode child = node.getChildren().get(0);
-
-      node.setType(child.getType());
-      node.setlValue(child.islValue());
-
+      
+      // 1
       while (scope != null) {
         if (scope.hasDeclared(child.getName())) {
-          return;
+          node.setType(child.getType());
+          node.setlValue(child.islValue());
+          return; // all good
         }
         scope = scope.getParentScope();
       }
@@ -43,39 +43,35 @@ public class PrimarniIzraz extends Rule {
       throw new SemanticException(getErrorMessage(node));
     } else if (children.equals(Arrays.asList("BROJ"))) {
       SNode child = node.getChildren().get(0);
-
-      node.setType(Int.INT);
-      node.setlValue(false);
-
+      
+      // 1
       Long value = Long.parseLong(child.getValue());
       if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
-        return;
+        node.setType(Int.INT);
+        node.setlValue(false);
+        return; // all good
       }
 
       throw new SemanticException(getErrorMessage(node));
     } else if (children.equals(Arrays.asList("ZNAK"))) {
       SNode child = node.getChildren().get(0);
-
-      node.setType(Char.CHAR);
-      node.setlValue(false);
-
+      
+      // 1
       String value = child.getValue();
       value = value.substring(1, value.length() - 1); // skip ''
       if (invalidCharacter(value)) {
         throw new SemanticException(getErrorMessage(node));
       }
 
-      return;
+      node.setType(Char.CHAR);
+      node.setlValue(false);
     } else if (children.equals(Arrays.asList("NIZ_ZNAKOVA"))) {
       SNode child = node.getChildren().get(0);
-
-      node.setType(new Array(ConstChar.CONST_CHAR));
-      node.setlValue(false);
-
+      
+      // 1
       String value = child.getValue();
       value = value.substring(1, value.length() - 1); // skip ""
       value = value + "!"; // helper symbol if \ is last
-
       for (int i = 0; i < value.length() - 1; i++) {
         if (value.charAt(i) == '\\') {
           if (invalidCharacter(value.substring(i, i + 2))) {
@@ -87,13 +83,17 @@ public class PrimarniIzraz extends Rule {
           throw new SemanticException(getErrorMessage(node));
         }
       }
+      
+      node.setType(new Array(ConstChar.CONST_CHAR));
+      node.setlValue(false);
     } else if (children.equals(Arrays.asList("L_ZAGRADA", "<izraz>", "D_ZAGRADA"))) {
       SNode child = node.getChildren().get(1); // <izraz>
+      
+      // 1
+      child.visit(scope);
 
       node.setType(child.getType());
       node.setlValue(child.islValue());
-
-      child.visit(scope);
     }
   }
 
