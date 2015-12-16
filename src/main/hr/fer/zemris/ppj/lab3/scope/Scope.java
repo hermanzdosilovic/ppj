@@ -12,7 +12,6 @@ public class Scope {
   private List<Scope> childrenScopes = new ArrayList<>();
 
   public Scope() {
-    this(null);
   }
 
   public Scope(Scope parentScope) {
