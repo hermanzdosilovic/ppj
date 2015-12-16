@@ -21,10 +21,10 @@ public class ListaDeklaracija extends Rule {
     List<String> children = node.getValuesOfChildren();
 
     if (children.equals(Arrays.asList("<deklaracija>"))) {
-      node.getChildren().get(0).visit(new Scope(scope));
+      node.getChildren().get(0).visit(scope);
     } else if (children.equals(Arrays.asList("<lista_deklaracija>", "<deklaracija>"))) {
-      node.getChildren().get(0).visit(new Scope(scope));
-      node.getChildren().get(1).visit(new Scope(scope));
+      node.getChildren().get(0).visit(scope);
+      node.getChildren().get(1).visit(scope);
     }
   }
 }

@@ -27,7 +27,9 @@ public class InitDeklarator extends Rule {
       izravni_deklarator.setnType(node.getnType());
       
       // 2
-      
+      if(){
+        throw new SemanticException(getErrorMessage(node));
+      }
     }
   }
 

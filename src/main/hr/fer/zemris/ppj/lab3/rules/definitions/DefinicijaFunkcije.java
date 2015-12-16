@@ -32,7 +32,7 @@ public class DefinicijaFunkcije extends Rule {
         "<slozena_naredba>"))) {
       SNode ime_tipa = node.getChildren().get(0);
       // 1
-      ime_tipa.visit(new Scope(scope));
+      ime_tipa.visit(scope);
 
       // 2
       if (ime_tipa.getType() instanceof ConstType) {
@@ -62,7 +62,7 @@ public class DefinicijaFunkcije extends Rule {
         "<lista_parametara>", "D_ZAGRADA", "<slozena_naredba>"))) {
       SNode ime_tipa = node.getChildren().get(0);
       // 1
-      ime_tipa.visit(new Scope(scope));
+      ime_tipa.visit(scope);
 
       // 2
       if (ime_tipa.getType() instanceof ConstType) {
@@ -77,7 +77,7 @@ public class DefinicijaFunkcije extends Rule {
 
       // 4
       SNode lista_parametara = node.getChildren().get(3);
-      lista_parametara.visit(new Scope(scope));
+      lista_parametara.visit(scope);
 
       // 5
       NonVoidFunctionType functionType =

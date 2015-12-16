@@ -23,12 +23,12 @@ public class ListaInitDeklaratora extends Rule {
     if (children.equals(Arrays.asList("<init_deklarator>"))) {
       SNode init_deklarator = node.getChildren().get(0);
       init_deklarator.setnType(node.getnType());
-      init_deklarator.visit(new Scope(scope));
+      init_deklarator.visit(scope);
     } else if (children.equals(Arrays.asList("<lista_init_deklaratora>", "ZAREZ",
         "<init_deklarator>"))) {
       SNode lista_init_deklaratora = node.getChildren().get(0);
       lista_init_deklaratora.setnType(node.getnType());
-      lista_init_deklaratora.visit(new Scope(scope));
+      lista_init_deklaratora.visit(scope);
     }
   }
 }

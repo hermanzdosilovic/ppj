@@ -23,12 +23,12 @@ public class Deklaracija extends Rule {
     if(children.equals(Arrays.asList("<ime_tipa>", "<lista_init_deklaratora>", "TOCKAZAREZ"))){
       SNode ime_tipa = node.getChildren().get(0);
       // 1
-      node.getChildren().get(0).visit(new Scope(scope));
+      ime_tipa.visit(scope);
       
       // 2
       SNode lista_init_deklaratora = node.getChildren().get(1);
       lista_init_deklaratora.setnType(ime_tipa.getType());
-      lista_init_deklaratora.visit(new Scope(scope));
+      lista_init_deklaratora.visit(scope);
     }
   }
 

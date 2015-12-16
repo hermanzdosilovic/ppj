@@ -27,7 +27,7 @@ public class ListaParametara extends Rule {
       node.setNames(deklaracija_parametara.getNames());
 
       // 1
-      deklaracija_parametara.visit(new Scope(scope));
+      deklaracija_parametara.visit(scope);
     } else if (children.equals(Arrays.asList("<lista_parametara>", "ZAREZ",
         "<deklaracija_parametra>"))) {
       SNode lista_parametara = node.getChildren().get(0);
@@ -41,10 +41,10 @@ public class ListaParametara extends Rule {
       node.setNames(imena);
 
       // 1
-      lista_parametara.visit(new Scope(scope));
+      lista_parametara.visit(scope);
 
       // 2
-      deklaracija_parametra.visit(new Scope(scope));
+      deklaracija_parametra.visit(scope);
 
       // 3
       if (lista_parametara.getNames().contains(deklaracija_parametra.getName())) {
