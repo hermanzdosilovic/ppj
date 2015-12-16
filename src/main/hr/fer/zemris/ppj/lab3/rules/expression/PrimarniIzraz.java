@@ -93,7 +93,7 @@ public class PrimarniIzraz extends Rule {
       node.setType(child.getType());
       node.setlValue(child.islValue());
 
-      child.visit(new Scope(scope));
+      child.visit(scope);
     }
   }
 
