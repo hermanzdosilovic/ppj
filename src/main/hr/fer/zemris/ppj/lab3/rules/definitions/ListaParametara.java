@@ -23,11 +23,12 @@ public class ListaParametara extends Rule {
 
     if (children.equals(Arrays.asList("<deklaracija_parametara>"))) {
       SNode deklaracija_parametara = node.getChildren().get(0);
-      node.setTypes(deklaracija_parametara.getTypes());
-      node.setNames(deklaracija_parametara.getNames());
 
       // 1
       deklaracija_parametara.visit(scope);
+
+      node.setTypes(deklaracija_parametara.getTypes());
+      node.setNames(deklaracija_parametara.getNames());
     } else if (children.equals(Arrays.asList("<lista_parametara>", "ZAREZ",
         "<deklaracija_parametra>"))) {
       SNode lista_parametara = node.getChildren().get(0);
@@ -37,8 +38,6 @@ public class ListaParametara extends Rule {
       node.setTypes(novaLista);
 
       List<String> imena = deklaracija_parametra.getNames();
-      imena.add(deklaracija_parametra.getName());
-      node.setNames(imena);
 
       // 1
       lista_parametara.visit(scope);
@@ -50,6 +49,8 @@ public class ListaParametara extends Rule {
       if (lista_parametara.getNames().contains(deklaracija_parametra.getName())) {
         throw new SemanticException(getErrorMessage(node));
       }
+      imena.add(deklaracija_parametra.getName());
+      node.setNames(imena);
     }
   }
 
