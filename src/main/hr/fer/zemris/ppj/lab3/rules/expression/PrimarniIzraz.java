@@ -15,6 +15,9 @@ import java.nio.charset.CharsetEncoder;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Herman Zvonimir Dosilovic
+ */
 public class PrimarniIzraz extends Rule {
   public static PrimarniIzraz PRIMARNI_IZRAZ = new PrimarniIzraz();
   private static final CharsetEncoder asciiEncoder = Charset.forName("US-ASCII").newEncoder();
@@ -29,7 +32,7 @@ public class PrimarniIzraz extends Rule {
 
     if (children.equals(Arrays.asList("IDN"))) {
       SNode child = node.getChildren().get(0);
-      
+
       // 1
       while (scope != null) {
         if (scope.hasDeclared(child.getName())) {
@@ -43,7 +46,7 @@ public class PrimarniIzraz extends Rule {
       throw new SemanticException(getErrorMessage(node));
     } else if (children.equals(Arrays.asList("BROJ"))) {
       SNode child = node.getChildren().get(0);
-      
+
       // 1
       Long value = Long.parseLong(child.getValue());
       if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
@@ -55,7 +58,7 @@ public class PrimarniIzraz extends Rule {
       throw new SemanticException(getErrorMessage(node));
     } else if (children.equals(Arrays.asList("ZNAK"))) {
       SNode child = node.getChildren().get(0);
-      
+
       // 1
       String value = child.getValue();
       value = value.substring(1, value.length() - 1); // skip ''
@@ -67,7 +70,7 @@ public class PrimarniIzraz extends Rule {
       node.setlValue(false);
     } else if (children.equals(Arrays.asList("NIZ_ZNAKOVA"))) {
       SNode child = node.getChildren().get(0);
-      
+
       // 1
       String value = child.getValue();
       value = value.substring(1, value.length() - 1); // skip ""
@@ -83,12 +86,12 @@ public class PrimarniIzraz extends Rule {
           throw new SemanticException(getErrorMessage(node));
         }
       }
-      
+
       node.setType(new Array(ConstChar.CONST_CHAR));
       node.setlValue(false);
     } else if (children.equals(Arrays.asList("L_ZAGRADA", "<izraz>", "D_ZAGRADA"))) {
       SNode child = node.getChildren().get(1); // <izraz>
-      
+
       // 1
       child.visit(scope);
 

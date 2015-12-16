@@ -4,6 +4,7 @@ import java.util.Map;
 
 import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
+import hr.fer.zemris.ppj.lab3.rules.expression.PostfiksIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.structure.PrijevodnaJedinica;
 import hr.fer.zemris.ppj.lab3.rules.structure.VanjskaDeklaracija;
@@ -24,7 +25,8 @@ public final class RuleFactory {
 
     // Izrazi
     ruleTable.put("<primarni_izraz>", PrimarniIzraz.PRIMARNI_IZRAZ);
-
+    ruleTable.put("<postfiks izraz>", PostfiksIzraz.POSTFIKS_IZRAZ);
+    
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
     ruleTable.put("<deklaracija parametra>", DeklaracijaParametra.DEKLARACIJA_PARAMETRA);
