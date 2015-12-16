@@ -25,7 +25,7 @@ public class DefinicijaFunkcije extends Rule {
   }
 
   @Override
-  public void visit(SNode node, Scope scope) throws SemanticException {
+  public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
 
     if (children.equals(Arrays.asList("<ime_tipa>", "IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA",

@@ -16,8 +16,13 @@ public abstract class Rule {
     this.symbol = symbol;
   }
 
-  public abstract void visit(SNode node, Scope scope) throws SemanticException;
+  public void visit(SNode node, Scope scope) throws SemanticException {
+    node.setScope(scope);
+    checkRule(node, scope);
+  };
 
+  public abstract void checkRule(SNode node, Scope scope) throws SemanticException; 
+  
   public Symbol getSymbol() {
     return symbol;
   }

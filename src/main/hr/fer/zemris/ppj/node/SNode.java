@@ -22,6 +22,7 @@ public class SNode {
   private int lineNumber;
   private String value;
   private List<SNode> children = new ArrayList<>();
+  private Scope scope;
 
   public Symbol getSymbol() {
     return symbol;
@@ -154,8 +155,17 @@ public class SNode {
     RuleFactory.getRule(symbol).visit(this, scope);
   }
 
+  public Scope getScope() {
+    return scope;
+  }
+
+  public void setScope(Scope scope) {
+    this.scope = scope;
+  }
+  
   @Override
   public String toString() {
     return SNode.printTree(this);
   }
+
 }

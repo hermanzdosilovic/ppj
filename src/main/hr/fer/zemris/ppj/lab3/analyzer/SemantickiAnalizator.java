@@ -11,11 +11,13 @@ import java.util.List;
 
 public class SemantickiAnalizator {
   private SNode root;
-
+  private Scope globalScope;
+  
   public static void main(String[] args) throws IOException {
     SemantickiAnalizator sa = new SemantickiAnalizator();
     try {
-      sa.root.visit(new Scope());
+      sa.globalScope = new Scope();
+      sa.root.visit(sa.globalScope);
     } catch (SemanticException e) {
       System.out.println(e.getMessage());
     }
