@@ -14,34 +14,35 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 /**
  * @author Herman Zvonimir Dosilovic
  */
-public class BinIIzraz extends Rule {
-  public static BinIIzraz BIN_I_IZRAZ = new BinIIzraz();
+public class BinXiliIzraz extends Rule {
 
-  private BinIIzraz() {
-    super(new NonTerminalSymbol("<bin_i_izraz>"));
+  public static BinXiliIzraz BIN_XILI_IZRAZ = new BinXiliIzraz();
+  
+  private BinXiliIzraz() {
+    super(new NonTerminalSymbol("<bin_xili_izraz>"));
   }
-
+  
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
-    if (children.equals(Arrays.asList("<jednakosni_izraz>"))) {
-      SNode jednakosni_izraz = node.getChildren().get(0);
-      jednakosni_izraz.visit(scope);
-      node.setType(jednakosni_izraz.getType());
-      node.setlValue(jednakosni_izraz.islValue());
-    } else if (children.equals(Arrays.asList("<bin_i_izraz>", "OP_BIN_I", "<jednakosni_izraz>"))) {
+    if (children.equals(Arrays.asList("<bin_i_izraz>"))) {
       SNode bin_i_izraz = node.getChildren().get(0);
-      SNode jednakosni_izraz = node.getChildren().get(2);
+      bin_i_izraz.visit(scope);
+      node.setType(bin_i_izraz.getType());
+      node.setlValue(bin_i_izraz.islValue());
+    } else if (children.equals(Arrays.asList("<bin_xili_izraz>", "OP_BIN_XILI", "<bin_i_izraz>"))) {
+      SNode bin_xili_izraz = node.getChildren().get(0);
+      SNode bin_i_izraz = node.getChildren().get(2);
 
+      bin_xili_izraz.visit(scope);
+      if (!TypesHelper.canImplicitlyCast(bin_xili_izraz.getType(), Int.INT)) {
+        throw new SemanticException(getErrorMessage(node));
+      }
       bin_i_izraz.visit(scope);
       if (!TypesHelper.canImplicitlyCast(bin_i_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      jednakosni_izraz.visit(scope);
-      if (!TypesHelper.canImplicitlyCast(jednakosni_izraz.getType(), Int.INT)) {
-        throw new SemanticException(getErrorMessage(node));
-      }
-      
+
       node.setType(Int.INT);
       node.setlValue(false);
     }

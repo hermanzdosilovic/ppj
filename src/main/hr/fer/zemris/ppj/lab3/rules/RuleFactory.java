@@ -6,6 +6,7 @@ import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
 import hr.fer.zemris.ppj.lab3.rules.expression.AditivniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.BinIIzraz;
+import hr.fer.zemris.ppj.lab3.rules.expression.BinXiliIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.CastIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.ImeTipa;
 import hr.fer.zemris.ppj.lab3.rules.expression.JednakosniIzraz;
@@ -48,6 +49,7 @@ public final class RuleFactory {
     ruleTable.put("<odnosni_izraz>", OdnosniIzraz.ODNOSNI_IZRAZ);
     ruleTable.put("<jednakosni_izraz>", JednakosniIzraz.JEDNAKOSNI_IZRAZ);
     ruleTable.put("<bin_i_izraz>", BinIIzraz.BIN_I_IZRAZ);
+    ruleTable.put("<bin_xili_izraz>", BinXiliIzraz.BIN_XILI_IZRAZ);
     
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
