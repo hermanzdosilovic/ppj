@@ -97,14 +97,19 @@ public class PostfiksIzraz extends Rule {
       // 3 TODO: check this one more time!
       Type pov = scope.getType(postfiks_izraz.getName());
       List<Type> params = new ArrayList<>();
+      Scope childScope = scope;
       while (scope != null) {
-        if (scope.hasDeclared(postfiks_izraz.getName())) {
+        if (scope.hasDeclared(postfiks_izraz.getName())) { // has declared function with name
           pov = scope.getType(postfiks_izraz.getName());
+          if (scope.hasDefined(postfiks_izraz.getName())) { // has defined function with given name
+            scope = childScope;
+          }
           for (String name : lista_argumenata.getNames()) {
             params.add(scope.getType(name));
           }
           break;
         }
+        childScope = scope;
         scope = scope.getParentScope();
       }
 
@@ -120,17 +125,19 @@ public class PostfiksIzraz extends Rule {
 
       node.setType(pov);
       node.setlValue(false);
-    } else if (children.equals(Arrays.asList("<postfiks_izraz>", "OP_INC")) || children.equals(Arrays.asList("<postfiks_izraz>", "OP_DEC"))) {
+    } else if (children.equals(Arrays.asList("<postfiks_izraz>", "OP_INC"))
+        || children.equals(Arrays.asList("<postfiks_izraz>", "OP_DEC"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
-      
+
       // 1
       postfiks_izraz.visit(scope);
-      
+
       // 2
-      if (!postfiks_izraz.islValue() || !TypesHelper.canImplicitlyCast(postfiks_izraz.getType(), Int.INT)) {
+      if (!postfiks_izraz.islValue()
+          || !TypesHelper.canImplicitlyCast(postfiks_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
       node.setType(Int.INT);
       node.setlValue(false);
     }
