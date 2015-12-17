@@ -7,6 +7,7 @@ import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
 import hr.fer.zemris.ppj.lab3.rules.expression.CastIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.ImeTipa;
 import hr.fer.zemris.ppj.lab3.rules.expression.ListaArgumenata;
+import hr.fer.zemris.ppj.lab3.rules.expression.MultiplikativniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.PostfiksIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.SpecifikatorTipa;
@@ -38,6 +39,7 @@ public final class RuleFactory {
     ruleTable.put("<cast_izraz>", CastIzraz.CAST_IZRAZ);
     ruleTable.put("<ime_tipa>", ImeTipa.IME_TIPA);
     ruleTable.put("<specifikator_tipa>", SpecifikatorTipa.SPECIFIKATOR_TIPA);
+    ruleTable.put("<multiplikativni_izraz>", MultiplikativniIzraz.MULTIPLIKATIVNI_IZRAZ);
     
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
