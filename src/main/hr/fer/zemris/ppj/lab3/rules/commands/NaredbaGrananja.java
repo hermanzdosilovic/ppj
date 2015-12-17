@@ -22,16 +22,17 @@ public class NaredbaGrananja extends Rule {
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> childrenValues = node.getValuesOfChildren();
+    SNode izraz = node.getChildren().get(2);
     if (childrenValues
         .equals(Arrays.asList("KR_IF", "L_ZAGRADA", "<izraz>", "D_ZAGRADA", "<naredba>"))) {
-      node.getChildren().get(2).visit(scope);
-      if (!TypesHelper.canImplicitlyCast(node.getChildren().get(2).getType(), Int.INT)) {
+      izraz.visit(scope);
+      if (!TypesHelper.canImplicitlyCast(izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
       node.getChildren().get(4).visit(scope);
     } else if (childrenValues.equals(Arrays.asList("KR_IF", "L_ZAGRADA", "<izraz>", "D_ZAGRADA",
         "<naredba>", "KR_ELSE", "<naredba>"))) {
-      node.getChildren().get(2).visit(scope);
+      izraz.visit(scope);
       if (!TypesHelper.canImplicitlyCast(node.getChildren().get(2).getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }

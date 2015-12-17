@@ -19,12 +19,8 @@ public class ListaNaredbi extends Rule {
   
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
-    List<String> childrenValues = node.getValuesOfChildren();
-    if (childrenValues.equals(Arrays.asList("<naredba>"))) {
-      node.getChildren().get(0).visit(scope);
-    } else if (childrenValues.equals(Arrays.asList("<lista_naredbi>", "<naredba>"))) {
-      node.getChildren().get(0).visit(scope);
-      node.getChildren().get(1).visit(scope);
+    for (SNode child : node.getChildren()) {
+      child.visit(scope);
     }
   }
 
