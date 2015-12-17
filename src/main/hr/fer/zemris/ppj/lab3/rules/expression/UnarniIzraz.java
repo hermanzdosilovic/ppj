@@ -12,6 +12,9 @@ import hr.fer.zemris.ppj.lab3.types.TypesHelper;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
+/**
+ * @author Herman Zvonimir Dosilovic
+ */
 public class UnarniIzraz extends Rule {
   public static UnarniIzraz UNARNI_IZRAZ = new UnarniIzraz();
 
@@ -47,5 +50,4 @@ public class UnarniIzraz extends Rule {
       node.setlValue(false);
     }
   }
-
 }
