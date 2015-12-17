@@ -69,14 +69,7 @@ public class PostfiksIzraz extends Rule {
       postfiks_izraz.visit(scope);
 
       // 2
-      Type pov = scope.getType(postfiks_izraz.getName());
-      while (scope != null) {
-        if (scope.hasDeclared(postfiks_izraz.getName())) {
-          pov = scope.getType(postfiks_izraz.getName());
-          break;
-        }
-        scope = scope.getParentScope();
-      }
+      Type pov = getFunctionTypeByName(node, postfiks_izraz.getName());
       if (!postfiks_izraz.getType().equals(new VoidFunctionType((ReturnType) pov))) {
         throw new SemanticException(getErrorMessage(node));
       }
@@ -94,25 +87,9 @@ public class PostfiksIzraz extends Rule {
       // 2
       lista_argumenata.visit(scope);
 
-      // 3 TODO: check this one more time!
-      Type pov = scope.getType(postfiks_izraz.getName());
-      List<Type> params = new ArrayList<>();
-      Scope childScope = scope;
-      while (scope != null) {
-        if (scope.hasDeclared(postfiks_izraz.getName())) { // has declared function with name
-          pov = scope.getType(postfiks_izraz.getName());
-          if (scope.hasDefined(postfiks_izraz.getName())) { // has defined function with given name
-            scope = childScope;
-          }
-          for (String name : lista_argumenata.getNames()) {
-            params.add(scope.getType(name));
-          }
-          break;
-        }
-        childScope = scope;
-        scope = scope.getParentScope();
-      }
-
+      // 3
+      Type pov = getFunctionTypeByName(node, postfiks_izraz.getName());
+      List<Type> params = getFunctionParamTypesByName(node, postfiks_izraz.getName());
       if (!postfiks_izraz.getType().equals(new NonVoidFunctionType(params, (ReturnType) pov))) {
         throw new SemanticException(getErrorMessage(node));
       }
@@ -143,4 +120,39 @@ public class PostfiksIzraz extends Rule {
     }
   }
 
+  private Type getFunctionTypeByName(SNode node, String name) {
+    while (node != null) {
+      if (node.getSymbol().getValue().equals("<definicija_funkcije>")
+          && node.getChildren().get(1).getName().equals(name)) {
+        return node.getChildren().get(0).getType();
+      } else if (node.getSymbol().getValue().equals("<deklaracija>")
+          && node.getScope().hasDeclared(name)) {
+        return node.getScope().getType(name);
+      }
+      node = node.getParent();
+    }
+    return null;
+  }
+
+  private List<Type> getFunctionParamTypesByName(SNode node, String name) {
+    while (node != null) {
+      if (node.getSymbol().getValue().equals("<definicija_funkcije>")
+          && node.getChildren().get(1).getName().equals(name)) {
+        if (node.getChildren().get(3).getSymbol().getValue().equals("KR_VOID")) {
+          return new ArrayList<Type>();
+        } else {
+          return node.getChildren().get(3).getTypes();
+        }
+      } else if (node.getSymbol().getValue().equals("<izravni_deklarator>")
+          && node.getScope().hasDeclared(name)) {
+        if (node.getChildren().get(3).getSymbol().getValue().equals("KR_VOID")) {
+          return new ArrayList<Type>();
+        } else {
+          return node.getChildren().get(3).getTypes();
+        }
+      }
+      node = node.getParent();
+    }
+    return null;
+  }
 }
