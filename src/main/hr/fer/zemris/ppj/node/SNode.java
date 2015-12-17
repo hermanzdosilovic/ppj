@@ -23,7 +23,8 @@ public class SNode {
   private String value;
   private List<SNode> children = new ArrayList<>();
   private Scope scope;
-
+  private SNode parent;
+  
   public Symbol getSymbol() {
     return symbol;
   }
@@ -166,6 +167,14 @@ public class SNode {
   @Override
   public String toString() {
     return SNode.printTree(this);
+  }
+
+  public SNode getParent() {
+    return parent;
+  }
+
+  public void setParent(SNode parent) {
+    this.parent = parent;
   }
 
 }

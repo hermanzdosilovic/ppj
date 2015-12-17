@@ -54,6 +54,9 @@ public class SemantickiAnalizator {
       node.setValue(line.substring(line.indexOf(' ') + 1));
     } else {
       node.setSymbol(new NonTerminalSymbol(line));
+      for (SNode child : node.getChildren()) {
+        child.setParent(node);
+      }
     }
     return node;
   }
