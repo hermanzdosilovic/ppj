@@ -61,7 +61,7 @@ public class PostfiksIzraz extends Rule {
 
       Type X = ((Array) postfiks_izraz.getType()).getNumericType();
       node.setType(X);
-      node.setlValue(!TypesHelper.isArray(X));
+      node.setlValue(!TypesHelper.isConstT(X));
     } else if (children.equals(Arrays.asList("<postfiks_izraz>", "L_ZAGRADA", "D_ZAGRADA"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
 
@@ -69,8 +69,8 @@ public class PostfiksIzraz extends Rule {
       postfiks_izraz.visit(scope);
 
       // 2
-      Type pov = getFunctionTypeByName(node, postfiks_izraz.getName());
-      if (!postfiks_izraz.getType().equals(new VoidFunctionType((ReturnType) pov))) {
+      Type pov = getFunctionTypeByName(scope, postfiks_izraz.getName());
+      if (!(postfiks_izraz.getType() instanceof VoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
       }
 
@@ -88,12 +88,12 @@ public class PostfiksIzraz extends Rule {
       lista_argumenata.visit(scope);
 
       // 3
-      Type pov = getFunctionTypeByName(node, postfiks_izraz.getName());
-      List<Type> params = getFunctionParamTypesByName(node, postfiks_izraz.getName());
-      if (!postfiks_izraz.getType().equals(new NonVoidFunctionType(params, (ReturnType) pov))) {
+      Type pov = getFunctionTypeByName(scope, postfiks_izraz.getName());
+      if (!(postfiks_izraz.getType() instanceof NonVoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
       }
 
+      List<Type> params = getFunctionParamTypesByName(node, postfiks_izraz.getName());
       for (int i = 0; i < params.size(); i++) {
         if (!TypesHelper.canImplicitlyCast(lista_argumenata.getTypes().get(i), params.get(i))) {
           throw new SemanticException(getErrorMessage(node));
@@ -120,16 +120,12 @@ public class PostfiksIzraz extends Rule {
     }
   }
 
-  private Type getFunctionTypeByName(SNode node, String name) {
-    while (node != null) {
-      if (node.getSymbol().getValue().equals("<definicija_funkcije>")
-          && node.getChildren().get(1).getName().equals(name)) {
-        return node.getChildren().get(0).getType();
-      } else if (node.getSymbol().getValue().equals("<deklaracija>")
-          && node.getScope().hasDeclared(name)) {
-        return node.getScope().getType(name);
+  private Type getFunctionTypeByName(Scope scope, String name) {
+    while(scope != null) {
+      if (scope.hasDeclared(name)) {
+        return scope.getType(name);
       }
-      node = node.getParent();
+      scope = scope.getParentScope();
     }
     return null;
   }
