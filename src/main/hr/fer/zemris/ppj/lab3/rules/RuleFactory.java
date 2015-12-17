@@ -10,6 +10,7 @@ import hr.fer.zemris.ppj.lab3.rules.expression.BinIliIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.BinXiliIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.CastIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.ImeTipa;
+import hr.fer.zemris.ppj.lab3.rules.expression.IzrazPridruzivanja;
 import hr.fer.zemris.ppj.lab3.rules.expression.JednakosniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.ListaArgumenata;
 import hr.fer.zemris.ppj.lab3.rules.expression.LogIIzraz;
@@ -56,6 +57,7 @@ public final class RuleFactory {
     ruleTable.put("<bin_ili_izraz>", BinIliIzraz.BIN_ILI_IZRAZ);
     ruleTable.put("<log_i_izraz>", LogIIzraz.LOG_I_IZRAZ);
     ruleTable.put("<log_ili_izraz>", LogIliIzraz.LOG_ILI_IZRAZ);
+    ruleTable.put("<izraz_pridruzivanja>", IzrazPridruzivanja.IZRAZ_PRIDRUZIVANJA);
     
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
