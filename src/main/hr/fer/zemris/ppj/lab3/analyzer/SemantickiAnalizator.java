@@ -1,6 +1,9 @@
 package hr.fer.zemris.ppj.lab3.analyzer;
 
 import hr.fer.zemris.ppj.lab3.scope.Scope;
+import hr.fer.zemris.ppj.lab3.types.FunctionType;
+import hr.fer.zemris.ppj.lab3.types.Int;
+import hr.fer.zemris.ppj.lab3.types.VoidFunctionType;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
@@ -18,6 +21,8 @@ public class SemantickiAnalizator {
     try {
       sa.globalScope = new Scope();
       sa.root.visit(sa.globalScope);
+      sa.checkMain();
+      sa.checkFunction(sa.globalScope);
     } catch (SemanticException e) {
       System.out.println(e.getMessage());
     }
@@ -35,6 +40,26 @@ public class SemantickiAnalizator {
     return root;
   }
 
+  public void checkMain() throws SemanticException {
+    if (!globalScope.hasDefined("main")) {
+      throw new SemanticException("main");
+    }
+    if (!globalScope.getType("main").equals(new VoidFunctionType(Int.INT))) {
+      throw new SemanticException("main");
+    }
+  }
+  
+  public void checkFunction(Scope scope) throws SemanticException {
+    for (String name : scope.getNames()) {
+      if (scope.getType(name) instanceof FunctionType && !globalScope.hasDefined(name)) {
+        throw new SemanticException("funkcija");
+      }
+    }
+    for (Scope child : scope.getChildrenScopes()) {
+      checkFunction(child);
+    }
+  }
+  
   public static SNode treeBuilder(List<String> inputLines, int index) {
     int countSpacesIndex = countSpaces(inputLines.get(index));
     SNode node = new SNode();

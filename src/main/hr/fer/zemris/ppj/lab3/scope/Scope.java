@@ -5,6 +5,7 @@ import hr.fer.zemris.ppj.lab3.types.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Scope {
   private Scope parentScope;
@@ -88,6 +89,10 @@ public class Scope {
     return childrenScopes;
   }
 
+  public Set<String> getNames() {
+    return table.keySet();
+  }
+  
   private class ScopeValue {
     private Type type;
     private boolean defined;
