@@ -26,7 +26,7 @@ public class NaredbaPetlje extends Rule {
     if (childrenValues
         .equals(Arrays.asList("KR_WHILE", "L_ZAGRADA", "<izraz>", "D_ZAGRADA", "<naredba>"))) {
       children.get(2).visit(scope);
-      if (!TypesHelper.canImplicitlyCast(children.get(2).getnType(), Int.INT)) {
+      if (!TypesHelper.canImplicitlyCast(children.get(2).getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
       children.get(4).visit(scope);
@@ -34,7 +34,7 @@ public class NaredbaPetlje extends Rule {
         "<izraz_naredba>", "D_ZAGRADA", "<naredba>"))) {
       children.get(2).visit(scope);
       children.get(3).visit(scope);
-      if (!TypesHelper.canImplicitlyCast(children.get(3).getnType(), Int.INT)) {
+      if (!TypesHelper.canImplicitlyCast(children.get(3).getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
       children.get(5).visit(scope);
@@ -42,7 +42,7 @@ public class NaredbaPetlje extends Rule {
         "<izraz_naredba>", "<izraz>", "D_ZAGRADA", "<naredba>"))) {
       children.get(2).visit(scope);
       children.get(3).visit(scope);
-      if (!TypesHelper.canImplicitlyCast(children.get(3).getnType(), Int.INT)) {
+      if (!TypesHelper.canImplicitlyCast(children.get(3).getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
       children.get(4).visit(scope);
