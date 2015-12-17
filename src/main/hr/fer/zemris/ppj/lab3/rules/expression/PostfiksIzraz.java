@@ -1,6 +1,5 @@
 package hr.fer.zemris.ppj.lab3.rules.expression;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Array;
 import hr.fer.zemris.ppj.lab3.types.Int;
 import hr.fer.zemris.ppj.lab3.types.NonVoidFunctionType;
-import hr.fer.zemris.ppj.lab3.types.ReturnType;
 import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
 import hr.fer.zemris.ppj.lab3.types.VoidFunctionType;
@@ -93,7 +91,7 @@ public class PostfiksIzraz extends Rule {
         throw new SemanticException(getErrorMessage(node));
       }
 
-      List<Type> params = getFunctionParamTypesByName(node, postfiks_izraz.getName());
+      List<Type> params = ((NonVoidFunctionType) pov).getParams();
       for (int i = 0; i < params.size(); i++) {
         if (!TypesHelper.canImplicitlyCast(lista_argumenata.getTypes().get(i), params.get(i))) {
           throw new SemanticException(getErrorMessage(node));
@@ -126,28 +124,6 @@ public class PostfiksIzraz extends Rule {
         return scope.getType(name);
       }
       scope = scope.getParentScope();
-    }
-    return null;
-  }
-
-  private List<Type> getFunctionParamTypesByName(SNode node, String name) {
-    while (node != null) {
-      if (node.getSymbol().getValue().equals("<definicija_funkcije>")
-          && node.getChildren().get(1).getName().equals(name)) {
-        if (node.getChildren().get(3).getSymbol().getValue().equals("KR_VOID")) {
-          return new ArrayList<Type>();
-        } else {
-          return node.getChildren().get(3).getTypes();
-        }
-      } else if (node.getSymbol().getValue().equals("<izravni_deklarator>")
-          && node.getScope().hasDeclared(name)) {
-        if (node.getChildren().get(3).getSymbol().getValue().equals("KR_VOID")) {
-          return new ArrayList<Type>();
-        } else {
-          return node.getChildren().get(3).getTypes();
-        }
-      }
-      node = node.getParent();
     }
     return null;
   }
