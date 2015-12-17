@@ -1,5 +1,6 @@
 package hr.fer.zemris.ppj.lab3.rules;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
@@ -15,7 +16,7 @@ import hr.fer.zemris.ppj.symbol.Symbol;
  */
 public final class RuleFactory {
 
-  private static Map<String, Rule> ruleTable;
+  private static Map<String, Rule> ruleTable = new HashMap<>();
 
   static {
     // Deklaracije i definicije
