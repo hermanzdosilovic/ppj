@@ -4,6 +4,7 @@ import java.util.Map;
 
 import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
+import hr.fer.zemris.ppj.lab3.rules.expression.AditivniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.CastIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.ImeTipa;
 import hr.fer.zemris.ppj.lab3.rules.expression.ListaArgumenata;
@@ -40,6 +41,7 @@ public final class RuleFactory {
     ruleTable.put("<ime_tipa>", ImeTipa.IME_TIPA);
     ruleTable.put("<specifikator_tipa>", SpecifikatorTipa.SPECIFIKATOR_TIPA);
     ruleTable.put("<multiplikativni_izraz>", MultiplikativniIzraz.MULTIPLIKATIVNI_IZRAZ);
+    ruleTable.put("<aditivni_izraz>", AditivniIzraz.ADITIVNI_IZRAZ);
     
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
