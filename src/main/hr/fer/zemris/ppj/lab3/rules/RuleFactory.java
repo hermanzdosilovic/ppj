@@ -7,6 +7,7 @@ import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
 import hr.fer.zemris.ppj.lab3.rules.expression.AditivniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.CastIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.ImeTipa;
+import hr.fer.zemris.ppj.lab3.rules.expression.JednakosniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.ListaArgumenata;
 import hr.fer.zemris.ppj.lab3.rules.expression.MultiplikativniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.OdnosniIzraz;
@@ -44,6 +45,7 @@ public final class RuleFactory {
     ruleTable.put("<multiplikativni_izraz>", MultiplikativniIzraz.MULTIPLIKATIVNI_IZRAZ);
     ruleTable.put("<aditivni_izraz>", AditivniIzraz.ADITIVNI_IZRAZ);
     ruleTable.put("<odnosni_izraz>", OdnosniIzraz.ODNOSNI_IZRAZ);
+    ruleTable.put("<jednakosni_izraz>", JednakosniIzraz.JEDNAKOSNI_IZRAZ);
     
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
