@@ -3,8 +3,6 @@ package hr.fer.zemris.ppj.lab3.rules.definitions;
 import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
-import hr.fer.zemris.ppj.lab3.types.Array;
-import hr.fer.zemris.ppj.lab3.types.ConstType;
 import hr.fer.zemris.ppj.lab3.types.NumericType;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
 import hr.fer.zemris.ppj.node.SNode;
