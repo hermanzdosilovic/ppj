@@ -5,6 +5,7 @@ import java.util.Map;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
 import hr.fer.zemris.ppj.lab3.rules.expression.CastIzraz;
+import hr.fer.zemris.ppj.lab3.rules.expression.ImeTipa;
 import hr.fer.zemris.ppj.lab3.rules.expression.ListaArgumenata;
 import hr.fer.zemris.ppj.lab3.rules.expression.PostfiksIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
@@ -34,6 +35,7 @@ public final class RuleFactory {
     ruleTable.put("<unarni_izraz>", UnarniIzraz.UNARNI_IZRAZ);
     ruleTable.put("<unarni_operator>", UnarniOperator.UNARNI_OPERATOR);
     ruleTable.put("<cast_izraz>", CastIzraz.CAST_IZRAZ);
+    ruleTable.put("<ime_tipa>", ImeTipa.IME_TIPA);
     
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
