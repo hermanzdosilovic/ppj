@@ -91,7 +91,7 @@ public class PostfiksIzraz extends Rule {
         throw new SemanticException(getErrorMessage(node));
       }
 
-      List<Type> params = ((NonVoidFunctionType) postfiks_izraz.getnType()).getParams();
+      List<Type> params = ((NonVoidFunctionType) postfiks_izraz.getType()).getParams();
       for (int i = 0; i < params.size(); i++) {
         if (!TypesHelper.canImplicitlyCast(lista_argumenata.getTypes().get(i), params.get(i))) {
           throw new SemanticException(getErrorMessage(node));
