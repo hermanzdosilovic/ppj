@@ -35,10 +35,10 @@ public class TypesHelperTest {
     assertEquals(false, TypesHelper.canImplicitlyCast(Char.CHAR, new VoidFunctionType()));
   }
   
-  @Test
-  public void implicitCharToNonVoidFunctionType() {
-    assertEquals(false, TypesHelper.canImplicitlyCast(Char.CHAR, new NonVoidFunctionType()));
-  }
+//  @Test
+//  public void implicitCharToNonVoidFunctionType() {
+//    assertEquals(false, TypesHelper.canImplicitlyCast(Char.CHAR, new NonVoidFunctionType()));
+//  }
   
   @Test
   public void implicitCharToVoid() {
@@ -75,10 +75,10 @@ public class TypesHelperTest {
     assertEquals(false, TypesHelper.canImplicitlyCast(Int.INT, new VoidFunctionType()));
   }
   
-  @Test
-  public void implicitIntToNonVoidFunctionType() {
-    assertEquals(false, TypesHelper.canImplicitlyCast(Int.INT, new NonVoidFunctionType()));
-  }
+//  @Test
+//  public void implicitIntToNonVoidFunctionType() {
+//    assertEquals(false, TypesHelper.canImplicitlyCast(Int.INT, new NonVoidFunctionType()));
+//  }
   
   @Test
   public void implicitIntToVoid() {
@@ -115,10 +115,10 @@ public class TypesHelperTest {
     assertEquals(false, TypesHelper.canImplicitlyCast(ConstChar.CONST_CHAR, new VoidFunctionType()));
   }
   
-  @Test
-  public void implicitConstCharToNonVoidFunctionType() {
-    assertEquals(false, TypesHelper.canImplicitlyCast(ConstChar.CONST_CHAR, new NonVoidFunctionType()));
-  }
+//  @Test
+//  public void implicitConstCharToNonVoidFunctionType() {
+//    assertEquals(false, TypesHelper.canImplicitlyCast(ConstChar.CONST_CHAR, new NonVoidFunctionType()));
+//  }
   
   @Test
   public void implicitConstCharToVoid() {
@@ -155,11 +155,11 @@ public class TypesHelperTest {
     assertEquals(false, TypesHelper.canImplicitlyCast(ConstInt.CONST_INT, new VoidFunctionType()));
   }
   
-  @Test
-  public void implicitConstIntToNonVoidFunctionType() {
-    assertEquals(false, TypesHelper.canImplicitlyCast(ConstInt.CONST_INT, new NonVoidFunctionType()));
-  }
-  
+//  @Test
+//  public void implicitConstIntToNonVoidFunctionType() {
+//    assertEquals(false, TypesHelper.canImplicitlyCast(ConstInt.CONST_INT, new NonVoidFunctionType()));
+//  }
+//  
   @Test
   public void implicitConstIntToVoid() {
     assertEquals(false, TypesHelper.canImplicitlyCast(ConstInt.CONST_INT, Void.VOID));
@@ -243,5 +243,16 @@ public class TypesHelperTest {
   @Test
   public void implicitConstCharArrayToIntArray() {
     assertEquals(false, TypesHelper.canImplicitlyCast(new Array(ConstChar.CONST_CHAR), new Array(Int.INT))); 
+  }
+  
+  @Test
+  public void implicitCastNull() {
+    Type type1 = null;
+    Type type2 = null;
+    assertEquals(false, TypesHelper.canImplicitlyCast(type1, type2));
+    assertEquals(false, TypesHelper.canImplicitlyCast(Int.INT, null));
+    assertEquals(false, TypesHelper.canImplicitlyCast(null, Int.INT));
+    assertEquals(false, TypesHelper.canImplicitlyCast(new Array(Int.INT), null));
+    assertEquals(false, TypesHelper.canImplicitlyCast(null, new Array(Int.INT)));
   }
 }

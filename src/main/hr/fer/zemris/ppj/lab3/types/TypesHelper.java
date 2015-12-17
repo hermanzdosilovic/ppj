@@ -31,7 +31,10 @@ public class TypesHelper {
   }
   
   public static boolean canImplicitlyCast(NumericType source, NumericType target) {
-
+    if (source == null || target == null) {
+      return false;
+    }
+    
     if (source == target) {
       return true;
     }
@@ -57,6 +60,8 @@ public class TypesHelper {
   }
   
   public static boolean canImplicitlyCast(Array source, Array target) {
+    if (source == null || target == null)
+      return false;
     return 
         source.getNumericType() == target.getNumericType() 
      || !isConstT((Type)source.getNumericType()) && constT((Type)source.getNumericType()) == target.getNumericType();
