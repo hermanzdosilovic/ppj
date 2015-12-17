@@ -7,6 +7,7 @@ import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
 import hr.fer.zemris.ppj.lab3.rules.expression.ListaArgumenata;
 import hr.fer.zemris.ppj.lab3.rules.expression.PostfiksIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
+import hr.fer.zemris.ppj.lab3.rules.expression.UnarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.structure.PrijevodnaJedinica;
 import hr.fer.zemris.ppj.lab3.rules.structure.VanjskaDeklaracija;
 import hr.fer.zemris.ppj.node.SNode;
@@ -28,6 +29,7 @@ public final class RuleFactory {
     ruleTable.put("<primarni_izraz>", PrimarniIzraz.PRIMARNI_IZRAZ);
     ruleTable.put("<postfiks_izraz>", PostfiksIzraz.POSTFIKS_IZRAZ);
     ruleTable.put("<lista_argumenata>", ListaArgumenata.LISTA_ARGUMENATA);
+    ruleTable.put("<unarni_izraz>", UnarniIzraz.UNARNI_IZRAZ);
     
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
