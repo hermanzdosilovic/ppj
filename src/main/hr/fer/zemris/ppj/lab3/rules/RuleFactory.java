@@ -9,6 +9,7 @@ import hr.fer.zemris.ppj.lab3.rules.expression.ImeTipa;
 import hr.fer.zemris.ppj.lab3.rules.expression.ListaArgumenata;
 import hr.fer.zemris.ppj.lab3.rules.expression.PostfiksIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
+import hr.fer.zemris.ppj.lab3.rules.expression.SpecifikatorTipa;
 import hr.fer.zemris.ppj.lab3.rules.expression.UnarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.UnarniOperator;
 import hr.fer.zemris.ppj.lab3.rules.structure.PrijevodnaJedinica;
@@ -36,6 +37,7 @@ public final class RuleFactory {
     ruleTable.put("<unarni_operator>", UnarniOperator.UNARNI_OPERATOR);
     ruleTable.put("<cast_izraz>", CastIzraz.CAST_IZRAZ);
     ruleTable.put("<ime_tipa>", ImeTipa.IME_TIPA);
+    ruleTable.put("<specifikator_tipa>", SpecifikatorTipa.SPECIFIKATOR_TIPA);
     
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
