@@ -6,6 +6,7 @@ import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
 import hr.fer.zemris.ppj.lab3.rules.definitions.Deklaracija;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
 import hr.fer.zemris.ppj.lab3.rules.definitions.InitDeklarator;
+import hr.fer.zemris.ppj.lab3.rules.definitions.IzravniDeklarator;
 import hr.fer.zemris.ppj.lab3.rules.definitions.ListaDeklaracija;
 import hr.fer.zemris.ppj.lab3.rules.definitions.ListaInitDeklaratora;
 import hr.fer.zemris.ppj.lab3.rules.definitions.ListaParametara;
@@ -38,6 +39,7 @@ public final class RuleFactory {
     ruleTable.put("<deklaracija>", Deklaracija.DEKLARACIJA); 
     ruleTable.put("<lista_init_deklaratora>", ListaInitDeklaratora.LISTA_INIT_DEKLARATORA);
     ruleTable.put("<init_deklarator>", InitDeklarator.INIT_DEKLARATOR);
+    ruleTable.put("<izravni_deklarator>", IzravniDeklarator.IZRAVNI_DEKLARATOR);
   }
 
   public static Rule getRule(String name) {
