@@ -5,10 +5,12 @@ import java.util.Map;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
 import hr.fer.zemris.ppj.lab3.rules.definitions.Deklaracija;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
+import hr.fer.zemris.ppj.lab3.rules.definitions.Inicijalizator;
 import hr.fer.zemris.ppj.lab3.rules.definitions.InitDeklarator;
 import hr.fer.zemris.ppj.lab3.rules.definitions.IzravniDeklarator;
 import hr.fer.zemris.ppj.lab3.rules.definitions.ListaDeklaracija;
 import hr.fer.zemris.ppj.lab3.rules.definitions.ListaInitDeklaratora;
+import hr.fer.zemris.ppj.lab3.rules.definitions.ListaIzrazaPridruzivanja;
 import hr.fer.zemris.ppj.lab3.rules.definitions.ListaParametara;
 import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.structure.PrijevodnaJedinica;
@@ -40,6 +42,8 @@ public final class RuleFactory {
     ruleTable.put("<lista_init_deklaratora>", ListaInitDeklaratora.LISTA_INIT_DEKLARATORA);
     ruleTable.put("<init_deklarator>", InitDeklarator.INIT_DEKLARATOR);
     ruleTable.put("<izravni_deklarator>", IzravniDeklarator.IZRAVNI_DEKLARATOR);
+    ruleTable.put("<inicijalizator>", Inicijalizator.INICIJALIZATOR);
+    ruleTable.put("<lista_izraza_pridruzivanja>", ListaIzrazaPridruzivanja.LISTA_IZRAZA_PRIDRUZIVANJA);
   }
 
   public static Rule getRule(String name) {
