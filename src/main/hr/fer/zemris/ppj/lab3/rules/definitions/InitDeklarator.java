@@ -28,6 +28,7 @@ public class InitDeklarator extends Rule {
 
       // 1
       izravni_deklarator.setnType(node.getnType());
+      izravni_deklarator.visit(scope);
 
       // 2 provjeri isArray
       if (TypesHelper.isConstT(izravni_deklarator.getType())
@@ -38,17 +39,17 @@ public class InitDeklarator extends Rule {
         "<inicijalizator>"))) {
       SNode izravni_deklarator = node.getChildren().get(0);
       // 1
-      izravni_deklarator.visit(scope);
       izravni_deklarator.setnType(node.getnType());
+      izravni_deklarator.visit(scope);
 
       // 2
       SNode inicijalizator = node.getChildren().get(2);
       inicijalizator.visit(scope);
 
-      // 3
+      // 3 Tu mi je nesto sumnjivo oko prvog ifa
       if (TypesHelper.isT(izravni_deklarator.getType())
           || TypesHelper.isConstT(izravni_deklarator.getType())) {
-        if (TypesHelper.canExplicitlyCast(izravni_deklarator.getType(), new NumericType() {})) {
+        if (TypesHelper.canExplicitlyCast(inicijalizator.getType(), new NumericType() {})) {
           throw new SemanticException(getErrorMessage(node));
         } else if (TypesHelper.isArray(izravni_deklarator.getType())
             && Integer.parseInt(inicijalizator.getElemCount()) <= Integer

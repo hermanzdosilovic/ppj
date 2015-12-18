@@ -21,7 +21,7 @@ public class ListaParametara extends Rule {
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
 
-    if (children.equals(Arrays.asList("<deklaracija_parametara>"))) {
+    if (children.equals(Arrays.asList("<deklaracija_parametra>"))) {
       SNode deklaracija_parametara = node.getChildren().get(0);
 
       // 1
@@ -35,8 +35,6 @@ public class ListaParametara extends Rule {
       SNode deklaracija_parametra = node.getChildren().get(2);
       List<Type> novaLista = lista_parametara.getTypes();
       novaLista.add(lista_parametara.getType());
-      node.setTypes(novaLista);
-
       List<String> imena = deklaracija_parametra.getNames();
 
       // 1
@@ -51,6 +49,7 @@ public class ListaParametara extends Rule {
       }
       imena.add(deklaracija_parametra.getName());
       node.setNames(imena);
+      node.setTypes(novaLista);
     }
   }
 
