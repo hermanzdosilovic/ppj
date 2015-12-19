@@ -67,12 +67,10 @@ public class PostfiksIzraz extends Rule {
       postfiks_izraz.visit(scope);
 
       // 2
-      Type pov = getFunctionTypeByName(scope, postfiks_izraz.getName());
       if (!(postfiks_izraz.getType() instanceof VoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
       }
-
-      node.setType(pov);
+      node.setType(((VoidFunctionType)postfiks_izraz.getType()).getReturnType());
       node.setlValue(false);
     } else if (children.equals(
         Arrays.asList("<postfiks_izraz>", "L_ZAGRADA", "<lista_argumenata>", "D_ZAGRADA"))) {

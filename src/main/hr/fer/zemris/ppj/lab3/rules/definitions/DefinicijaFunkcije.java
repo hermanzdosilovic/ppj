@@ -54,7 +54,7 @@ public class DefinicijaFunkcije extends Rule {
 
       // 5
       scope.insert(idn.getName(), functionType, true);
-
+      
       // 6
       Scope scopeSlozenaNaredba = new Scope(scope);
       scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
