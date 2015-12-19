@@ -50,7 +50,7 @@ public class PrimarniIzraz extends Rule {
       // 1
       Long value = null;
       try {
-        value = Long.parseLong(child.getValue());
+        value = Long.decode(child.getValue());
       } catch (NumberFormatException e) {
         throw new SemanticException(getErrorMessage(node));
       }

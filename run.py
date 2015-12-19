@@ -7,6 +7,7 @@ def execute(tests):
 
     execution, correct, N = 0, 0, 0
     krivi = []
+    kriviFile = open('krivi', 'w')
     for test in list(filter(lambda x: os.path.isfile(tests+x) and x.endswith('.in'), os.listdir(tests))):
         N += 1
         imeTest = test[0:len(test)-2]
@@ -18,21 +19,21 @@ def execute(tests):
 
         with open(testDir + imeTest + 'out', 'U') as myfile:
             ocekivano = myfile.read()
+            myfile.close()
         with open(testDir + imeTest + 'u', 'U') as myfile:
             dobiveno = myfile.read()
-
+            myfile.close()
         ok = ocekivano == dobiveno
 
         if ok: 
             correct += 1
         else: 
+            kriviFile.write()
             krivi.append(imeTest)
         print('OK' if ok else 'WA')
         print(execution)
     
-    kriviFile = open('krivi', 'w')
-    for kt in krivi:
-        kriviFile.write("%s\n" % kt)
+    kriviFile.close()
     print('\nStats : {0}/{1} | {2}%'.format(correct, N, round(correct * 100 / N, 2)))
 
 execute(testDir)

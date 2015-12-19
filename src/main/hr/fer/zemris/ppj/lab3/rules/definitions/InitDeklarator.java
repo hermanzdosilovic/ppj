@@ -46,7 +46,7 @@ public class InitDeklarator extends Rule {
       // 2
       SNode inicijalizator = node.getChildren().get(2);
       inicijalizator.visit(scope);
-
+      
       // 3
       if (TypesHelper.isT(izravni_deklarator.getType())
           || TypesHelper.isConstT(izravni_deklarator.getType())) {
