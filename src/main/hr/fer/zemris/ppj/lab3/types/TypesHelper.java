@@ -117,4 +117,14 @@ public class TypesHelper {
   public static boolean isNonVoidFunction(Type type) {
     return type instanceof NonVoidFunctionType;
   }
+  
+  public static Type getTFromX(NumericType type) {
+    if (type == CONST_CHAR) {
+      return CHAR;
+    }
+    if (type == CONST_INT) {
+      return INT;
+    } 
+    return type;
+  }
 }
