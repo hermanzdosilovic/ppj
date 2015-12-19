@@ -48,7 +48,12 @@ public class PrimarniIzraz extends Rule {
       SNode child = node.getChildren().get(0);
 
       // 1
-      Long value = Long.parseLong(child.getValue());
+      Long value = null;
+      try {
+        value = Long.parseLong(child.getValue());
+      } catch (NumberFormatException e) {
+        throw new SemanticException(getErrorMessage(node));
+      }
       if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
         node.setType(Int.INT);
         node.setlValue(false);
