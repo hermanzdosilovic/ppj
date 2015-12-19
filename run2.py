@@ -9,11 +9,11 @@ testDir = './io/lab-3/tests/'
 def execute(tests):
     execution, correct, N = 0, 0, 0
     krivi = []
-    with open("krpa_in.txt") as in_list:
-        in_file = in_list.read().splitlines()
-
-#    with open("truba_in.txt") as in_list:
+#    with open("krpa_in.txt") as in_list:
 #        in_file = in_list.read().splitlines()
+
+    with open("truba_in.txt") as in_list:
+        in_file = in_list.read().splitlines()
     for test in in_file:
         N += 1
         runString = './' + sys.argv[1] + ' < ' + testDir + test + 'in' + ' > ' + testDir + test + 'u'
@@ -40,5 +40,7 @@ def execute(tests):
     for kt in krivi:
         kriviFile.write("%s\n" % kt)
     print('\nStats : {0}/{1} | {2}%'.format(correct, N, round(correct * 100 / N, 2)))
+    kriviFile.close()
+    in_list.close()
 
 execute(testDir)
