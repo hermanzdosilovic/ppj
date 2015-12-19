@@ -4,6 +4,7 @@ import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Array;
+import hr.fer.zemris.ppj.lab3.types.NonVoidFunctionType;
 import hr.fer.zemris.ppj.lab3.types.NumericType;
 import hr.fer.zemris.ppj.lab3.types.ReturnType;
 import hr.fer.zemris.ppj.lab3.types.Void;
@@ -39,7 +40,7 @@ public class IzravniDeklarator extends Rule {
       }
 
       // 3
-      scope.insert(idn.getName(), idn.getType(), false);
+      scope.insert(idn.getName(), idn.getType(), true);
 
       node.setType(node.getnType());
     } else if (children.equals(Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))) {
@@ -62,9 +63,10 @@ public class IzravniDeklarator extends Rule {
       }
 
       // 4
-      scope.insert(idn.getName(), idn.getType(), false);
+      scope.insert(idn.getName(), idn.getType(), true);
 
       node.setType(new Array((NumericType) node.getnType()));
+      node.setElemCount(brojValue);
     } else if (children.equals(Arrays.asList("IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA"))) {
 
       // 1
@@ -72,12 +74,13 @@ public class IzravniDeklarator extends Rule {
       VoidFunctionType functionType = new VoidFunctionType((ReturnType) node.getnType());
 
       if (scope.hasDeclared(idn.getName())) {
-        Scope globalScope = scope.getGlobalScope();
-        globalScope.insert(idn.getName(), functionType, false);
+        if (!scope.getType(idn.getName()).equals(functionType)) {
+          throw new SemanticException(getErrorMessage(node));
+        }
       } else {
         scope.insert(idn.getName(), functionType, false);
       }
-      node.setType(new VoidFunctionType((ReturnType) node.getnType()));
+      node.setType(functionType);
     } else if (children
         .equals(Arrays.asList("IDN", "L_ZAGRADA", "<lista_parametara>", "D_ZAGRADA"))) {
       SNode lista_parametara = node.getChildren().get(2);
@@ -87,11 +90,13 @@ public class IzravniDeklarator extends Rule {
 
       // 2
       SNode idn = node.getChildren().get(0);
-      VoidFunctionType functionType = new VoidFunctionType((ReturnType) node.getnType());
+      NonVoidFunctionType functionType =
+          new NonVoidFunctionType(lista_parametara.getTypes(), (ReturnType) node.getnType());
 
       if (scope.hasDeclared(idn.getName())) {
-        Scope globalScope = scope.getGlobalScope();
-        globalScope.insert(idn.getName(), functionType, false);
+        if(!scope.getType(idn.getName()).equals(functionType)){
+          throw new SemanticException(getErrorMessage(node));
+        }
       } else {
         scope.insert(idn.getName(), functionType, false);
       }

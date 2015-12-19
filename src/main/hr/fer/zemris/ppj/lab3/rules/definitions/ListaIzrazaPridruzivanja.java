@@ -28,7 +28,7 @@ public class ListaIzrazaPridruzivanja extends Rule {
       // 1
       izraz_pridruzivanja.visit(scope);
 
-      node.setTypes(izraz_pridruzivanja.getTypes());
+      node.setTypes(Arrays.asList(izraz_pridruzivanja.getType()));
     } else if (children.equals(Arrays.asList("<lista_izraza_pridruzivanja>", "ZAREZ",
         "<izraz_pridruzivanja>"))) {
       SNode lista_izraza_pridruzivanja = node.getChildren().get(0);
@@ -44,9 +44,7 @@ public class ListaIzrazaPridruzivanja extends Rule {
       novaLista.add(izraz_pridruzivanja.getType());
       node.setTypes(novaLista);
 
-      StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.append(Integer.parseInt(lista_izraza_pridruzivanja.getElemCount()) + 1);
-      node.setElemCount(stringBuilder.toString());
+      node.setElemCount(lista_izraza_pridruzivanja.getElemCount() + 1);
     }
   }
 }

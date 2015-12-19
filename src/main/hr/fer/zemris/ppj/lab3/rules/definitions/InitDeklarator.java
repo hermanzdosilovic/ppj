@@ -32,7 +32,7 @@ public class InitDeklarator extends Rule {
 
       // 2 provjeri isArray
       if (TypesHelper.isConstT(izravni_deklarator.getType())
-          || TypesHelper.isArray(izravni_deklarator.getType())) {
+          || TypesHelper.isArrayConstT(izravni_deklarator.getType())) {
         throw new SemanticException(getErrorMessage(node));
       }
     } else if (children.equals(Arrays.asList("<izravni_deklarator>", "OP_PRIDRUZI",
@@ -46,17 +46,18 @@ public class InitDeklarator extends Rule {
       SNode inicijalizator = node.getChildren().get(2);
       inicijalizator.visit(scope);
 
-      // 3 Tu mi je nesto sumnjivo oko prvog ifa
+      // 3
       if (TypesHelper.isT(izravni_deklarator.getType())
           || TypesHelper.isConstT(izravni_deklarator.getType())) {
-        if (TypesHelper.canExplicitlyCast(inicijalizator.getType(), new NumericType() {})) {
+        if (!TypesHelper.canImplicitlyCast(inicijalizator.getType(),
+            TypesHelper.getTFromX((NumericType) izravni_deklarator.getType()))) {
           throw new SemanticException(getErrorMessage(node));
-        } else if (TypesHelper.isArray(izravni_deklarator.getType())
-            && Integer.parseInt(inicijalizator.getElemCount()) <= Integer
-                .parseInt(izravni_deklarator.getElemCount())) {
+        } else if ((TypesHelper.isArray(izravni_deklarator.getType())
+            || TypesHelper.isArrayConstT(izravni_deklarator.getType()))
+            && inicijalizator.getElemCount() <= izravni_deklarator.getElemCount()) {
 
           for (Type U : inicijalizator.getTypes()) {
-            if (!TypesHelper.canExplicitlyCast(U, new NumericType() {})) {
+            if (!TypesHelper.canImplicitlyCast(U, TypesHelper.getTFromX((NumericType) U))) {
               throw new SemanticException(getErrorMessage(node));
             }
           }

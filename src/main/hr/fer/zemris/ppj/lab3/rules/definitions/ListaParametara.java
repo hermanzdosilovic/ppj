@@ -14,7 +14,7 @@ public class ListaParametara extends Rule {
   public static ListaParametara LISTA_PARAMETARA = new ListaParametara();
 
   private ListaParametara() {
-    super(new NonTerminalSymbol("<lista_parametara>"));
+    super(new NonTerminalSymbol("<lista_parametra>"));
   }
 
   @Override
@@ -27,15 +27,12 @@ public class ListaParametara extends Rule {
       // 1
       deklaracija_parametara.visit(scope);
 
-      node.setTypes(deklaracija_parametara.getTypes());
-      node.setNames(deklaracija_parametara.getNames());
+      node.setTypes(Arrays.asList(deklaracija_parametara.getType()));
+      node.setNames(Arrays.asList(deklaracija_parametara.getName()));
     } else if (children.equals(Arrays.asList("<lista_parametara>", "ZAREZ",
         "<deklaracija_parametra>"))) {
       SNode lista_parametara = node.getChildren().get(0);
       SNode deklaracija_parametra = node.getChildren().get(2);
-      List<Type> novaLista = lista_parametara.getTypes();
-      novaLista.add(lista_parametara.getType());
-      List<String> imena = deklaracija_parametra.getNames();
 
       // 1
       lista_parametara.visit(scope);
@@ -47,6 +44,10 @@ public class ListaParametara extends Rule {
       if (lista_parametara.getNames().contains(deklaracija_parametra.getName())) {
         throw new SemanticException(getErrorMessage(node));
       }
+
+      List<Type> novaLista = lista_parametara.getTypes();
+      novaLista.add(deklaracija_parametra.getType());
+      List<String> imena = lista_parametara.getNames();
       imena.add(deklaracija_parametra.getName());
       node.setNames(imena);
       node.setTypes(novaLista);

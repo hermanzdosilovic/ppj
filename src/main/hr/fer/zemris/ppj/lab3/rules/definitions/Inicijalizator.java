@@ -31,19 +31,14 @@ public class Inicijalizator extends Rule {
 
       SNode trazenoDjete = izraz_pridruzivanja;
       while (trazenoDjete.getChildren().size() == 1) {
-        if (trazenoDjete.getName().equals("NIZ_ZNAKOVA")) {
-          break;
-        }
         trazenoDjete = trazenoDjete.getChildren().get(0);
       }
 
-      if (trazenoDjete.getName().equals("NIZ_ZNAKOVA")) {
-        StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(Integer.parseInt(trazenoDjete.getElemCount()) + 1);
-        node.setElemCount(stringBuffer.toString());
+      if (trazenoDjete.getSymbol().getValue().equals("NIZ_ZNAKOVA")) {
+        node.setElemCount(trazenoDjete.getValue().length() - 1);
 
         List<Type> tipovi = new ArrayList<Type>();
-        for (int i = 0; i < Integer.parseInt(node.getElemCount()); i++) {
+        for (int i = 0; i < node.getElemCount(); i++) {
           tipovi.add(Char.CHAR);
         }
         node.setTypes(tipovi);

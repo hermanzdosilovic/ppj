@@ -29,6 +29,10 @@ public class ListaInitDeklaratora extends Rule {
       SNode lista_init_deklaratora = node.getChildren().get(0);
       lista_init_deklaratora.setnType(node.getnType());
       lista_init_deklaratora.visit(scope);
+
+      SNode init_deklarator = node.getChildren().get(0);
+      init_deklarator.setnType(node.getnType());
+      init_deklarator.visit(scope);
     }
   }
 }
