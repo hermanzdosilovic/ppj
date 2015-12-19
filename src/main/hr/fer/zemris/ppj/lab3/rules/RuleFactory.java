@@ -11,7 +11,15 @@ import hr.fer.zemris.ppj.lab3.rules.commands.NaredbaPetlje;
 import hr.fer.zemris.ppj.lab3.rules.commands.NaredbaSkoka;
 import hr.fer.zemris.ppj.lab3.rules.commands.SlozenaNaredba;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
+import hr.fer.zemris.ppj.lab3.rules.definitions.Deklaracija;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
+import hr.fer.zemris.ppj.lab3.rules.definitions.Inicijalizator;
+import hr.fer.zemris.ppj.lab3.rules.definitions.InitDeklarator;
+import hr.fer.zemris.ppj.lab3.rules.definitions.IzravniDeklarator;
+import hr.fer.zemris.ppj.lab3.rules.definitions.ListaDeklaracija;
+import hr.fer.zemris.ppj.lab3.rules.definitions.ListaInitDeklaratora;
+import hr.fer.zemris.ppj.lab3.rules.definitions.ListaIzrazaPridruzivanja;
+import hr.fer.zemris.ppj.lab3.rules.definitions.ListaParametara;
 import hr.fer.zemris.ppj.lab3.rules.expression.AditivniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.BinIIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.BinIliIzraz;
@@ -71,7 +79,15 @@ public final class RuleFactory {
 
     // Deklaracije i definicije
     ruleTable.put("<definicija_funkcije>", DefinicijaFunkcije.DEFINICIJA_FUNKCIJE);
-    ruleTable.put("<deklaracija parametra>", DeklaracijaParametra.DEKLARACIJA_PARAMETRA);
+    ruleTable.put("<deklaracija_parametra>", DeklaracijaParametra.DEKLARACIJA_PARAMETRA);
+    ruleTable.put("<lista_parametara>", ListaParametara.LISTA_PARAMETARA);
+    ruleTable.put("<lista_deklaracija>", ListaDeklaracija.LISTA_DEKLARACIJA); 
+    ruleTable.put("<deklaracija>", Deklaracija.DEKLARACIJA); 
+    ruleTable.put("<lista_init_deklaratora>", ListaInitDeklaratora.LISTA_INIT_DEKLARATORA);
+    ruleTable.put("<init_deklarator>", InitDeklarator.INIT_DEKLARATOR);
+    ruleTable.put("<izravni_deklarator>", IzravniDeklarator.IZRAVNI_DEKLARATOR);
+    ruleTable.put("<inicijalizator>", Inicijalizator.INICIJALIZATOR);
+    ruleTable.put("<lista_izraza_pridruzivanja>", ListaIzrazaPridruzivanja.LISTA_IZRAZA_PRIDRUZIVANJA);
     
     //Naredbe
     ruleTable.put("<izraz_naredba>", IzrazNaredba.IZRAZ_NAREDBA);

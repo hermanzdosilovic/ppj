@@ -23,29 +23,29 @@ public class DeklaracijaParametra extends Rule {
 
     if (children.equals(Arrays.asList("<ime_tipa>", "IDN"))) {
       SNode ime_tipa = node.getChildren().get(0);
-      node.setType(ime_tipa.getType());
-      node.setName(node.getChildren().get(1).getName());
 
       // 1
-      ime_tipa.visit(new Scope(scope));
+      ime_tipa.visit(scope);
 
       // 2
       if (ime_tipa.getType().equals(Void.VOID)) {
         throw new SemanticException(getErrorMessage(node));
       }
+      node.setType(ime_tipa.getType());
+      node.setName(node.getChildren().get(1).getName());
     } else if (children
         .equals(Arrays.asList("<ime_tipa>", "IDN", "L_UGL_ZAGRADA", "D_UGL_ZAGRADA"))) {
       SNode ime_tipa = node.getChildren().get(0);
-      node.setTypes(ime_tipa.getTypes());
-      node.setName(node.getChildren().get(1).getName());
 
       // 1
-      ime_tipa.visit(new Scope(scope));
+      ime_tipa.visit(scope);
 
       // 2
       if (ime_tipa.getType().equals(Void.VOID)) {
         throw new SemanticException(getErrorMessage(node));
       }
+      node.setTypes(ime_tipa.getTypes());
+      node.setName(node.getChildren().get(1).getName());
     }
   }
 }
