@@ -10,7 +10,7 @@ def execute(tests):
     for test in list(filter(lambda x: os.path.isfile(tests+x) and x.endswith('.in'), os.listdir(tests))):
         N += 1
         imeTest = test[0:len(test)-2]
-        runString = sys.argv[1] + ' < ' + testDir + test + ' > ' + testDir + '/' + imeTest + 'u'
+        runString = sys.argv[1] + ' < ' + testDir + test + ' > ' + testDir + imeTest + 'u'
         print('Test: ' + test);
         execution = time.time()
         subprocess.call(runString, shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
@@ -23,8 +23,10 @@ def execute(tests):
 
         ok = ocekivano == dobiveno
 
-        if ok: correct += 1
-        else: krivi.append(imeTest)
+        if ok: 
+            correct += 1
+        else: 
+            krivi.append(imeTest)
         print('OK' if ok else 'WA')
         print(execution)
     

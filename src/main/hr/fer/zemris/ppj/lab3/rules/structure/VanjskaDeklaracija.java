@@ -19,7 +19,7 @@ public class VanjskaDeklaracija extends Rule {
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     for (SNode child : node.getChildren()) {
-      child.visit(new Scope(scope));
+      child.visit(scope);
     }
   }
 }
