@@ -18,7 +18,7 @@ public class SNode {
   private String name;
   private List<String> names;
   private Type nType;
-  private String elemCount;
+  private int elemCount;
   private int lineNumber;
   private String value;
   private List<SNode> children = new ArrayList<>();
@@ -73,11 +73,11 @@ public class SNode {
     this.nType = nType;
   }
 
-  public String getElemCount() {
+  public int getElemCount() {
     return elemCount;
   }
 
-  public void setElemCount(String elemCount) {
+  public void setElemCount(int elemCount) {
     this.elemCount = elemCount;
   }
 

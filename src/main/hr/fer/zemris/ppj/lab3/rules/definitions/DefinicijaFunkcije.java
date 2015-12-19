@@ -3,10 +3,10 @@ package hr.fer.zemris.ppj.lab3.rules.definitions;
 import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
-import hr.fer.zemris.ppj.lab3.types.ConstType;
 import hr.fer.zemris.ppj.lab3.types.NonVoidFunctionType;
-import hr.fer.zemris.ppj.lab3.types.NumericType;
 import hr.fer.zemris.ppj.lab3.types.ReturnType;
+import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab3.types.NumericType;
 import hr.fer.zemris.ppj.lab3.types.VoidFunctionType;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
@@ -33,10 +33,10 @@ public class DefinicijaFunkcije extends Rule {
         "<slozena_naredba>"))) {
       SNode ime_tipa = node.getChildren().get(0);
       // 1
-      ime_tipa.visit(new Scope(scope));
+      ime_tipa.visit(scope);
 
       // 2
-      if (ime_tipa.getType() instanceof ConstType) {
+      if (TypesHelper.isConstT(ime_tipa.getType())) {
         throw new SemanticException(getErrorMessage(node));
       }
 
@@ -57,15 +57,18 @@ public class DefinicijaFunkcije extends Rule {
       scope.insert(idn.getName(), functionType, true);
 
       // 6
-      node.getChildren().get(5).visit(new Scope(scope));
+      Scope scopeSlozenaNaredba = new Scope(scope);
+      scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
+      node.getChildren().get(5).visit(scopeSlozenaNaredba);
+
     } else if (children.equals(Arrays.asList("<ime_tipa>", "IDN", "L_ZAGRADA", "<lista_parametara>",
         "D_ZAGRADA", "<slozena_naredba>"))) {
       SNode ime_tipa = node.getChildren().get(0);
       // 1
-      ime_tipa.visit(new Scope(scope));
+      ime_tipa.visit(scope);
 
       // 2
-      if (ime_tipa.getType() instanceof ConstType) {
+      if (TypesHelper.isConstT(ime_tipa.getType())) {
         throw new SemanticException(getErrorMessage(node));
       }
 
@@ -77,7 +80,7 @@ public class DefinicijaFunkcije extends Rule {
 
       // 4
       SNode lista_parametara = node.getChildren().get(3);
-      lista_parametara.visit(new Scope(scope));
+      lista_parametara.visit(scope);
 
       // 5
       NonVoidFunctionType functionType =
