@@ -27,6 +27,12 @@ public class TypesHelper {
   }
   
   public static boolean canImplicitlyCast(Type source, Type target) {
+    if (source instanceof NumericType && target instanceof NumericType) {
+      return canImplicitlyCast((NumericType)source, (NumericType)target);
+    }
+    if (source instanceof Array && target instanceof Array) {
+      return canImplicitlyCast((Array) source, (Array) target);
+    }
     return false;
   }
   
