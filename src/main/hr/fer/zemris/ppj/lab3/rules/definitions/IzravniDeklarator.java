@@ -59,7 +59,7 @@ public class IzravniDeklarator extends Rule {
       // 3
       Integer brojValue = null;
       try {
-        brojValue = Integer.parseInt(node.getChildren().get(2).getValue());
+        brojValue = Integer.decode(node.getChildren().get(2).getValue());
       } catch (NumberFormatException e) {
         throw new SemanticException(getErrorMessage(node));
       }
