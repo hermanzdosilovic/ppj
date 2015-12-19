@@ -6,6 +6,7 @@ import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.NonVoidFunctionType;
 import hr.fer.zemris.ppj.lab3.types.ReturnType;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab3.types.NumericType;
 import hr.fer.zemris.ppj.lab3.types.VoidFunctionType;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
@@ -60,8 +61,8 @@ public class DefinicijaFunkcije extends Rule {
       scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
       node.getChildren().get(5).visit(scopeSlozenaNaredba);
 
-    } else if (children.equals(Arrays.asList("<ime_tipa>", "IDN", "L_ZAGRADA",
-        "<lista_parametara>", "D_ZAGRADA", "<slozena_naredba>"))) {
+    } else if (children.equals(Arrays.asList("<ime_tipa>", "IDN", "L_ZAGRADA", "<lista_parametara>",
+        "D_ZAGRADA", "<slozena_naredba>"))) {
       SNode ime_tipa = node.getChildren().get(0);
       // 1
       ime_tipa.visit(scope);
@@ -95,8 +96,8 @@ public class DefinicijaFunkcije extends Rule {
       Scope scopeSlozenaNaredba = new Scope(scope);
       scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
       for (int i = 0; i < lista_parametara.getTypes().size(); i++) {
-        scopeSlozenaNaredba.insert(lista_parametara.getNames().get(i), lista_parametara.getTypes()
-            .get(i), false);
+        scopeSlozenaNaredba.insert(lista_parametara.getNames().get(i),
+            lista_parametara.getTypes().get(i), false);
       }
       node.getChildren().get(5).visit(scopeSlozenaNaredba);
     }

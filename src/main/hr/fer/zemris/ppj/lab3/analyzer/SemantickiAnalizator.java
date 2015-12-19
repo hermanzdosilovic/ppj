@@ -51,9 +51,16 @@ public class SemantickiAnalizator {
       node.setSymbol(new TerminalSymbol(line.substring(0, line.indexOf(' '))));
       line = line.substring(line.indexOf(' ') + 1);
       node.setLineNumber(Integer.valueOf(line.substring(0, line.indexOf(' '))));
-      node.setValue(line.substring(line.indexOf(' ') + 1));
+      String value = line.substring(line.indexOf(' ') + 1);
+      if (node.getSymbol().getValue().equals("IDN")) {
+        node.setName(value);
+      }
+      node.setValue(value);
     } else {
       node.setSymbol(new NonTerminalSymbol(line));
+      for (SNode child : node.getChildren()) {
+        child.setParent(node);
+      }
     }
     return node;
   }
