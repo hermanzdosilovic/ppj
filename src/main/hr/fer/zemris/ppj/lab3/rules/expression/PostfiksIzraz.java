@@ -84,7 +84,6 @@ public class PostfiksIzraz extends Rule {
       lista_argumenata.visit(scope);
 
       // 3
-      Type pov = getFunctionTypeByName(scope, postfiks_izraz.getName());
       if (!(postfiks_izraz.getType() instanceof NonVoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
       }
@@ -96,7 +95,7 @@ public class PostfiksIzraz extends Rule {
         }
       }
 
-      node.setType(pov);
+      node.setType(((NonVoidFunctionType)postfiks_izraz.getType()).getReturnType());
       node.setlValue(false);
     } else if (children.equals(Arrays.asList("<postfiks_izraz>", "OP_INC"))
         || children.equals(Arrays.asList("<postfiks_izraz>", "OP_DEC"))) {

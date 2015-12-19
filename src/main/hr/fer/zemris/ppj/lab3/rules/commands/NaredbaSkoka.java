@@ -60,6 +60,7 @@ public class NaredbaSkoka extends Rule {
       if (node.getSymbol().getValue().equals("<naredba_petlje>")) {
         return true;
       }
+      node = node.getParent();
     }
     return false;
   }
