@@ -87,6 +87,13 @@ public class TypesHelper {
     return type instanceof Array;
   }
   
+  public static boolean isArrayConstT(Type type) {
+    if (type instanceof Array) {
+      return isConstT(((Array) type).getNumericType());
+    }
+    return false;
+  }
+  
   public static boolean isX(Type type) {
     return type instanceof NumericType;
   }
