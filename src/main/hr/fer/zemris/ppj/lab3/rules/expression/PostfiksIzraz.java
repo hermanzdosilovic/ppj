@@ -35,7 +35,6 @@ public class PostfiksIzraz extends Rule {
       child.visit(scope);
       node.setType(child.getType());
       node.setlValue(child.islValue());
-
     } else if (children
         .equals(Arrays.asList("<postfiks_izraz>", "L_UGL_ZAGRADA", "<izraz>", "D_UGL_ZAGRADA"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
@@ -87,8 +86,11 @@ public class PostfiksIzraz extends Rule {
       if (!(postfiks_izraz.getType() instanceof NonVoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
       }
-
+      
       List<Type> params = ((NonVoidFunctionType) postfiks_izraz.getType()).getParams();
+      if (params.size() != lista_argumenata.getTypes().size()) {
+        throw new SemanticException(getErrorMessage(node));
+      }
       for (int i = 0; i < params.size(); i++) {
         if (!TypesHelper.canImplicitlyCast(lista_argumenata.getTypes().get(i), params.get(i))) {
           throw new SemanticException(getErrorMessage(node));
@@ -115,13 +117,4 @@ public class PostfiksIzraz extends Rule {
     }
   }
 
-  private Type getFunctionTypeByName(Scope scope, String name) {
-    while(scope != null) {
-      if (scope.hasDeclared(name)) {
-        return scope.getType(name);
-      }
-      scope = scope.getParentScope();
-    }
-    return null;
-  }
 }
