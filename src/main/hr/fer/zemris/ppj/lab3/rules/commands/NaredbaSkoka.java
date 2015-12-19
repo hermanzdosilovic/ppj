@@ -44,7 +44,7 @@ public class NaredbaSkoka extends Rule {
 
   private ReturnType functionReturnType(SNode node) {
     while (node != null) {
-      if (node.getValue().equals("<definicija_funkcije>")) {
+      if (node.getSymbol().getValue().equals("<definicija_funkcije>")) {
         break;
       }
       node = node.getParent();

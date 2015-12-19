@@ -46,7 +46,6 @@ public class ListaParametara extends Rule {
       }
 
       List<Type> novaLista = lista_parametara.getTypes();
-      System.out.println(novaLista);
       novaLista.add(deklaracija_parametra.getType());
       List<String> imena = lista_parametara.getNames();
       imena.add(deklaracija_parametra.getName());

@@ -3,13 +3,14 @@ package hr.fer.zemris.ppj.lab3.scope;
 import hr.fer.zemris.ppj.lab3.types.Type;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class Scope {
   private Scope parentScope;
-  private Map<String, ScopeValue> table;
+  private Map<String, ScopeValue> table = new HashMap<>();
   private List<Scope> childrenScopes = new ArrayList<>();
 
   public Scope() {
