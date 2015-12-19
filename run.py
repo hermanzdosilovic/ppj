@@ -10,6 +10,8 @@ def execute(tests):
     kriviFile = open('krivi', 'w')
     for test in list(filter(lambda x: os.path.isfile(tests+x) and x.endswith('.in'), os.listdir(tests))):
         N += 1
+        if N < 105 :
+            continue
         imeTest = test[0:len(test)-2]
         runString = sys.argv[1] + ' < ' + testDir + test + ' > ' + testDir + imeTest + 'u'
         print(str(N) + ' Test: ' + test);
@@ -28,7 +30,7 @@ def execute(tests):
         if ok: 
             correct += 1
         else: 
-            kriviFile.write()
+            kriviFile.write(testDir + test)
             krivi.append(imeTest)
         print('OK' if ok else 'WA')
         print(execution)

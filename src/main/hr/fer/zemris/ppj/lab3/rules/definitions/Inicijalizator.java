@@ -39,7 +39,7 @@ public class Inicijalizator extends Rule {
         int len = str.length() - 1;
         
         for(int i = 0; i < str.length(); i++) {
-          if (str.charAt(i) == '\\') {
+          if (str.charAt(i) == '\\' && i != str.length() - 1) {
             len--;
             i++;
           }
