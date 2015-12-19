@@ -29,6 +29,7 @@ public class ListaIzrazaPridruzivanja extends Rule {
       izraz_pridruzivanja.visit(scope);
 
       node.setTypes(Arrays.asList(izraz_pridruzivanja.getType()));
+      node.setElemCount(1);
     } else if (children.equals(Arrays.asList("<lista_izraza_pridruzivanja>", "ZAREZ",
         "<izraz_pridruzivanja>"))) {
       SNode lista_izraza_pridruzivanja = node.getChildren().get(0);
