@@ -1,1 +1,1 @@
-<izraz_pridruzivanja> ::= <postfiks_izraz> OP_PRIDRUZI(5,=) <izraz_pridruzivanja>
+<primarni_izraz> ::= NIZ_ZNAKOVA(2,"\"\0\n\t\\"")

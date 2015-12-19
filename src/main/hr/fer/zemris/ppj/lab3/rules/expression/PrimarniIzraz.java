@@ -89,6 +89,8 @@ public class PrimarniIzraz extends Rule {
           }
         } else if (invalidCharacter(value.substring(i, i + 1))) {
           throw new SemanticException(getErrorMessage(node));
+        } else if (value.charAt(i) == '\"') {
+          throw new SemanticException(getErrorMessage(node));
         }
       }
 
