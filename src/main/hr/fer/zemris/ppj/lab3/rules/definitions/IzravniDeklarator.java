@@ -40,7 +40,7 @@ public class IzravniDeklarator extends Rule {
       }
 
       // 3
-      scope.insert(idn.getName(), idn.getType(), true);
+      scope.insert(idn.getName(), node.getnType(), true);
 
       node.setType(node.getnType());
     } else if (children.equals(Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))) {
@@ -62,10 +62,10 @@ public class IzravniDeklarator extends Rule {
         throw new SemanticException(getErrorMessage(node));
       }
 
-      // 4
-      scope.insert(idn.getName(), idn.getType(), true);
-
       node.setType(new Array((NumericType) node.getnType()));
+      // 4
+      scope.insert(idn.getName(), node.getType(), true);
+
       node.setElemCount((int) brojValue);
     } else if (children.equals(Arrays.asList("IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA"))) {
 
