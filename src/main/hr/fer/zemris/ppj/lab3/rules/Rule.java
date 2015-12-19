@@ -37,7 +37,7 @@ public abstract class Rule {
         message.append(child.getSymbol());
       } else {
         message.append(child.getSymbol() + "(");
-        message.append(node.getLineNumber() + "," + node.getValue() + ")");
+        message.append(child.getLineNumber() + "," + child.getValue() + ")");
       }
       message.append(" ");
     }

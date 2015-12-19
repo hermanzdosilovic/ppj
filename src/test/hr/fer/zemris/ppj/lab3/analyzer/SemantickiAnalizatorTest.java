@@ -17,7 +17,7 @@ public class SemantickiAnalizatorTest {
   @Test
   public void buildTreeTest() throws FileNotFoundException, IOException {
     SemantickiAnalizator sa = 
-        new SemantickiAnalizator(new FileInputStream(new File("./langdefs/simplePpjLang_najmanji.out")));
+        new SemantickiAnalizator(new FileInputStream(new File("io/lab-3/tests/009fea211f963ef96b16ab2c279ae416.in")));
     System.out.println(SNode.printTree(sa.getRoot()));
   }
 
