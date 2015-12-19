@@ -57,7 +57,7 @@ public class IzravniDeklarator extends Rule {
       }
 
       // 3
-      int brojValue = (int) Integer.parseInt(node.getChildren().get(2).getValue());
+      long brojValue = (long) Long.parseLong(node.getChildren().get(2).getValue());
       if (brojValue > 1024 || brojValue <= 0) {
         throw new SemanticException(getErrorMessage(node));
       }
@@ -66,7 +66,7 @@ public class IzravniDeklarator extends Rule {
       scope.insert(idn.getName(), idn.getType(), true);
 
       node.setType(new Array((NumericType) node.getnType()));
-      node.setElemCount(brojValue);
+      node.setElemCount((int) brojValue);
     } else if (children.equals(Arrays.asList("IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA"))) {
 
       // 1

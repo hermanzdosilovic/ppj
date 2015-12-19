@@ -14,7 +14,7 @@ public class ListaParametara extends Rule {
   public static ListaParametara LISTA_PARAMETARA = new ListaParametara();
 
   private ListaParametara() {
-    super(new NonTerminalSymbol("<lista_parametra>"));
+    super(new NonTerminalSymbol("<lista_parametara>"));
   }
 
   @Override
@@ -22,13 +22,13 @@ public class ListaParametara extends Rule {
     List<String> children = node.getValuesOfChildren();
 
     if (children.equals(Arrays.asList("<deklaracija_parametra>"))) {
-      SNode deklaracija_parametara = node.getChildren().get(0);
+      SNode deklaracija_parametra = node.getChildren().get(0);
 
       // 1
-      deklaracija_parametara.visit(scope);
+      deklaracija_parametra.visit(scope);
 
-      node.setTypes(Arrays.asList(deklaracija_parametara.getType()));
-      node.setNames(Arrays.asList(deklaracija_parametara.getName()));
+      node.setTypes(Arrays.asList(deklaracija_parametra.getType()));
+      node.setNames(Arrays.asList(deklaracija_parametra.getName()));
     } else if (children.equals(Arrays.asList("<lista_parametara>", "ZAREZ",
         "<deklaracija_parametra>"))) {
       SNode lista_parametara = node.getChildren().get(0);
