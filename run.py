@@ -11,7 +11,7 @@ def execute(tests):
         N += 1
         imeTest = test[0:len(test)-2]
         runString = sys.argv[1] + ' < ' + testDir + test + ' > ' + testDir + imeTest + 'u'
-        print('Test: ' + test);
+        print(str(N) + ' Test: ' + test);
         execution = time.time()
         subprocess.call(runString, shell=True, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT)
         execution = round(time.time() - execution, 3)

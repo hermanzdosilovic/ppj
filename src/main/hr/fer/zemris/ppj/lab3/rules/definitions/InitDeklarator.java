@@ -57,6 +57,9 @@ public class InitDeklarator extends Rule {
       } else if ((TypesHelper.isArray(izravni_deklarator.getType()) || TypesHelper
           .isArrayConstT(izravni_deklarator.getType()))
           && inicijalizator.getElemCount() <= izravni_deklarator.getElemCount()) {
+        if (inicijalizator.getElemCount() == 0) {
+          throw new SemanticException(getErrorMessage(node));
+        }
         for (Type U : inicijalizator.getTypes()) {
           if (!TypesHelper.canImplicitlyCast(U,
               TypesHelper.getTFromX(((Array) izravni_deklarator.getType()).getNumericType()))) {
