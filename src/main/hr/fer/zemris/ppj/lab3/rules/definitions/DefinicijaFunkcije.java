@@ -6,7 +6,6 @@ import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.NonVoidFunctionType;
 import hr.fer.zemris.ppj.lab3.types.ReturnType;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
-import hr.fer.zemris.ppj.lab3.types.NumericType;
 import hr.fer.zemris.ppj.lab3.types.VoidFunctionType;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
@@ -55,7 +54,7 @@ public class DefinicijaFunkcije extends Rule {
 
       // 5
       scope.insert(idn.getName(), functionType, true);
-
+      
       // 6
       Scope scopeSlozenaNaredba = new Scope(scope);
       scopeSlozenaNaredba.insert(idn.getName(), functionType, true);

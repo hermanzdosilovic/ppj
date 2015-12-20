@@ -7,6 +7,7 @@ import hr.fer.zemris.ppj.lab3.types.Array;
 import hr.fer.zemris.ppj.lab3.types.Char;
 import hr.fer.zemris.ppj.lab3.types.ConstChar;
 import hr.fer.zemris.ppj.lab3.types.Int;
+import hr.fer.zemris.ppj.lab3.types.TypesHelper;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -35,8 +36,8 @@ public class PrimarniIzraz extends Rule {
       // 1
       while (scope != null) {
         if (scope.hasDeclared(child.getName())) {
-          node.setType(child.getType());
-          node.setlValue(child.islValue());
+          node.setType(scope.getType(child.getName()));
+          node.setlValue(TypesHelper.isLType(scope.getType(child.getName())));
           return; // all good
         }
         scope = scope.getParentScope();
@@ -47,7 +48,12 @@ public class PrimarniIzraz extends Rule {
       SNode child = node.getChildren().get(0);
 
       // 1
-      Long value = Long.parseLong(child.getValue());
+      Long value = null;
+      try {
+        value = Long.decode(child.getValue());
+      } catch (NumberFormatException e) {
+        throw new SemanticException(getErrorMessage(node));
+      }
       if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
         node.setType(Int.INT);
         node.setlValue(false);
@@ -82,6 +88,8 @@ public class PrimarniIzraz extends Rule {
             i++;
           }
         } else if (invalidCharacter(value.substring(i, i + 1))) {
+          throw new SemanticException(getErrorMessage(node));
+        } else if (value.charAt(i) == '\"') {
           throw new SemanticException(getErrorMessage(node));
         }
       }

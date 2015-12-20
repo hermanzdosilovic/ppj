@@ -51,8 +51,10 @@ public class SemantickiAnalizator {
   
   public void checkFunction(Scope scope) throws SemanticException {
     for (String name : scope.getNames()) {
-      if (scope.getType(name) instanceof FunctionType && !globalScope.hasDefined(name)) {
-        throw new SemanticException("funkcija");
+      if (scope.getType(name) instanceof FunctionType) {
+        if (!(globalScope.hasDefined(name) && globalScope.getType(name).equals(scope.getType(name)))) {
+          throw new SemanticException("funkcija");
+        }
       }
     }
     for (Scope child : scope.getChildrenScopes()) {

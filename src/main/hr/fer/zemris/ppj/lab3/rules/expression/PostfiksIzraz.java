@@ -35,7 +35,6 @@ public class PostfiksIzraz extends Rule {
       child.visit(scope);
       node.setType(child.getType());
       node.setlValue(child.islValue());
-
     } else if (children
         .equals(Arrays.asList("<postfiks_izraz>", "L_UGL_ZAGRADA", "<izraz>", "D_UGL_ZAGRADA"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
@@ -67,12 +66,10 @@ public class PostfiksIzraz extends Rule {
       postfiks_izraz.visit(scope);
 
       // 2
-      Type pov = getFunctionTypeByName(scope, postfiks_izraz.getName());
       if (!(postfiks_izraz.getType() instanceof VoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
       }
-
-      node.setType(pov);
+      node.setType(((VoidFunctionType)postfiks_izraz.getType()).getReturnType());
       node.setlValue(false);
     } else if (children.equals(
         Arrays.asList("<postfiks_izraz>", "L_ZAGRADA", "<lista_argumenata>", "D_ZAGRADA"))) {
@@ -86,19 +83,21 @@ public class PostfiksIzraz extends Rule {
       lista_argumenata.visit(scope);
 
       // 3
-      Type pov = getFunctionTypeByName(scope, postfiks_izraz.getName());
       if (!(postfiks_izraz.getType() instanceof NonVoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
       }
-
+      
       List<Type> params = ((NonVoidFunctionType) postfiks_izraz.getType()).getParams();
+      if (params.size() != lista_argumenata.getTypes().size()) {
+        throw new SemanticException(getErrorMessage(node));
+      }
       for (int i = 0; i < params.size(); i++) {
         if (!TypesHelper.canImplicitlyCast(lista_argumenata.getTypes().get(i), params.get(i))) {
           throw new SemanticException(getErrorMessage(node));
         }
       }
 
-      node.setType(pov);
+      node.setType(((NonVoidFunctionType)postfiks_izraz.getType()).getReturnType());
       node.setlValue(false);
     } else if (children.equals(Arrays.asList("<postfiks_izraz>", "OP_INC"))
         || children.equals(Arrays.asList("<postfiks_izraz>", "OP_DEC"))) {
@@ -118,13 +117,4 @@ public class PostfiksIzraz extends Rule {
     }
   }
 
-  private Type getFunctionTypeByName(Scope scope, String name) {
-    while(scope != null) {
-      if (scope.hasDeclared(name)) {
-        return scope.getType(name);
-      }
-      scope = scope.getParentScope();
-    }
-    return null;
-  }
 }

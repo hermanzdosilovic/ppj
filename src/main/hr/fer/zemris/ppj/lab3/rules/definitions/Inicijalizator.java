@@ -35,7 +35,17 @@ public class Inicijalizator extends Rule {
       }
 
       if (trazenoDjete.getSymbol().getValue().equals("NIZ_ZNAKOVA")) {
-        node.setElemCount(trazenoDjete.getValue().length() - 1);
+        String str = trazenoDjete.getValue();
+        int len = str.length() - 1;
+        
+        for(int i = 0; i < str.length(); i++) {
+          if (str.charAt(i) == '\\' && i != str.length() - 1) {
+            len--;
+            i++;
+          }
+        }
+        
+        node.setElemCount(len);
 
         List<Type> tipovi = new ArrayList<Type>();
         for (int i = 0; i < node.getElemCount(); i++) {
@@ -59,4 +69,5 @@ public class Inicijalizator extends Rule {
       node.setTypes(lista_izraza_pridruzivanja.getTypes());
     }
   }
+  
 }

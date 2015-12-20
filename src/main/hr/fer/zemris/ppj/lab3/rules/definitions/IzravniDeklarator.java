@@ -40,7 +40,7 @@ public class IzravniDeklarator extends Rule {
       }
 
       // 3
-      scope.insert(idn.getName(), idn.getType(), true);
+      scope.insert(idn.getName(), node.getnType(), true);
 
       node.setType(node.getnType());
     } else if (children.equals(Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))) {
@@ -57,16 +57,21 @@ public class IzravniDeklarator extends Rule {
       }
 
       // 3
-      long brojValue = (long) Long.parseLong(node.getChildren().get(2).getValue());
+      Integer brojValue = null;
+      try {
+        brojValue = Integer.decode(node.getChildren().get(2).getValue());
+      } catch (NumberFormatException e) {
+        throw new SemanticException(getErrorMessage(node));
+      }
       if (brojValue > 1024 || brojValue <= 0) {
         throw new SemanticException(getErrorMessage(node));
       }
 
-      // 4
-      scope.insert(idn.getName(), idn.getType(), true);
-
       node.setType(new Array((NumericType) node.getnType()));
-      node.setElemCount((int) brojValue);
+      // 4
+      scope.insert(idn.getName(), node.getType(), true);
+
+      node.setElemCount(brojValue);
     } else if (children.equals(Arrays.asList("IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA"))) {
 
       // 1

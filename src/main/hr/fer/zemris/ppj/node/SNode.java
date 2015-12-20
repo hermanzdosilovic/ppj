@@ -14,9 +14,9 @@ public class SNode {
   private Symbol symbol;
   private Type type;
   private boolean lValue;
-  private List<Type> types;
+  private List<Type> types = new ArrayList<>();
   private String name;
-  private List<String> names;
+  private List<String> names = new ArrayList<>();;
   private Type nType;
   private int elemCount;
   private int lineNumber;
@@ -46,7 +46,7 @@ public class SNode {
   }
 
   public void setTypes(List<Type> types) {
-    this.types = types;
+    this.types = new ArrayList<>(types);
   }
 
   public String getName() {
@@ -62,7 +62,7 @@ public class SNode {
   }
 
   public void setNames(List<String> names) {
-    this.names = names;
+    this.names = new ArrayList<>(names);
   }
 
   public Type getnType() {
