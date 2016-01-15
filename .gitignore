@@ -1,4 +1,4 @@
 bin/
 *.ser
-io/lab-3/tests/
-
+*.user.out
+failed_tests.txt
