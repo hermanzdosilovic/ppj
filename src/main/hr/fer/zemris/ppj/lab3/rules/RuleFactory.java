@@ -9,7 +9,9 @@ import hr.fer.zemris.ppj.lab3.rules.commands.Naredba;
 import hr.fer.zemris.ppj.lab3.rules.commands.NaredbaGrananja;
 import hr.fer.zemris.ppj.lab3.rules.commands.NaredbaPetlje;
 import hr.fer.zemris.ppj.lab3.rules.commands.NaredbaSkoka;
+import hr.fer.zemris.ppj.lab3.rules.commands.PrijevodnaJedinica;
 import hr.fer.zemris.ppj.lab3.rules.commands.SlozenaNaredba;
+import hr.fer.zemris.ppj.lab3.rules.commands.VanjskaDeklaracija;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DefinicijaFunkcije;
 import hr.fer.zemris.ppj.lab3.rules.definitions.Deklaracija;
 import hr.fer.zemris.ppj.lab3.rules.definitions.DeklaracijaParametra;
@@ -39,8 +41,6 @@ import hr.fer.zemris.ppj.lab3.rules.expression.PrimarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.SpecifikatorTipa;
 import hr.fer.zemris.ppj.lab3.rules.expression.UnarniIzraz;
 import hr.fer.zemris.ppj.lab3.rules.expression.UnarniOperator;
-import hr.fer.zemris.ppj.lab3.rules.structure.PrijevodnaJedinica;
-import hr.fer.zemris.ppj.lab3.rules.structure.VanjskaDeklaracija;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.Symbol;
 

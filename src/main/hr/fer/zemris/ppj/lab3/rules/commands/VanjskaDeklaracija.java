@@ -1,4 +1,4 @@
-package hr.fer.zemris.ppj.lab3.rules.structure;
+package hr.fer.zemris.ppj.lab3.rules.commands;
 
 import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;
@@ -9,11 +9,11 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 /**
  * @author Ivan Trubic
  */
-public class PrijevodnaJedinica extends Rule {
-  public static PrijevodnaJedinica PRIJEVODNA_JEDINICA = new PrijevodnaJedinica();
+public class VanjskaDeklaracija extends Rule {
+  public static VanjskaDeklaracija VANJSKA_DEKLARACIJA = new VanjskaDeklaracija();
 
-  private PrijevodnaJedinica() {
-    super(new NonTerminalSymbol("<prijevodna_jedinica>"));
+  private VanjskaDeklaracija() {
+    super(new NonTerminalSymbol("<vanjska_deklaracija>"));
   }
 
   @Override
