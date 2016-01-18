@@ -1,10 +1,10 @@
 #!/bin/bash
 
 if [[ $1 == "--build" ]]; then
-	javac -d bin/ -sourcepath src/main/ $(find src/main -name *.java)
+  javac -d bin/ -sourcepath src/main/ $(find src/main -name *.java)
 elif [[ $1 == "--build-only" ]]; then
-	javac -d bin/ -sourcepath src/main/ $(find src/main -name *.java)
-	exit
+  javac -d bin/ -sourcepath src/main/ $(find src/main -name *.java)
+  exit
 fi
 java -cp bin/ hr.fer.zemris.ppj.lab4.GeneratorKoda
 

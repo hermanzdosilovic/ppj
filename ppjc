@@ -1,10 +1,19 @@
 #!/bin/bash
 if [[ $1 == "--build" ]]; then
-  ./GLA && ./GSA
-  if [[ $2 != "" ]]; then
-    ./LA < $2 | ./SA | ./SEM
-  fi
-elif [[ $1 != "" ]]; then
-  ./LA < $1 | ./SA | ./SEM
+  opts=$1
+  source_file=$2
+  ./GLA $1 && ./GSA $1
+elif [[ $1 == "--build-only" ]]; then
+  ./GLA $1 && ./GSA $1 && ./LA $1 && ./SA $1 && ./GEN $1
+  exit
+else
+  source_file=$1
 fi
+
+if [[ ! -f $source_file ]]; then
+  echo "File not found: $source_file" >&2
+  exit
+fi
+
+./LA $opts < $source_file | ./SA $opts | ./GEN $opts > a.frisc 
 
