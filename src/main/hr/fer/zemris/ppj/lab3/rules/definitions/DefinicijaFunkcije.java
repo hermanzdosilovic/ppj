@@ -28,7 +28,8 @@ public class DefinicijaFunkcije extends Rule {
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
     
-//    System.out.print("F_" + node.getChildren().get(1).getName());
+    System.out.print("F_" + node.getChildren().get(1).getName());
+    
     if (children.equals(Arrays.asList("<ime_tipa>", "IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA",
         "<slozena_naredba>"))) {
       SNode ime_tipa = node.getChildren().get(0);
@@ -55,7 +56,6 @@ public class DefinicijaFunkcije extends Rule {
 
       // 5
       scope.insert(idn.getName(), functionType, true);
-      
       // 6
       Scope scopeSlozenaNaredba = new Scope(scope);
       //scopeSlozenaNaredba.insert(idn.getName(), functionType, true);

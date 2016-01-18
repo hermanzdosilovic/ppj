@@ -94,6 +94,10 @@ public class Scope {
     return table.keySet();
   }
   
+  public Map<String, ScopeValue> getTable() {
+    return table;
+  }
+  
   private class ScopeValue {
     private Type type;
     private boolean defined;
