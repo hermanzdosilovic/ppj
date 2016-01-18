@@ -27,7 +27,8 @@ public class DefinicijaFunkcije extends Rule {
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
-
+    
+//    System.out.print("F_" + node.getChildren().get(1).getName());
     if (children.equals(Arrays.asList("<ime_tipa>", "IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA",
         "<slozena_naredba>"))) {
       SNode ime_tipa = node.getChildren().get(0);
@@ -57,7 +58,7 @@ public class DefinicijaFunkcije extends Rule {
       
       // 6
       Scope scopeSlozenaNaredba = new Scope(scope);
-      scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
+      //scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
       node.getChildren().get(5).visit(scopeSlozenaNaredba);
 
     } else if (children.equals(Arrays.asList("<ime_tipa>", "IDN", "L_ZAGRADA", "<lista_parametara>",
@@ -93,7 +94,7 @@ public class DefinicijaFunkcije extends Rule {
 
       // 7
       Scope scopeSlozenaNaredba = new Scope(scope);
-      scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
+      //scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
       for (int i = 0; i < lista_parametara.getTypes().size(); i++) {
         scopeSlozenaNaredba.insert(lista_parametara.getNames().get(i),
             lista_parametara.getTypes().get(i), false);

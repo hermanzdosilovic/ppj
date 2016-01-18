@@ -27,7 +27,7 @@ def execute(tests):
             correct += 1
             os.remove(tests + imeTest + 'user.out')
         else: 
-            kriviFile.write(tests + test)
+            kriviFile.write(tests + test + '\n')
         print(' OK ' if ok else ' WA '),
         print(execution)
         N += 1

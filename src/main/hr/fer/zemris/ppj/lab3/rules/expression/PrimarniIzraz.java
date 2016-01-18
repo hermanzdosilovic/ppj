@@ -57,6 +57,8 @@ public class PrimarniIzraz extends Rule {
       if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
         node.setType(Int.INT);
         node.setlValue(false);
+//        System.out.println("\tLOAD R0, " + value);
+//        System.out.println("\tPUSH R0");
         return; // all good
       }
 
