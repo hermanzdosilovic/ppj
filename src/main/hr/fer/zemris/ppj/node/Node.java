@@ -61,4 +61,9 @@ public class Node {
       buildOutputTree(m, spaces + 1, output);
     }
   }
+  
+  @Override
+  public String toString() {
+    return Node.printTree(this);
+  }
 }

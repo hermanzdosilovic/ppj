@@ -1,3 +1,4 @@
 bin/
 *.ser
-
+*.user.out
+failed_tests.txt
