@@ -15,11 +15,11 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
  */
 public class CastIzraz extends Rule {
   public static CastIzraz CAST_IZRAZ = new CastIzraz();
-  
+
   private CastIzraz() {
     super(new NonTerminalSymbol("<cast_izraz>"));
   }
-  
+
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
@@ -28,16 +28,17 @@ public class CastIzraz extends Rule {
       unarni_izraz.visit(scope);
       node.setType(unarni_izraz.getType());
       node.setlValue(unarni_izraz.islValue());
-    } else if (children.equals(Arrays.asList("L_ZAGRADA", "<ime_tipa>", "D_ZAGRADA", "<cast_izraz>"))) {
+    } else if (children
+        .equals(Arrays.asList("L_ZAGRADA", "<ime_tipa>", "D_ZAGRADA", "<cast_izraz>"))) {
       SNode ime_tipa = node.getChildren().get(1);
       SNode cast_izraz = node.getChildren().get(3);
-      
+
       ime_tipa.visit(scope);
       cast_izraz.visit(scope);
       if (!TypesHelper.canExplicitlyCast(cast_izraz.getType(), ime_tipa.getType())) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
       node.setType(ime_tipa.getType());
       node.setlValue(false);
     }

@@ -1,5 +1,9 @@
 package hr.fer.zemris.ppj.lab3.analyzer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.FunctionType;
 import hr.fer.zemris.ppj.lab3.types.Int;
@@ -8,14 +12,10 @@ import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
 public class SemantickiAnalizator {
   private SNode root;
   private Scope globalScope;
-  
+
   public static void main(String[] args) throws IOException {
     SemantickiAnalizator sa = new SemantickiAnalizator();
     try {
@@ -48,11 +48,12 @@ public class SemantickiAnalizator {
       throw new SemanticException("main");
     }
   }
-  
+
   public void checkFunction(Scope scope) throws SemanticException {
     for (String name : scope.getNames()) {
       if (scope.getType(name) instanceof FunctionType) {
-        if (!(globalScope.hasDefined(name) && globalScope.getType(name).equals(scope.getType(name)))) {
+        if (!(globalScope.hasDefined(name)
+            && globalScope.getType(name).equals(scope.getType(name)))) {
           throw new SemanticException("funkcija");
         }
       }
@@ -61,7 +62,7 @@ public class SemantickiAnalizator {
       checkFunction(child);
     }
   }
-  
+
   public static SNode treeBuilder(List<String> inputLines, int index) {
     int countSpacesIndex = countSpaces(inputLines.get(index));
     SNode node = new SNode();

@@ -1,14 +1,14 @@
 package hr.fer.zemris.ppj.node;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.RuleFactory;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.symbol.Symbol;
 import hr.fer.zemris.ppj.symbol.TerminalSymbol;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SNode {
   private Symbol symbol;
@@ -24,7 +24,7 @@ public class SNode {
   private List<SNode> children = new ArrayList<>();
   private Scope scope;
   private SNode parent;
-  
+
   public Symbol getSymbol() {
     return symbol;
   }
@@ -163,7 +163,7 @@ public class SNode {
   public void setScope(Scope scope) {
     this.scope = scope;
   }
-  
+
   @Override
   public String toString() {
     return SNode.printTree(this);

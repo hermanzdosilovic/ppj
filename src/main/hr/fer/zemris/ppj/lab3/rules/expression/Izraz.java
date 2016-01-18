@@ -1,7 +1,7 @@
 package hr.fer.zemris.ppj.lab3.rules.expression;
 
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 
 import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;

@@ -9,6 +9,7 @@ import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.ReturnType;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
 import hr.fer.zemris.ppj.lab3.types.Void;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -33,15 +34,16 @@ public class NaredbaSkoka extends Rule {
       if (type == null || type != Void.VOID) {
         throw new SemanticException(getErrorMessage(node));
       }
-      System.out.print("\tRET");
+      GeneratorKoda.write("\tRET");
     } else if (childrenValues.equals(Arrays.asList("KR_RETURN", "<izraz>", "TOCKAZAREZ"))) {
       node.getChildren().get(1).visit(scope);
       ReturnType type = functionReturnType(node);
-      if (type == null || !TypesHelper.canImplicitlyCast(node.getChildren().get(1).getType(), type)) {
+      if (type == null
+          || !TypesHelper.canImplicitlyCast(node.getChildren().get(1).getType(), type)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      System.out.println("\tPOP R6");
-        System.out.println("\tRET");
+      GeneratorKoda.writeln("\tPOP R6");
+      GeneratorKoda.writeln("\tRET");
     }
   }
 

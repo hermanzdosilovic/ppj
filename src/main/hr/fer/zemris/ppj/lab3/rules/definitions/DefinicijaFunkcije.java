@@ -7,6 +7,7 @@ import hr.fer.zemris.ppj.lab3.types.NonVoidFunctionType;
 import hr.fer.zemris.ppj.lab3.types.ReturnType;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
 import hr.fer.zemris.ppj.lab3.types.VoidFunctionType;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -28,8 +29,7 @@ public class DefinicijaFunkcije extends Rule {
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
     
-    System.out.print("F_" + node.getChildren().get(1).getName());
-    
+    GeneratorKoda.write("F_" + node.getChildren().get(1).getName());
     if (children.equals(Arrays.asList("<ime_tipa>", "IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA",
         "<slozena_naredba>"))) {
       SNode ime_tipa = node.getChildren().get(0);
