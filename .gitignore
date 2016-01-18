@@ -1,4 +1,6 @@
 bin/
 *.ser
 *.user.out
+*.swp
+*.swo
 failed_tests.txt
