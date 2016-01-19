@@ -85,7 +85,7 @@ U vršnom direktoriju projekta postoji nekoliko skripti koje se koriste za pokre
 * ulazni testni primjeri nalaze se u direktoriju `io/lab-4`, a imena im završavaju ekstenzijom `.c`
 * izlazni testni primjeri nalaze se u direktoriju `io/lab-4`, a imena im završavaju ekstenzijom `.out`
 * tester generatora kôda pokreće cjeloviti prevoditelj jezika *ppjC*: skriptu `ppjc`
-* parametar `--build` prevodi kôd semantičkog analizatora prije pokretanja testera
+* parametar `--build` prevodi kôd generatora prije pokretanja testera
 * primjer pokretanja: `./lab4.tester.py`
 
 ## Prevoditelj `ppjc`

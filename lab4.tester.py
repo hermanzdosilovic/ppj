@@ -51,5 +51,5 @@ def execute(tests):
     print '\nStats : {0}/{1}'.format(correct, N)
 
 if len(sys.argv) > 1 and sys.argv[1] == "--build":
-    subprocess.call('bash -c \"./ppjc --build-only\"', shell=True)
+    subprocess.call('bash -c \"./GEN --build-only\"', shell=True)
 execute(testDir)
