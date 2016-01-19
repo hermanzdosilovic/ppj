@@ -1,5 +1,4 @@
 #!/bin/bash
-
 if [[ $1 == "--build" ]]; then
   javac -d bin/ -sourcepath src/main/ $(find src/main -name *.java)
 elif [[ $1 == "--build-only" ]]; then

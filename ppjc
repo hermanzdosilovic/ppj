@@ -2,7 +2,7 @@
 if [[ $1 == "--build" ]]; then
   opts=$1
   source_file=$2
-  ./GLA $1 && ./GSA $1
+  ./GLA $1 && ./GSA $1 && ./LA --build-only && ./SA --build-only ./GEN --build-only
 elif [[ $1 == "--build-only" ]]; then
   ./GLA --build && ./GSA --build && ./LA $1 && ./SA $1 && ./GEN $1
   exit
