@@ -1,5 +1,0 @@
-KR_INT 1 int
-IDN 1 a
-OP_PRIDRUZI 1 =
-BROJ 1 0xefffffff
-TOCKAZAREZ 1 ;

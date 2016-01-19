@@ -1,2 +1,0 @@
-semantic: `char` can't be converted to `void`
-note: '( void ) n' on line 12

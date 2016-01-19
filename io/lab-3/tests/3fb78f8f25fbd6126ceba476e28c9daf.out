@@ -1,1 +1,0 @@
-<unarni_izraz> ::= OP_INC(16,++) <unarni_izraz>

@@ -1,2 +1,0 @@
-semantic: invalid implicit conversion from `niz(const char)` to `int` in intializator
-note: 'e [ 8 ] = { "das" , 1 , 2 , 3 , 4 , 5 , 6 , 87 }' on line 12

@@ -1,2 +1,0 @@
-int a = 0xffffffff;
-int a = 0x7fffffff;

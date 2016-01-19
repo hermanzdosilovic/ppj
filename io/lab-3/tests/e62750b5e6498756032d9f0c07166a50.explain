@@ -1,2 +1,0 @@
-semantic: invalid escaped string 'jao\\ko\t\\"' on byte offset 11
-note: '"jao\\ko\t\\""' on line 4

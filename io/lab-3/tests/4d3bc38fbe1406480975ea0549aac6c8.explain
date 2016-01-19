@@ -1,2 +1,0 @@
-semantic: duplicate parameter name a
-note: 'int a , const int b , int a' on line 1

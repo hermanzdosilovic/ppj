@@ -1,2 +1,0 @@
-semantic: `int` can't be converted to `void`
-note: '( void ) 4' on line 21

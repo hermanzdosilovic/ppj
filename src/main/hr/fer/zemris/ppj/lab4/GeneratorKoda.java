@@ -13,7 +13,7 @@ public class GeneratorKoda {
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
     writeln("\tMOVE 40000, R7");
-    writeln("\tCALL F_MAIN");
+    writeln("\tCALL F_main");
     writeln("\tHALT");
     SemantickiAnalizator.main(args);
     fileWriter.close();
@@ -29,6 +29,7 @@ public class GeneratorKoda {
     if (fileWriter == null) {
       return;
     }
+    System.err.print(line);
     try {
       fileWriter.write(line);
     } catch (IOException e) {
