@@ -73,7 +73,7 @@ public class GeneratorKoda {
    * @return new label
    */
   public static String getNextLabel() {
-    return "L_" + counter;
+    return "L_" + counter++;
   }
 
 }
