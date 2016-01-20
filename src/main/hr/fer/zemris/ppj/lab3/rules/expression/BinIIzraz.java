@@ -8,6 +8,7 @@ import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Int;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -41,6 +42,11 @@ public class BinIIzraz extends Rule {
       if (!TypesHelper.canImplicitlyCast(jednakosni_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
+      
+      GeneratorKoda.writeln("\tPOP R1");
+      GeneratorKoda.writeln("\tPOP R0");
+      GeneratorKoda.writeln("\tAND R0, R1, R0");
+      GeneratorKoda.writeln("\tPUSH R0");
       
       node.setType(Int.INT);
       node.setlValue(false);

@@ -8,6 +8,7 @@ import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Int;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -17,11 +18,11 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 public class BinXiliIzraz extends Rule {
 
   public static BinXiliIzraz BIN_XILI_IZRAZ = new BinXiliIzraz();
-  
+
   private BinXiliIzraz() {
     super(new NonTerminalSymbol("<bin_xili_izraz>"));
   }
-  
+
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
@@ -42,6 +43,11 @@ public class BinXiliIzraz extends Rule {
       if (!TypesHelper.canImplicitlyCast(bin_i_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
+
+      GeneratorKoda.writeln("\tPOP R1");
+      GeneratorKoda.writeln("\tPOP R0");
+      GeneratorKoda.writeln("\tXOR R0, R1, R0");
+      GeneratorKoda.writeln("\tPUSH R0");
 
       node.setType(Int.INT);
       node.setlValue(false);
