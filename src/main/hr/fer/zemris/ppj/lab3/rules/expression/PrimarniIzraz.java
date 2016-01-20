@@ -36,23 +36,26 @@ public class PrimarniIzraz extends Rule {
       SNode child = node.getChildren().get(0);
 
       // 1
+      int offset = 0;
       while (scope != null) {
         if (scope.hasDeclared(child.getName())) {
-          if (scope.getParentScope() == null) {
-
-            String globalLabel = GeneratorKoda.getGlobalVariableLabel(child.getName());
-            GeneratorKoda.writeln("\tLOAD R0,(" + globalLabel + ")");
-            GeneratorKoda.writeln("\tPUSH R0");
-          } else {
-            GeneratorKoda.writeln("\tLOAD R0, (R7 + )"); // dodati vrijednost za dohvat sa stoga
+          if (TypesHelper.isX(scope.getType(child.getName()))) {
+            if (scope.getParentScope() == null) {
+              String globalLabel = GeneratorKoda.getGlobalVariableLabel(child.getName());
+              GeneratorKoda.writeln("\tLOAD R0, (" + globalLabel + ")");
+            } else {
+              GeneratorKoda.writeln("\tLOAD R0, (R6 + "
+                  + Integer.toHexString(offset + scope.getOffset(child.getName())).toUpperCase()
+                  + ")");
+            }
             GeneratorKoda.writeln("\tPUSH R0");
           }
-
           node.setType(scope.getType(child.getName()));
           node.setlValue(TypesHelper.isLType(scope.getType(child.getName())));
           return; // all good
         }
         scope = scope.getParentScope();
+        offset -= scope.getCurrentStackSize();
       }
 
       throw new SemanticException(getErrorMessage(node));
