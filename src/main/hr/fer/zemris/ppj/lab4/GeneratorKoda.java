@@ -177,7 +177,7 @@ public class GeneratorKoda {
    * @return label representing provided variable
    */
   public static String getGlobalVariableLabel(String name) {
-    return "G_" + name;
+    return "G_" + name.toUpperCase();
   }
   
   /**
@@ -187,7 +187,7 @@ public class GeneratorKoda {
    * @return label representing provided function name
    */
   public static String getFunctionLabel(String name) {
-    return "F_" + name;
+    return "F_" + name.toUpperCase();
   }
   
   /**
