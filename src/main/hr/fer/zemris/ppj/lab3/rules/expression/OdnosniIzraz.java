@@ -8,6 +8,7 @@ import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Int;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -43,6 +44,26 @@ public class OdnosniIzraz extends Rule {
       if (!TypesHelper.canImplicitlyCast(aditivni_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
+
+      GeneratorKoda.writeln("\tPOP R1");
+      GeneratorKoda.writeln("\tPOP R0");
+      GeneratorKoda.writeln("\tMOVE 1, R2");
+      GeneratorKoda.writeln("\tCMP R1, R0");
+      String labela = GeneratorKoda.getNextLabel();
+
+      if (children.contains("OP_LT")) {
+        GeneratorKoda.writeln("\tJP_SLT " + labela);
+      } else if (children.contains("OP_GT")) {
+        GeneratorKoda.writeln("\tJP_SGT " + labela);
+      } else if (children.contains("OP_LTE")) {
+        GeneratorKoda.writeln("\tJP_SLE "+labela);
+      } else if (children.contains("OP_GTE")) {
+        GeneratorKoda.writeln("\tJP_SGE "+labela);
+      }
+      
+      GeneratorKoda.writeln("\tMOVE 0, R2");
+      GeneratorKoda.writeln(labela + "\tPUSH R2");
+
       node.setType(Int.INT);
       node.setlValue(false);
     }
