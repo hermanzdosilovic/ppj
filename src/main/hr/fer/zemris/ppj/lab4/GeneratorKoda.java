@@ -8,6 +8,10 @@ import java.io.IOException;
 import hr.fer.zemris.ppj.lab3.analyzer.SemantickiAnalizator;
 
 public class GeneratorKoda {
+  public static String MULT_LABEL = "F_1";
+  public static String DIV_LABEL = "F_2";
+  public static String MOD_LABEL = "F_3";
+
   private static BufferedWriter fileWriter;
   private static int counter = 0;
   
@@ -17,8 +21,10 @@ public class GeneratorKoda {
     writeln("\tCALL F_main");
     writeln("\tHALT");
     SemantickiAnalizator.main(args);
-
-
+    
+    modulo();
+    division();
+    multiplication();
     fileWriter.close();
 
 
@@ -51,40 +57,119 @@ public class GeneratorKoda {
   public static void writeln(String line) {
     write(line + "\n");
   }
-<<<<<<< HEAD
 
   private static void multiplication() {
-
-    writeln("\tPUSH R0");
-    writeln("\tPUSH R1");
-
-    writeln("\tLOAD R0,(R7 + 010");
-    writeln("\tLOAD R1,(R7 + 0C)");
-    
-    writeln("\tMOVE 0, R6");
-    writeln("PETLJA\tADD R0, R6, R6");
-    writeln("\tSUB R1, 1, R1");
-    writeln("\tJR_NZ PETLJA");
-
- 
-    writeln("\tPOP R1");
-    writeln("\tPOP R0");
-    writeln("\tRET");
-  }
-  
-  private static void division() {
-
-    writeln("\tPUSH R0");
+    writeln("");
+    writeln(MULT_LABEL + "\tPUSH R0");
     writeln("\tPUSH R1");
 
     writeln("\tLOAD R0,(R7 + 010)");
     writeln("\tLOAD R1,(R7 + 0C)");
     
+    writeln("\tMOVE 0, R6");
+    String labela = getNextLabel();
+    writeln(labela + "\tADD R0, R6, R6");
+    writeln("\tSUB R1, 1, R1");
+    writeln("\tJP_NZ " + labela);
+
+ 
     writeln("\tPOP R1");
     writeln("\tPOP R0");
     writeln("\tRET");
+    writeln("");
   }
   
+  private static void division() {
+    writeln("");
+    writeln(DIV_LABEL + "\tPUSH R0");
+    writeln("\tPUSH R1");
+    writeln("\tPUSH R2");
+    
+    
+    writeln("\tLOAD R0,(R7 + 014)");
+    writeln("\tLOAD R1,(R7 + 010)");
+   
+    writeln("\tMOVE 0, R2");
+    writeln("\tCMP R0, 0");
+    String labela3 = getNextLabel();
+    writeln("\tJP_SGT " + labela3);
+    writeln("\tMOVE 1, R2");
+    writeln("\tXOR R0, -1, R0");
+    writeln("\tADD R0, 1, R0");
+    
+    writeln(labela3 + "\tCMP R1, 0");
+    String labela4 = getNextLabel();
+    writeln("\tJP_SGT " + labela4);
+    writeln("\tXOR R2, 1, R2");
+    writeln("\tXOR R1, -1, R1");
+    writeln("\tADD R1, 1, R1");
+    
+    writeln(labela4 + "\tMOVE 0, R6");
+    String labela1 = getNextLabel();
+    writeln(labela1 + "\tSUB R0, R1, R0");
+    String labela2 = getNextLabel();
+    writeln("\tJR_ULT " + labela2);
+    
+    writeln("\tADD R6, 1, R6");
+    writeln("\tJP " + labela1);
+    
+    writeln(labela2 + "\tCMP R2, 0");
+    String labela5 = getNextLabel();
+    writeln("\tJP_EQ " + labela5);
+    writeln("\tXOR R6, -1, R6");
+    writeln("\tADD R6, 1, R6");
+
+    writeln(labela5 + "\tPOP R2");
+    writeln("\tPOP R1");
+    writeln("\tPOP R0");
+    writeln("\tRET");
+    writeln("");
+  }
+  
+  private static void modulo() {
+    writeln("");
+    writeln(MOD_LABEL + "\tPUSH R0");
+    writeln("\tPUSH R1");
+    writeln("\tPUSH R2");
+    
+    writeln("\tLOAD R0, (R7 + 014)");
+    writeln("\tLOAD R1, (R7 + 010)");
+     
+    // dijeljenje
+    writeln("\tPUSH R6");
+    writeln("\tPUSH R0");
+    writeln("\tPUSH R1");
+    writeln("\tCALL " + DIV_LABEL);
+    
+    writeln("\tPOP R1");
+    writeln("\tPOP R0");
+    
+    writeln("\tADD R6, 0, R2");
+    writeln("\tPOP R6");
+    
+    //mnozenje
+    writeln("\tPUSH R6");
+    writeln("\tPUSH R1");
+    writeln("\tPUSH R2");
+    writeln("\tCALL " + MULT_LABEL);
+    
+    writeln("\tPOP R2");
+    writeln("\tPOP R1");
+    
+    writeln("\tADD R6, 0, R2");
+    writeln("\tPOP R6");
+    
+    //oduzimanje
+    writeln("\tSUB R0, R2, R6");
+    
+    writeln("\tPOP R2");
+    writeln("\tPOP R1");
+    writeln("\tPOP R0");
+    writeln("\tRET");
+    writeln("");
+    
+    
+  }
   /**
    * Takes a name of a global variable and returns a label representing that
    * global variable in FRISC code. 
