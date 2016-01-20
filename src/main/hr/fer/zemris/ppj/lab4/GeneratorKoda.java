@@ -16,7 +16,11 @@ public class GeneratorKoda {
     writeln("\tCALL F_main");
     writeln("\tHALT");
     SemantickiAnalizator.main(args);
+
+
     fileWriter.close();
+
+
   }
 
   /**
@@ -45,5 +49,37 @@ public class GeneratorKoda {
    */
   public static void writeln(String line) {
     write(line + "\n");
+  }
+
+  private static void multiplication() {
+
+    writeln("\tPUSH R0");
+    writeln("\tPUSH R1");
+
+    writeln("\tLOAD R0,(R7 + 010");
+    writeln("\tLOAD R1,(R7 + 0C)");
+    
+    writeln("\tMOVE 0, R6");
+    writeln("PETLJA\tADD R0, R6, R6");
+    writeln("\tSUB R1, 1, R1");
+    writeln("\tJR_NZ PETLJA");
+
+ 
+    writeln("\tPOP R1");
+    writeln("\tPOP R0");
+    writeln("\tRET");
+  }
+  
+  private static void division() {
+
+    writeln("\tPUSH R0");
+    writeln("\tPUSH R1");
+
+    writeln("\tLOAD R0,(R7 + 010)");
+    writeln("\tLOAD R1,(R7 + 0C)");
+    
+    writeln("\tPOP R1");
+    writeln("\tPOP R0");
+    writeln("\tRET");
   }
 }
