@@ -35,7 +35,7 @@ public class JednakosniIzraz extends Rule {
       SNode jednakosni_izraz = node.getChildren().get(0);
       SNode odnosni_izraz = node.getChildren().get(2);
       jednakosni_izraz.visit(scope);
-      
+
       if (!TypesHelper.canImplicitlyCast(jednakosni_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
@@ -43,23 +43,30 @@ public class JednakosniIzraz extends Rule {
       if (!TypesHelper.canImplicitlyCast(odnosni_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
       GeneratorKoda.writeln("\tPOP R1");
+      if (odnosni_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
       GeneratorKoda.writeln("\tPOP R0");
+      if (jednakosni_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      }
+
       GeneratorKoda.writeln("\tMOVE 1, R2");
       GeneratorKoda.writeln("\tCMP R0, R1");
       String labela = GeneratorKoda.getNextLabel();
-      
-      if(children.contains("OP_EQ")) {
-        GeneratorKoda.writeln("\tJP_EQ " + labela); 
+
+      if (children.contains("OP_EQ")) {
+        GeneratorKoda.writeln("\tJP_EQ " + labela);
       } else {
         GeneratorKoda.writeln("\tJP_NE " + labela);
       }
-      
-      GeneratorKoda.writeln("\tMOVE 0, R2");      
+
+      GeneratorKoda.writeln("\tMOVE 0, R2");
       GeneratorKoda.writeln(labela + "\tPUSH R2");
 
-      
+
       node.setType(Int.INT);
       node.setlValue(false);
     }

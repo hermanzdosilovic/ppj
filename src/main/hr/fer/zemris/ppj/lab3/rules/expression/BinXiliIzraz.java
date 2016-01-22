@@ -45,6 +45,15 @@ public class BinXiliIzraz extends Rule {
       }
 
       GeneratorKoda.writeln("\tPOP R1");
+      if (bin_i_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
+      GeneratorKoda.writeln("\tPOP R0");
+      if (bin_xili_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      }
+
+      GeneratorKoda.writeln("\tPOP R1");
       GeneratorKoda.writeln("\tPOP R0");
       GeneratorKoda.writeln("\tXOR R0, R1, R0");
       GeneratorKoda.writeln("\tPUSH R0");

@@ -42,12 +42,20 @@ public class BinIIzraz extends Rule {
       if (!TypesHelper.canImplicitlyCast(jednakosni_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
       GeneratorKoda.writeln("\tPOP R1");
+      if (jednakosni_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
       GeneratorKoda.writeln("\tPOP R0");
+      if (bin_i_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      }
+
+
       GeneratorKoda.writeln("\tAND R0, R1, R0");
       GeneratorKoda.writeln("\tPUSH R0");
-      
+
       node.setType(Int.INT);
       node.setlValue(false);
     }

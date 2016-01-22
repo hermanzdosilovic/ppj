@@ -17,11 +17,11 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
  */
 public class LogIIzraz extends Rule {
   public static LogIIzraz LOG_I_IZRAZ = new LogIIzraz();
-  
+
   private LogIIzraz() {
     super(new NonTerminalSymbol("<log_i_izraz>"));
   }
-  
+
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
@@ -33,7 +33,7 @@ public class LogIIzraz extends Rule {
     } else if (children.equals(Arrays.asList("<log_i_izraz>", "OP_I", "<bin_ili_izraz>"))) {
       SNode log_i_izraz = node.getChildren().get(0);
       SNode bin_ili_izraz = node.getChildren().get(2);
-      
+
       log_i_izraz.visit(scope);
       if (!TypesHelper.canImplicitlyCast(log_i_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
@@ -42,16 +42,23 @@ public class LogIIzraz extends Rule {
       if (!TypesHelper.canImplicitlyCast(bin_ili_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
       GeneratorKoda.writeln("\tPOP R1");
+      if (bin_ili_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
       GeneratorKoda.writeln("\tPOP R0");
+      if (log_i_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      }
+
       GeneratorKoda.writeln("\tAND R0, R1, R0");
       GeneratorKoda.writeln("\tCMP R0, 0");
       String labela = GeneratorKoda.getNextLabel();
       GeneratorKoda.writeln("\tJP_EQ " + labela);
       GeneratorKoda.writeln("\tMOVE 1, R0");
       GeneratorKoda.writeln(labela + "\tPUSH R0");
-      
+
       node.setType(Int.INT);
       node.setlValue(false);
     }

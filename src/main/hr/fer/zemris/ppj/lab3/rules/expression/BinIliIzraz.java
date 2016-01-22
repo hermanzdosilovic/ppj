@@ -17,11 +17,11 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
  */
 public class BinIliIzraz extends Rule {
   public static BinIliIzraz BIN_ILI_IZRAZ = new BinIliIzraz();
-  
+
   private BinIliIzraz() {
     super(new NonTerminalSymbol("<bin_ili_izraz>"));
   }
-  
+
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
@@ -33,21 +33,28 @@ public class BinIliIzraz extends Rule {
     } else if (children.equals(Arrays.asList("<bin_ili_izraz>", "OP_BIN_ILI", "<bin_xili_izraz>"))) {
       SNode bin_ili_izraz = node.getChildren().get(0);
       SNode bin_xili_izraz = node.getChildren().get(2);
-      
+
       bin_ili_izraz.visit(scope);
-      if(!TypesHelper.canImplicitlyCast(bin_ili_izraz.getType(), Int.INT)) {
+      if (!TypesHelper.canImplicitlyCast(bin_ili_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
       bin_xili_izraz.visit(scope);
-      if(!TypesHelper.canImplicitlyCast(bin_xili_izraz.getType(), Int.INT)) {
+      if (!TypesHelper.canImplicitlyCast(bin_xili_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
       GeneratorKoda.writeln("\tPOP R1");
+      if (bin_xili_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
       GeneratorKoda.writeln("\tPOP R0");
+      if (bin_ili_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      }
+
       GeneratorKoda.writeln("\tOR R0, R1, R0");
       GeneratorKoda.writeln("\tPUSH R0");
-      
+
       node.setType(Int.INT);
       node.setlValue(false);
     }

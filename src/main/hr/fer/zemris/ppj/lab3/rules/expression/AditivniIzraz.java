@@ -44,16 +44,24 @@ public class AditivniIzraz extends Rule {
       if (!TypesHelper.canImplicitlyCast(multiplikativni_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
+
       GeneratorKoda.writeln("\tPOP R1");
+      if (multiplikativni_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
       GeneratorKoda.writeln("\tPOP R0");
+      if (aditivini_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      }
+
       if (children.contains("PLUS")) {
         GeneratorKoda.writeln("\tADD R1, R0, R0");
       } else {
         GeneratorKoda.writeln("\tSUB R0, R1, R0");
       }
       GeneratorKoda.writeln("\tPUSH R0");
-      
+
       node.setType(Int.INT);
       node.setlValue(false);
     }

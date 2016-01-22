@@ -44,19 +44,31 @@ public class MultiplikativniIzraz extends Rule {
       if (!TypesHelper.canImplicitlyCast(cast_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
+      GeneratorKoda.writeln("\tPOP R1");
+      if (cast_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
+      GeneratorKoda.writeln("\tPOP R0");
+      if (multiplikativni_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      }
+
       GeneratorKoda.writeln("\tPUSH R6");
-      if(children.contains("OP_PUTA")) {
-        GeneratorKoda.writeln("\tCALL "+ GeneratorKoda.MULT_LABEL);
-      }else if(children.contains("OP_DIJELI")) {
-        GeneratorKoda.writeln("\tCALL "+ GeneratorKoda.DIV_LABEL);
-      }else {
-        GeneratorKoda.writeln("\tCALL "+ GeneratorKoda.MOD_LABEL);
+      GeneratorKoda.writeln("\tPUSH R0");
+      GeneratorKoda.writeln("\tPUSH R1");
+
+      if (children.contains("OP_PUTA")) {
+        GeneratorKoda.writeln("\tCALL " + GeneratorKoda.MULT_LABEL);
+      } else if (children.contains("OP_DIJELI")) {
+        GeneratorKoda.writeln("\tCALL " + GeneratorKoda.DIV_LABEL);
+      } else {
+        GeneratorKoda.writeln("\tCALL " + GeneratorKoda.MOD_LABEL);
       }
       GeneratorKoda.writeln("\tADD R6, 0, R0");
       GeneratorKoda.writeln("\tPOP R6");
       GeneratorKoda.writeln("\tPUSH R0");
-      
+
       node.setType(Int.INT);
       node.setlValue(false);
     }

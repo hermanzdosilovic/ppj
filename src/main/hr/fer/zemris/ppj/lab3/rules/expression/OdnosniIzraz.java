@@ -46,7 +46,14 @@ public class OdnosniIzraz extends Rule {
       }
 
       GeneratorKoda.writeln("\tPOP R1");
+      if (aditivni_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
       GeneratorKoda.writeln("\tPOP R0");
+      if (odnosni_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      }
+        
       GeneratorKoda.writeln("\tMOVE 1, R2");
       GeneratorKoda.writeln("\tCMP R1, R0");
       String labela = GeneratorKoda.getNextLabel();
