@@ -28,7 +28,7 @@ public class GeneratorKoda {
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
     writeln("\tMOVE 40000, R7");
-    writeln("\tCALL F_main");
+    writeln("\tCALL " + getFunctionLabel("main"));
     writeln("\tHALT");
     inUse = true;
     SemantickiAnalizator.main(args);
@@ -38,8 +38,6 @@ public class GeneratorKoda {
     multiplication();
     constants();
     fileWriter.close();
-
-
   }
 
   /**

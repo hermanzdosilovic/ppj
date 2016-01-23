@@ -29,7 +29,10 @@ public class DefinicijaFunkcije extends Rule {
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
     
-    GeneratorKoda.write("F_" + node.getChildren().get(1).getName());
+    GeneratorKoda.write(GeneratorKoda.getFunctionLabel(node.getChildren().get(1).getName()));
+    for (int i = 0; i < 6; i++) {
+      GeneratorKoda.writeln("\tPUSH R" + i);
+    }
     if (children.equals(Arrays.asList("<ime_tipa>", "IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA",
         "<slozena_naredba>"))) {
       SNode ime_tipa = node.getChildren().get(0);

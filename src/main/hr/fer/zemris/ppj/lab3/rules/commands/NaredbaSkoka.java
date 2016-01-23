@@ -45,6 +45,10 @@ public class NaredbaSkoka extends Rule {
       if (type == null || type != Void.VOID) {
         throw new SemanticException(getErrorMessage(node));
       }
+
+      for (int i = 5; i >= 0; i--) {
+        GeneratorKoda.writeln("\tPOP R" + i);
+      }
       GeneratorKoda.writeln("\tRET");
     } else if (childrenValues.equals(Arrays.asList("KR_RETURN", "<izraz>", "TOCKAZAREZ"))) {
       node.getChildren().get(1).visit(scope);
@@ -56,7 +60,9 @@ public class NaredbaSkoka extends Rule {
       if (node.getChildren().get(1).islValue()) {
         GeneratorKoda.writeln("\tLOAD R6, (R6)");
       }
-
+      for (int i = 5; i >= 0; i--) {
+        GeneratorKoda.writeln("\tPOP R" + i);
+      }
       GeneratorKoda.writeln("\tRET");
     }
   }

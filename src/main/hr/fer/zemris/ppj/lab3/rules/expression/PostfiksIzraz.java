@@ -62,14 +62,13 @@ public class PostfiksIzraz extends Rule {
       node.setlValue(!TypesHelper.isConstT(X));
     } else if (children.equals(Arrays.asList("<postfiks_izraz>", "L_ZAGRADA", "D_ZAGRADA"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
-
-      for (int i = 0; i < 7; i++) {
-        GeneratorKoda.writeln("\tPUSH R" + i);
-      }
+      
       if (GeneratorKoda.inUse) {
         GeneratorKoda.writeln("\tCALL " + GeneratorKoda
             .getFunctionLabel(postfiks_izraz.getChildren().get(0).getChildren().get(0).getName()));
       }
+      GeneratorKoda.writeln("\tPUSH R6");
+      
       // 1
       postfiks_izraz.visit(scope);
 
@@ -80,10 +79,6 @@ public class PostfiksIzraz extends Rule {
       }
       node.setType(((VoidFunctionType) postfiks_izraz.getType()).getReturnType());
       node.setlValue(false);
-
-      for (int i = 6; i >= 0; i--) {
-        GeneratorKoda.writeln("\tPOP R" + i);
-      }
     } else if (children.equals(
         Arrays.asList("<postfiks_izraz>", "L_ZAGRADA", "<lista_argumenata>", "D_ZAGRADA"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
