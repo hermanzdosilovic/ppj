@@ -53,6 +53,10 @@ public class NaredbaSkoka extends Rule {
         throw new SemanticException(getErrorMessage(node));
       }
       GeneratorKoda.writeln("\tPOP R6");
+      if (node.getChildren().get(1).islValue()) {
+        GeneratorKoda.writeln("\tLOAD R6, (R6)");
+      }
+
       GeneratorKoda.writeln("\tRET");
     }
   }
