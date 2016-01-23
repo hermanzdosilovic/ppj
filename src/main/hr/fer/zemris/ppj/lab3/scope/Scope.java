@@ -12,6 +12,7 @@ public class Scope {
   private Scope parentScope;
   private Map<String, ScopeValue> table = new HashMap<>();
   private List<Scope> childrenScopes = new ArrayList<>();
+  private Map<String, Integer> stackOffset = new HashMap<>();
 
   public Scope() {
   }
@@ -96,6 +97,21 @@ public class Scope {
   
   public Map<String, ScopeValue> getTable() {
     return table;
+  }
+  
+  public void setOffset(String variable, int offset) {
+    stackOffset.put(variable, offset);
+  }
+  
+  public int getOffset(String variable) {
+    if (!stackOffset.containsKey(variable)) {
+      return -1;
+    }
+    return stackOffset.get(variable);
+  }
+  
+  public int getCurrentStackSize() {
+    return stackOffset.keySet().size();
   }
   
   private class ScopeValue {

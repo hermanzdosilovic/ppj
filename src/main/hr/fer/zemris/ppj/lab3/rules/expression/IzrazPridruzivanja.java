@@ -7,6 +7,7 @@ import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -28,8 +29,8 @@ public class IzrazPridruzivanja extends Rule {
       log_ili_izraz.visit(scope);
       node.setType(log_ili_izraz.getType());
       node.setlValue(log_ili_izraz.islValue());
-    } else if (children
-        .equals(Arrays.asList("<postfiks_izraz>", "OP_PRIDRUZI", "<izraz_pridruzivanja>"))) {
+    } else if (children.equals(Arrays.asList("<postfiks_izraz>", "OP_PRIDRUZI",
+        "<izraz_pridruzivanja>"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
       SNode izraz_pridruzivanja = node.getChildren().get(2);
 
@@ -41,6 +42,17 @@ public class IzrazPridruzivanja extends Rule {
       if (!TypesHelper.canImplicitlyCast(izraz_pridruzivanja.getType(), postfiks_izraz.getType())) {
         throw new SemanticException(getErrorMessage(node));
       }
+
+      GeneratorKoda.writeln("\tPOP R1");
+      GeneratorKoda.writeln("\tPOP R0");
+
+      GeneratorKoda.writeln("\tPOP R1");
+      if (izraz_pridruzivanja.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
+
+      GeneratorKoda.writeln("\tSTORE R1, (R0)");
+
 
       node.setType(postfiks_izraz.getType());
       node.setlValue(false);

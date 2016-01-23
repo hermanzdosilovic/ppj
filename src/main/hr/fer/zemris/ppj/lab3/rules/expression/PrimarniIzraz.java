@@ -12,10 +12,12 @@ import hr.fer.zemris.ppj.lab3.types.Array;
 import hr.fer.zemris.ppj.lab3.types.Char;
 import hr.fer.zemris.ppj.lab3.types.ConstChar;
 import hr.fer.zemris.ppj.lab3.types.Int;
+import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
 import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
+
 
 /**
  * @author Herman Zvonimir Dosilovic
@@ -35,13 +37,35 @@ public class PrimarniIzraz extends Rule {
       SNode child = node.getChildren().get(0);
 
       // 1
+      int offset = 0;
       while (scope != null) {
         if (scope.hasDeclared(child.getName())) {
-          node.setType(scope.getType(child.getName()));
-          node.setlValue(TypesHelper.isLType(scope.getType(child.getName())));
+          Type type = scope.getType(child.getName());
+
+          if (!TypesHelper.isFunction(type)) {
+
+            if (scope.getParentScope() == null) {
+              String globalLabel = GeneratorKoda.getGlobalVariableLabel(child.getName());
+              if (TypesHelper.isArray(type)) {
+                globalLabel += "_0";
+              }
+              GeneratorKoda.writeln("\tMOVE " + globalLabel + ", R0");
+
+            } else {
+              GeneratorKoda.writeln("\tADD R6, %D " + (offset + scope.getOffset(child.getName()))
+                  + ", R0");
+            }
+            if(!TypesHelper.isLType(type) && !TypesHelper.isArray(type)) {
+              GeneratorKoda.writeln("\tLOAD R0, (R0)");
+            }
+            GeneratorKoda.writeln("\tPUSH R0");
+          }
+          node.setType(type);
+          node.setlValue(TypesHelper.isLType(type));
           return; // all good
         }
         scope = scope.getParentScope();
+//        offset -= scope.getCurrentStackSize();
       }
 
       throw new SemanticException(getErrorMessage(node));
@@ -58,7 +82,9 @@ public class PrimarniIzraz extends Rule {
       if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
         node.setType(Int.INT);
         node.setlValue(false);
-        GeneratorKoda.writeln("\tMOVE %D " + value + ", R0");
+
+        GeneratorKoda.constants.add(value);
+        GeneratorKoda.writeln("\tLOAD R0, (" + GeneratorKoda.getConstantLabel(value) + ")");
         GeneratorKoda.writeln("\tPUSH R0");
         return; // all good
       }
@@ -72,8 +98,11 @@ public class PrimarniIzraz extends Rule {
       value = value.substring(1, value.length() - 1); // skip ''
       if (invalidCharacter(value)) {
         throw new SemanticException(getErrorMessage(node));
-      }
 
+      }
+      int znak = charToInt(value);
+      GeneratorKoda.writeln("\tMOVE %D " + znak + ",R0");
+      GeneratorKoda.writeln("\tPUSH R0");
       node.setType(Char.CHAR);
       node.setlValue(false);
     } else if (children.equals(Arrays.asList("NIZ_ZNAKOVA"))) {
@@ -116,6 +145,31 @@ public class PrimarniIzraz extends Rule {
    * @param character character to analyze
    * @return <code>true</code> if given character is invalid, <code>false</code> otherwise.
    */
+
+  private int charToInt(String value) {
+    int znak = 0;
+    if (value.length() == 1) {
+      znak = (int) value.charAt(0);
+
+    } else {
+
+      if (value.charAt(2) == 't') {
+        znak = '\t';
+      } else if (value.charAt(2) == 'n') {
+        znak = '\n';
+      } else if (value.charAt(2) == '0') {
+        znak = '\0';
+      } else if (value.charAt(2) == '\\') {
+        znak = '\\';
+      } else if (value.charAt(2) == '\'') {
+        znak = '\'';
+      } else if (value.charAt(2) == '\"') {
+        znak = '\"';
+      }
+    }
+    return znak;
+  }
+
   private boolean invalidCharacter(String character) {
     if (character.length() == 2 && character.charAt(0) == '\\') {
       if (!Arrays.asList('t', 'n', '0', '\\', '\'', '\"').contains(character.charAt(1))) {

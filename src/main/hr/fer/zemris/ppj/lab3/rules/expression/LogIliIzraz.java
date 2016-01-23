@@ -8,6 +8,7 @@ import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.Int;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -16,23 +17,23 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
  */
 public class LogIliIzraz extends Rule {
   public static LogIliIzraz LOG_ILI_IZRAZ = new LogIliIzraz();
-  
+
   private LogIliIzraz() {
     super(new NonTerminalSymbol("<log_ili_izraz>"));
   }
-  
+
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
     if (children.equals(Arrays.asList("<log_i_izraz>"))) {
-     SNode log_i_izraz = node.getChildren().get(0);
-     log_i_izraz.visit(scope);
-     node.setType(log_i_izraz.getType());
-     node.setlValue(log_i_izraz.islValue());
-    } else if (children.equals(Arrays.asList("<log_ili_izraz>", "OP_ILI", "<log_i_izraz>"))){
+      SNode log_i_izraz = node.getChildren().get(0);
+      log_i_izraz.visit(scope);
+      node.setType(log_i_izraz.getType());
+      node.setlValue(log_i_izraz.islValue());
+    } else if (children.equals(Arrays.asList("<log_ili_izraz>", "OP_ILI", "<log_i_izraz>"))) {
       SNode log_ili_izraz = node.getChildren().get(0);
       SNode log_i_izraz = node.getChildren().get(2);
-      
+
       log_ili_izraz.visit(scope);
       if (!TypesHelper.canImplicitlyCast(log_ili_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
@@ -41,7 +42,23 @@ public class LogIliIzraz extends Rule {
       if (!TypesHelper.canImplicitlyCast(log_i_izraz.getType(), Int.INT)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
+      GeneratorKoda.writeln("\tPOP R1");
+      if (log_i_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
+      GeneratorKoda.writeln("\tPOP R0");
+      if (log_ili_izraz.islValue()) {
+        GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      }
+
+      GeneratorKoda.writeln("\tOR R0, R1, R0");
+      GeneratorKoda.writeln("\tCMP R0, 0");
+      String labela = GeneratorKoda.getNextLabel();
+      GeneratorKoda.writeln("\tJP_EQ " + labela);
+      GeneratorKoda.writeln("\tMOVE 1, R0");
+      GeneratorKoda.writeln(labela + "\tPUSH R0");
+
       node.setType(Int.INT);
       node.setlValue(false);
     }
