@@ -36,6 +36,7 @@ public class GeneratorKoda {
     modulo();
     division();
     multiplication();
+    constants();
     fileWriter.close();
 
 
@@ -181,6 +182,15 @@ public class GeneratorKoda {
     
     
   }
+  
+  public static void constants(){
+    writeln("\tORG 20000");
+    for(Long constant : constants){
+      writeln("C_" + constant.toString() + " `DW " + constant.toString());
+    }
+  }
+  
+  
   /**
    * Takes a name of a global variable and returns a label representing that
    * global variable in FRISC code. 
