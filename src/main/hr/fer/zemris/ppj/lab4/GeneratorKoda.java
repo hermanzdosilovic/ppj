@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import hr.fer.zemris.ppj.lab3.analyzer.SemantickiAnalizator;
 
@@ -14,6 +16,8 @@ public class GeneratorKoda {
 
   private static BufferedWriter fileWriter;
   private static int counter = 0;
+  
+  public static Set<Long> constants = new HashSet<Long>(); 
   
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
@@ -197,5 +201,9 @@ public class GeneratorKoda {
   public static String getNextLabel() {
     return "L_" + counter++;
   }
-
+  
+  public static String getConstantLabel(long value) {
+    return "C_" + value;
+  }
 }
+  

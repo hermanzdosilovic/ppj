@@ -12,6 +12,7 @@ import hr.fer.zemris.ppj.lab3.types.Array;
 import hr.fer.zemris.ppj.lab3.types.Char;
 import hr.fer.zemris.ppj.lab3.types.ConstChar;
 import hr.fer.zemris.ppj.lab3.types.Int;
+import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
 import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
@@ -39,23 +40,29 @@ public class PrimarniIzraz extends Rule {
       int offset = 0;
       while (scope != null) {
         if (scope.hasDeclared(child.getName())) {
-          if (TypesHelper.isX(scope.getType(child.getName()))) {
+          Type type = scope.getType(child.getName());
+
+          if (!TypesHelper.isFunction(type)) {
+
             if (scope.getParentScope() == null) {
               String globalLabel = GeneratorKoda.getGlobalVariableLabel(child.getName());
-              GeneratorKoda.writeln("\tLOAD R0, (" + globalLabel + ")");
+              if (TypesHelper.isArray(type)) {
+                globalLabel += "_0";
+              }
+              GeneratorKoda.writeln("\tMOVE " + globalLabel + ", R0");
+
             } else {
-              GeneratorKoda.writeln("\tLOAD R0, (R6 + "
-                  + Integer.toHexString(offset + scope.getOffset(child.getName())).toUpperCase()
-                  + ")");
+              GeneratorKoda.writeln("\tADD R6, " + (offset + scope.getOffset(child.getName()))
+                  + ", R0");
             }
             GeneratorKoda.writeln("\tPUSH R0");
           }
-          node.setType(scope.getType(child.getName()));
-          node.setlValue(TypesHelper.isLType(scope.getType(child.getName())));
+          node.setType(type);
+          node.setlValue(TypesHelper.isLType(type));
           return; // all good
         }
         scope = scope.getParentScope();
-        offset -= scope.getCurrentStackSize();
+//        offset -= scope.getCurrentStackSize();
       }
 
       throw new SemanticException(getErrorMessage(node));
@@ -72,7 +79,9 @@ public class PrimarniIzraz extends Rule {
       if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
         node.setType(Int.INT);
         node.setlValue(false);
-        GeneratorKoda.writeln("\tMOVE %D " + value + ", R0");
+
+        GeneratorKoda.constants.add(value);
+        GeneratorKoda.writeln("\tLOAD R0, (" + GeneratorKoda.getConstantLabel(value) + ")");
         GeneratorKoda.writeln("\tPUSH R0");
         return; // all good
       }
@@ -89,7 +98,7 @@ public class PrimarniIzraz extends Rule {
 
       }
       int znak = charToInt(value);
-      GeneratorKoda.writeln("\tMOVE " + znak + ",R0");
+      GeneratorKoda.writeln("\tMOVE %D " + znak + ",R0");
       GeneratorKoda.writeln("\tPUSH R0");
       node.setType(Char.CHAR);
       node.setlValue(false);
