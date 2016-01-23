@@ -45,7 +45,7 @@ public class NaredbaSkoka extends Rule {
       if (type == null || type != Void.VOID) {
         throw new SemanticException(getErrorMessage(node));
       }
-      GeneratorKoda.write("\tRET");
+      GeneratorKoda.writeln("\tRET");
     } else if (childrenValues.equals(Arrays.asList("KR_RETURN", "<izraz>", "TOCKAZAREZ"))) {
       node.getChildren().get(1).visit(scope);
       ReturnType type = functionReturnType(node);

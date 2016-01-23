@@ -12,6 +12,7 @@ import hr.fer.zemris.ppj.lab3.types.NonVoidFunctionType;
 import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
 import hr.fer.zemris.ppj.lab3.types.VoidFunctionType;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -62,15 +63,27 @@ public class PostfiksIzraz extends Rule {
     } else if (children.equals(Arrays.asList("<postfiks_izraz>", "L_ZAGRADA", "D_ZAGRADA"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
 
+      for (int i = 0; i < 7; i++) {
+        GeneratorKoda.writeln("\tPUSH R" + i);
+      }
+      if (GeneratorKoda.inUse) {
+        GeneratorKoda.writeln("\tCALL " + GeneratorKoda
+            .getFunctionLabel(postfiks_izraz.getChildren().get(0).getChildren().get(0).getName()));
+      }
       // 1
       postfiks_izraz.visit(scope);
+
 
       // 2
       if (!(postfiks_izraz.getType() instanceof VoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      node.setType(((VoidFunctionType)postfiks_izraz.getType()).getReturnType());
+      node.setType(((VoidFunctionType) postfiks_izraz.getType()).getReturnType());
       node.setlValue(false);
+
+      for (int i = 6; i >= 0; i--) {
+        GeneratorKoda.writeln("\tPOP R" + i);
+      }
     } else if (children.equals(
         Arrays.asList("<postfiks_izraz>", "L_ZAGRADA", "<lista_argumenata>", "D_ZAGRADA"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
@@ -86,7 +99,7 @@ public class PostfiksIzraz extends Rule {
       if (!(postfiks_izraz.getType() instanceof NonVoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
       List<Type> params = ((NonVoidFunctionType) postfiks_izraz.getType()).getParams();
       if (params.size() != lista_argumenata.getTypes().size()) {
         throw new SemanticException(getErrorMessage(node));
@@ -97,7 +110,7 @@ public class PostfiksIzraz extends Rule {
         }
       }
 
-      node.setType(((NonVoidFunctionType)postfiks_izraz.getType()).getReturnType());
+      node.setType(((NonVoidFunctionType) postfiks_izraz.getType()).getReturnType());
       node.setlValue(false);
     } else if (children.equals(Arrays.asList("<postfiks_izraz>", "OP_INC"))
         || children.equals(Arrays.asList("<postfiks_izraz>", "OP_DEC"))) {

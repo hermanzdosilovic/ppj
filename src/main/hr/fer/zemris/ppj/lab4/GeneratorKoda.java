@@ -23,11 +23,14 @@ public class GeneratorKoda {
   public static Deque<String> povratneLabele = new ArrayDeque<String>();
   public static Deque<String> prekidneLabele = new ArrayDeque<String>();
   
+  public static boolean inUse;
+  
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
     writeln("\tMOVE 40000, R7");
     writeln("\tCALL F_main");
     writeln("\tHALT");
+    inUse = true;
     SemantickiAnalizator.main(args);
     
     modulo();
