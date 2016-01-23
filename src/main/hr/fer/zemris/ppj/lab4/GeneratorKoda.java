@@ -6,10 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import hr.fer.zemris.ppj.lab3.analyzer.SemantickiAnalizator;
+import hr.fer.zemris.ppj.lab3.scope.Scope;
 
 public class GeneratorKoda {
   public static String MULT_LABEL = "F_1";
@@ -22,18 +25,21 @@ public class GeneratorKoda {
   public static Set<Long> constants = new HashSet<Long>(); 
   public static Deque<String> povratneLabele = new ArrayDeque<String>();
   public static Deque<String> prekidneLabele = new ArrayDeque<String>();
+  public static Map<String, String> globalneVarijable = new HashMap<String, String>();
   
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
     writeln("\tMOVE 40000, R7");
     writeln("\tCALL F_main");
     writeln("\tHALT");
-    SemantickiAnalizator.main(args);
+    SemantickiAnalizator semAnalizator = new SemantickiAnalizator();
+    Scope globalScope = semAnalizator.run();
     
     modulo();
     division();
     multiplication();
     constants();
+    globalVariables(globalScope);
     fileWriter.close();
 
 
@@ -183,10 +189,16 @@ public class GeneratorKoda {
   public static void constants(){
     writeln("\tORG 20000");
     for(Long constant : constants){
-      writeln("C_" + constant.toString() + " `DW " + constant.toString());
+      writeln(getConstantLabel(constant) + " `DW " + constant.toString());
     }
   }
   
+  public static void globalVariables(Scope global){
+    for(String key : globalneVarijable.keySet()){
+      if(global.hasDeclared(key))
+        writeln("G_" + key + " `DW %D " + globalneVarijable.get(key));
+    }
+  }
   
   /**
    * Takes a name of a global variable and returns a label representing that

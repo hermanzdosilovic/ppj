@@ -7,6 +7,7 @@ import hr.fer.zemris.ppj.lab3.types.Array;
 import hr.fer.zemris.ppj.lab3.types.NumericType;
 import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -46,7 +47,7 @@ public class InitDeklarator extends Rule {
       // 2
       SNode inicijalizator = node.getChildren().get(2);
       inicijalizator.visit(scope);
-      
+
       // 3
       if (TypesHelper.isT(izravni_deklarator.getType())
           || TypesHelper.isConstT(izravni_deklarator.getType())) {
@@ -68,6 +69,62 @@ public class InitDeklarator extends Rule {
         }
       } else {
         throw new SemanticException(getErrorMessage(node));
+      }
+
+      String key = "";
+      String value = "0";
+      if (izravni_deklarator.getValuesOfChildren().contains("IDN")) {
+        key = izravni_deklarator.getChildren().get(0).getValue();
+      }
+      SNode newNode;
+      if (inicijalizator.getValuesOfChildren().contains("<izraz_pridruzivanja>")) {
+        newNode = inicijalizator.getChildren().get(0);
+        if (newNode.getValuesOfChildren().contains("<log_ili_izraz>")) {
+          newNode = newNode.getChildren().get(0);
+          if (newNode.getValuesOfChildren().contains("<log_i_izraz>")) {
+            newNode = newNode.getChildren().get(0);
+            if (newNode.getValuesOfChildren().contains("<bin_ili_izraz>")) {
+              newNode = newNode.getChildren().get(0);
+              if (newNode.getValuesOfChildren().contains("<bin_xili_izraz>")) {
+                newNode = newNode.getChildren().get(0);
+                if (newNode.getValuesOfChildren().contains("<bin_i_izraz>")) {
+                  newNode = newNode.getChildren().get(0);
+                  if (newNode.getValuesOfChildren().contains("<jednakosni_izraz>")) {
+                    newNode = newNode.getChildren().get(0);
+                    if (newNode.getValuesOfChildren().contains("<odnosni_izraz>")) {
+                      newNode = newNode.getChildren().get(0);
+                      if (newNode.getValuesOfChildren().contains("<aditivni_izraz>")) {
+                        newNode = newNode.getChildren().get(0);
+                        if (newNode.getValuesOfChildren().contains("<multiplikativni_izraz>")) {
+                          newNode = newNode.getChildren().get(0);
+                          if (newNode.getValuesOfChildren().contains("<cast_izraz>")) {
+                            newNode = newNode.getChildren().get(0);
+                            if (newNode.getValuesOfChildren().contains("<unarni_izraz>")) {
+                              newNode = newNode.getChildren().get(0);
+                              if (newNode.getValuesOfChildren().contains("<postfiks_izraz>")) {
+                                newNode = newNode.getChildren().get(0);
+                                if (newNode.getValuesOfChildren().contains("<primarni_izraz>")) {
+                                  newNode = newNode.getChildren().get(0);
+                                  if (newNode.getValuesOfChildren().contains("BROJ")) {
+                                    value =
+                                        newNode.getChildren().get(0).getValue();
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      if(key != "" && !GeneratorKoda.globalneVarijable.containsKey(key)){
+          GeneratorKoda.globalneVarijable.put(key, value);
       }
     }
   }
