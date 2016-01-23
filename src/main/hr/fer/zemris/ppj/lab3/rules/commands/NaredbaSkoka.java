@@ -60,9 +60,6 @@ public class NaredbaSkoka extends Rule {
       if (node.getChildren().get(1).islValue()) {
         GeneratorKoda.writeln("\tLOAD R6, (R6)");
       }
-      for (int i = 5; i >= 0; i--) {
-        GeneratorKoda.writeln("\tPOP R" + i);
-      }
       GeneratorKoda.writeln("\tRET");
     }
   }
