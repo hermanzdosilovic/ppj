@@ -55,7 +55,7 @@ public class PrimarniIzraz extends Rule {
               GeneratorKoda.writeln("\tADD R6, %D " + (offset + scope.getOffset(child.getName()))
                   + ", R0");
             }
-            if(TypesHelper.isLType(type)) {
+            if(!TypesHelper.isLType(type) && !TypesHelper.isArray(type)) {
               GeneratorKoda.writeln("\tLOAD R0, (R0)");
             }
             GeneratorKoda.writeln("\tPUSH R0");
