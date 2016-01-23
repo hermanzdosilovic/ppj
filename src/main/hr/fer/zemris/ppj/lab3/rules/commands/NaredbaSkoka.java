@@ -26,9 +26,20 @@ public class NaredbaSkoka extends Rule {
     List<String> childrenValues = node.getValuesOfChildren();
     if (childrenValues.equals(Arrays.asList("KR_CONTINUE", "TOCKAZAREZ"))
         || childrenValues.equals(Arrays.asList("KR_BREAK", "TOCKAZAREZ"))) {
+
       if (!isInsideOfLoop(node)) {
         throw new SemanticException(getErrorMessage(node));
       }
+      String labela;
+
+      if (childrenValues.contains("KR_BREAK")) {
+        labela = GeneratorKoda.prekidneLabele.getFirst();
+      } else {
+        labela = GeneratorKoda.povratneLabele.getFirst();
+      }
+
+      GeneratorKoda.writeln("\tJP " + labela);
+
     } else if (childrenValues.equals(Arrays.asList("KR_RETURN", "TOCKAZAREZ"))) {
       ReturnType type = functionReturnType(node);
       if (type == null || type != Void.VOID) {
@@ -38,8 +49,7 @@ public class NaredbaSkoka extends Rule {
     } else if (childrenValues.equals(Arrays.asList("KR_RETURN", "<izraz>", "TOCKAZAREZ"))) {
       node.getChildren().get(1).visit(scope);
       ReturnType type = functionReturnType(node);
-      if (type == null
-          || !TypesHelper.canImplicitlyCast(node.getChildren().get(1).getType(), type)) {
+      if (type == null || !TypesHelper.canImplicitlyCast(node.getChildren().get(1).getType(), type)) {
         throw new SemanticException(getErrorMessage(node));
       }
       GeneratorKoda.writeln("\tPOP R6");
