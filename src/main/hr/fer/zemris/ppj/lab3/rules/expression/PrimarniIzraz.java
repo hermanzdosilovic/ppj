@@ -52,8 +52,11 @@ public class PrimarniIzraz extends Rule {
               GeneratorKoda.writeln("\tMOVE " + globalLabel + ", R0");
 
             } else {
-              GeneratorKoda.writeln("\tADD R6, " + (offset + scope.getOffset(child.getName()))
+              GeneratorKoda.writeln("\tADD R6, %D " + (offset + scope.getOffset(child.getName()))
                   + ", R0");
+            }
+            if(TypesHelper.isLType(type)) {
+              GeneratorKoda.writeln("\tLOAD R0, (R0)");
             }
             GeneratorKoda.writeln("\tPUSH R0");
           }
