@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +20,8 @@ public class GeneratorKoda {
   private static int counter = 0;
   
   public static Set<Long> constants = new HashSet<Long>(); 
+  public static Deque<String> povratneLabele = new ArrayDeque<String>();
+  public static Deque<String> prekidneLabele = new ArrayDeque<String>();
   
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
