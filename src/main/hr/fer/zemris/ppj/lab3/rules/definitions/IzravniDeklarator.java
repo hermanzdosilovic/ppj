@@ -1,5 +1,8 @@
 package hr.fer.zemris.ppj.lab3.rules.definitions;
 
+import java.util.Arrays;
+import java.util.List;
+
 import hr.fer.zemris.ppj.lab3.analyzer.SemanticException;
 import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
@@ -13,9 +16,6 @@ import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class IzravniDeklarator extends Rule {
   public static IzravniDeklarator IZRAVNI_DEKLARATOR = new IzravniDeklarator();
 
@@ -26,7 +26,7 @@ public class IzravniDeklarator extends Rule {
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
-    
+
     if (children.equals(Arrays.asList("IDN"))) {
       SNode idn = node.getChildren().get(0);
 
@@ -42,10 +42,13 @@ public class IzravniDeklarator extends Rule {
 
       // 3
       scope.insert(idn.getName(), node.getnType(), true);
-
       node.setType(node.getnType());
-      
-      scope.setOffset(idn.getName(), - 4*(scope.getCurrentStackSize() + 1));
+
+      SNode parent = node.getParent();
+      if (parent.getValuesOfChildren().equals(Arrays.asList("<izravni_deklarator>"))) {
+        GeneratorKoda.writeln("\tPUSH R0\t; declaration"); // trash for declaration;
+      }
+      scope.setOffset(idn.getName(), -4 * (scope.getCurrentStackSize() + 1));
     } else if (children.equals(Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))) {
 
       // 1
@@ -102,7 +105,7 @@ public class IzravniDeklarator extends Rule {
           new NonVoidFunctionType(lista_parametara.getTypes(), (ReturnType) node.getnType());
 
       if (scope.hasDeclared(idn.getName())) {
-        if(!scope.getType(idn.getName()).equals(functionType)){
+        if (!scope.getType(idn.getName()).equals(functionType)) {
           throw new SemanticException(getErrorMessage(node));
         }
       } else {
