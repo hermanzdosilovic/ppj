@@ -26,6 +26,7 @@ public class SemantickiAnalizator {
     } catch (SemanticException e) {
       System.out.println(e.getMessage());
     }
+
   }
 
   public SemantickiAnalizator() throws IOException {
@@ -40,6 +41,18 @@ public class SemantickiAnalizator {
     return root;
   }
 
+  public Scope run() throws IOException {
+    try {
+      globalScope = new Scope();
+      root.visit(globalScope);
+      checkMain();
+      checkFunction(globalScope);
+    } catch (SemanticException e) {
+      System.out.println(e.getMessage());
+    }
+    return globalScope;
+  }
+
   public void checkMain() throws SemanticException {
     if (!globalScope.hasDefined("main")) {
       throw new SemanticException("main");
@@ -52,8 +65,7 @@ public class SemantickiAnalizator {
   public void checkFunction(Scope scope) throws SemanticException {
     for (String name : scope.getNames()) {
       if (scope.getType(name) instanceof FunctionType) {
-        if (!(globalScope.hasDefined(name)
-            && globalScope.getType(name).equals(scope.getType(name)))) {
+        if (!(globalScope.hasDefined(name) && globalScope.getType(name).equals(scope.getType(name)))) {
           throw new SemanticException("funkcija");
         }
       }
