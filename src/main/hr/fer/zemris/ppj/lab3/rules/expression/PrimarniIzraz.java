@@ -46,9 +46,6 @@ public class PrimarniIzraz extends Rule {
 
             if (scope.getParentScope() == null) {
               String globalLabel = GeneratorKoda.getGlobalVariableLabel(child.getName());
-              if (TypesHelper.isArray(type)) {
-                globalLabel += "_0";
-              }
               GeneratorKoda.writeln("\tMOVE " + globalLabel + ", R0");
 
             } else {
