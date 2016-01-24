@@ -22,12 +22,12 @@ public class GeneratorKoda {
 
   private static BufferedWriter fileWriter;
   private static int counter = 0;
-  
-  public static Set<Long> constants = new HashSet<Long>(); 
+
+  public static Set<Long> constants = new HashSet<Long>();
   public static Deque<String> povratneLabele = new ArrayDeque<String>();
   public static Deque<String> prekidneLabele = new ArrayDeque<String>();
   public static Map<String, List<String>> globalneVarijable = new HashMap<String, List<String>>();
-  
+
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
     writeln("\tMOVE 40000, R7");
@@ -35,7 +35,7 @@ public class GeneratorKoda {
     writeln("\tHALT");
     SemantickiAnalizator semAnalizator = new SemantickiAnalizator();
     Scope globalScope = semAnalizator.run();
-    
+
     modulo();
     division();
     multiplication();
@@ -81,30 +81,30 @@ public class GeneratorKoda {
 
     writeln("\tLOAD R0,(R7 + 010)");
     writeln("\tLOAD R1,(R7 + 0C)");
-    
+
     writeln("\tMOVE 0, R6");
     String labela = getNextLabel();
     writeln(labela + "\tADD R0, R6, R6");
     writeln("\tSUB R1, 1, R1");
     writeln("\tJP_NZ " + labela);
 
- 
+
     writeln("\tPOP R1");
     writeln("\tPOP R0");
     writeln("\tRET");
     writeln("");
   }
-  
+
   private static void division() {
     writeln("");
     writeln(DIV_LABEL + "\tPUSH R0");
     writeln("\tPUSH R1");
     writeln("\tPUSH R2");
-    
-    
+
+
     writeln("\tLOAD R0,(R7 + 014)");
     writeln("\tLOAD R1,(R7 + 010)");
-   
+
     writeln("\tMOVE 0, R2");
     writeln("\tCMP R0, 0");
     String labela3 = getNextLabel();
@@ -112,23 +112,23 @@ public class GeneratorKoda {
     writeln("\tMOVE 1, R2");
     writeln("\tXOR R0, -1, R0");
     writeln("\tADD R0, 1, R0");
-    
+
     writeln(labela3 + "\tCMP R1, 0");
     String labela4 = getNextLabel();
     writeln("\tJP_SGT " + labela4);
     writeln("\tXOR R2, 1, R2");
     writeln("\tXOR R1, -1, R1");
     writeln("\tADD R1, 1, R1");
-    
+
     writeln(labela4 + "\tMOVE 0, R6");
     String labela1 = getNextLabel();
     writeln(labela1 + "\tSUB R0, R1, R0");
     String labela2 = getNextLabel();
     writeln("\tJR_ULT " + labela2);
-    
+
     writeln("\tADD R6, 1, R6");
     writeln("\tJP " + labela1);
-    
+
     writeln(labela2 + "\tCMP R2, 0");
     String labela5 = getNextLabel();
     writeln("\tJP_EQ " + labela5);
@@ -141,103 +141,111 @@ public class GeneratorKoda {
     writeln("\tRET");
     writeln("");
   }
-  
+
   private static void modulo() {
     writeln("");
     writeln(MOD_LABEL + "\tPUSH R0");
     writeln("\tPUSH R1");
     writeln("\tPUSH R2");
-    
+
     writeln("\tLOAD R0, (R7 + 014)");
     writeln("\tLOAD R1, (R7 + 010)");
-     
+
     // dijeljenje
     writeln("\tPUSH R6");
     writeln("\tPUSH R0");
     writeln("\tPUSH R1");
     writeln("\tCALL " + DIV_LABEL);
-    
+
     writeln("\tPOP R1");
     writeln("\tPOP R0");
-    
+
     writeln("\tADD R6, 0, R2");
     writeln("\tPOP R6");
-    
-    //mnozenje
+
+    // mnozenje
     writeln("\tPUSH R6");
     writeln("\tPUSH R1");
     writeln("\tPUSH R2");
     writeln("\tCALL " + MULT_LABEL);
-    
+
     writeln("\tPOP R2");
     writeln("\tPOP R1");
-    
+
     writeln("\tADD R6, 0, R2");
     writeln("\tPOP R6");
-    
-    //oduzimanje
+
+    // oduzimanje
     writeln("\tSUB R0, R2, R6");
-    
+
     writeln("\tPOP R2");
     writeln("\tPOP R1");
     writeln("\tPOP R0");
     writeln("\tRET");
     writeln("");
-    
-    
+
+
   }
-  
-  public static void constants(){
+
+  public static void constants() {
     writeln("\tORG 20000");
-    for(Long constant : constants){
+    for (Long constant : constants) {
       writeln(getConstantLabel(constant) + " `DW " + constant.toString());
     }
   }
-  
-  public static void globalVariables(Scope global){
-    StringBuilder stringBuilder = new StringBuilder();
-    for(String key : globalneVarijable.keySet()){
-      if(global.hasDeclared(key)){
-        stringBuilder.append("G_" + key + " ");
-        for(String list : globalneVarijable.get(key)){
-          stringBuilder.append("\t`DW %D " + list);
-          writeln(stringBuilder.toString());
-          stringBuilder.delete(0, stringBuilder.length());
+
+
+  public static void globalVariables(Scope global) {
+    Deque<String> stack = new ArrayDeque<String>();
+    for (String key : globalneVarijable.keySet()) {
+      if (global.hasDeclared(key)) {
+        for (String list : globalneVarijable.get(key)) {
+          stack.push("\t DW %D " + list);
         }
+      }
+      StringBuilder stringBuilder = new StringBuilder();
+      while (!stack.isEmpty()) {
+        if (stack.size() == 1) {
+          stringBuilder.append("G_" + key + " ");
+        }
+        stringBuilder.append(stack.pop());
+        writeln(stringBuilder.toString());
+        stringBuilder.delete(0, stringBuilder.length());
       }
     }
   }
-  
+
   /**
-   * Takes a name of a global variable and returns a label representing that
-   * global variable in FRISC code. 
+   * Takes a name of a global variable and returns a label representing that global variable in
+   * FRISC code.
+   * 
    * @param name - name of a global variable
    * @return label representing provided variable
    */
   public static String getGlobalVariableLabel(String name) {
     return "G_" + name.toUpperCase();
   }
-  
+
   /**
-   * Takes a name of a function and returns a label representing
-   * that function in FRISC code.
+   * Takes a name of a function and returns a label representing that function in FRISC code.
+   * 
    * @param name - function name
    * @return label representing provided function name
    */
   public static String getFunctionLabel(String name) {
     return "F_" + name.toUpperCase();
   }
-  
+
   /**
    * Generates a new label with unique name.
+   * 
    * @return new label
    */
   public static String getNextLabel() {
     return "L_" + counter++;
   }
-  
+
   public static String getConstantLabel(long value) {
     return "C_" + value;
   }
 }
-  

@@ -152,6 +152,21 @@ public class InitDeklarator extends Rule {
                                           newNode.getChildren().get(0).getValue()).get(0);
                                 }
                               }
+                              else if(newNode.getValuesOfChildren().contains("<postfiks_izraz>")){
+                                String varijabla = "";
+                                newNode = newNode.getChildren().get(0);
+                                if(newNode.getValuesOfChildren().contains("<primarni_izraz>")){
+                                newNode = newNode.getChildren().get(0);
+                                  if(newNode.getValuesOfChildren().contains("IDN")){
+                                    varijabla = newNode.getChildren().get(0).getValue();
+                                  }
+                                  newNode = newNode.getParent();
+                                  newNode = newNode.getParent();
+                                }
+                                newNode = newNode.getChildren().get(2);
+                                int index = Integer.parseInt(findValue(newNode));
+                                value = GeneratorKoda.globalneVarijable.get(varijabla).get(index);
+                              }
                             
                           } else if (newNode.getValuesOfChildren().contains("OP_INC")
                               || newNode.getValuesOfChildren().contains("OP_DEC")) {
@@ -159,7 +174,6 @@ public class InitDeklarator extends Rule {
                             if (newNode.getValuesOfChildren().get(0).equals("OP_INC")) {
                               flag = true;
                             }
-//                            newNode = newNode.getChildren().get(1);
                             if (newNode.getValuesOfChildren().contains("<unarni_izraz>")) {
                               newNode = newNode.getChildren().get(1);
                               if (newNode.getValuesOfChildren().contains("<postfiks_izraz>")) {
