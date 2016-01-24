@@ -8,6 +8,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ public class GeneratorKoda {
   public static Set<Long> constants = new HashSet<Long>(); 
   public static Deque<String> povratneLabele = new ArrayDeque<String>();
   public static Deque<String> prekidneLabele = new ArrayDeque<String>();
-  public static Map<String, String> globalneVarijable = new HashMap<String, String>();
+  public static Map<String, List<String>> globalneVarijable = new HashMap<String, List<String>>();
   
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
@@ -194,9 +195,17 @@ public class GeneratorKoda {
   }
   
   public static void globalVariables(Scope global){
+    System.out.println(globalneVarijable.toString());
+    StringBuilder stringBuilder = new StringBuilder();
     for(String key : globalneVarijable.keySet()){
-      if(global.hasDeclared(key))
-        writeln("G_" + key + " `DW %D " + globalneVarijable.get(key));
+      if(global.hasDeclared(key)){
+        stringBuilder.append("G_" + key + " ");
+        for(String list : globalneVarijable.get(key)){
+          stringBuilder.append("\t`DW %D " + list);
+          writeln(stringBuilder.toString());
+          stringBuilder.delete(0, stringBuilder.length());
+        }
+      }
     }
   }
   

@@ -11,6 +11,7 @@ import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,45 +73,81 @@ public class InitDeklarator extends Rule {
       }
 
       String key = "";
-      String value = "0";
-      if (izravni_deklarator.getValuesOfChildren().contains("IDN")) {
+      List<String> value = new ArrayList<String>();
+      if (izravni_deklarator.getValuesOfChildren().equals(Arrays.asList("IDN"))) {
         key = izravni_deklarator.getChildren().get(0).getValue();
+        SNode newNode = inicijalizator;
+        value.add(findValue(newNode));
       }
-      SNode newNode;
-      if (inicijalizator.getValuesOfChildren().contains("<izraz_pridruzivanja>")) {
-        newNode = inicijalizator.getChildren().get(0);
-        if (newNode.getValuesOfChildren().contains("<log_ili_izraz>")) {
-          newNode = newNode.getChildren().get(0);
-          if (newNode.getValuesOfChildren().contains("<log_i_izraz>")) {
-            newNode = newNode.getChildren().get(0);
-            if (newNode.getValuesOfChildren().contains("<bin_ili_izraz>")) {
+      else if(izravni_deklarator.getValuesOfChildren().equals(Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))){
+        SNode broj = izravni_deklarator.getChildren().get(2);
+        key = izravni_deklarator.getChildren().get(0).getValue();
+        System.out.println("tu sam! " + key);
+        SNode newNode;
+        if(inicijalizator.getValuesOfChildren().contains("<lista_izraza_pridruzivanja>")){
+          newNode = inicijalizator.getChildren().get(1);
+
+          for(int i = 1; i <= Integer.parseInt(broj.getValue()); i++){
+            for(int j = Integer.parseInt(broj.getValue()) - i; j > 0; j--){
               newNode = newNode.getChildren().get(0);
-              if (newNode.getValuesOfChildren().contains("<bin_xili_izraz>")) {
+              System.out.println(newNode.getSymbol().getValue());
+            }
+            value.add(findValue(newNode));
+
+            for(int j = Integer.parseInt(broj.getValue()) - i; j > 0; j--){
+              newNode = newNode.getParent();
+            }
+          }
+        }
+      }
+      if (key != "" && !GeneratorKoda.globalneVarijable.containsKey(key)) {
+        if (value.isEmpty())
+          value.add("0");
+        GeneratorKoda.globalneVarijable.put(key, value);
+      }
+    }
+  }
+  
+  private String findValue(SNode newNode){
+    String value = "";
+
+    if (newNode.getValuesOfChildren().contains("<izraz_pridruzivanja>")) {
+      if(newNode.getValuesOfChildren().equals(Arrays.asList("<izraz_pridruzivanja>")))
+          newNode = newNode.getChildren().get(0);
+      else
+        newNode = newNode.getChildren().get(2);
+          if (newNode.getValuesOfChildren().contains("<log_ili_izraz>")) {
+            newNode = newNode.getChildren().get(0);
+            if (newNode.getValuesOfChildren().contains("<log_i_izraz>")) {
+              newNode = newNode.getChildren().get(0);
+              if (newNode.getValuesOfChildren().contains("<bin_ili_izraz>")) {
                 newNode = newNode.getChildren().get(0);
-                if (newNode.getValuesOfChildren().contains("<bin_i_izraz>")) {
+                if (newNode.getValuesOfChildren().contains("<bin_xili_izraz>")) {
                   newNode = newNode.getChildren().get(0);
-                  if (newNode.getValuesOfChildren().contains("<jednakosni_izraz>")) {
+                  if (newNode.getValuesOfChildren().contains("<bin_i_izraz>")) {
                     newNode = newNode.getChildren().get(0);
-                    if (newNode.getValuesOfChildren().contains("<odnosni_izraz>")) {
+                    if (newNode.getValuesOfChildren().contains("<jednakosni_izraz>")) {
                       newNode = newNode.getChildren().get(0);
-                      if (newNode.getValuesOfChildren().contains("<aditivni_izraz>")) {
+                      if (newNode.getValuesOfChildren().contains("<odnosni_izraz>")) {
                         newNode = newNode.getChildren().get(0);
-                        if (newNode.getValuesOfChildren().contains("<multiplikativni_izraz>")) {
+                        if (newNode.getValuesOfChildren().contains("<aditivni_izraz>")) {
                           newNode = newNode.getChildren().get(0);
-                          if (newNode.getValuesOfChildren().contains("<cast_izraz>")) {
+                          if (newNode.getValuesOfChildren().contains("<multiplikativni_izraz>")) {
                             newNode = newNode.getChildren().get(0);
-                            if (newNode.getValuesOfChildren().contains("<unarni_izraz>")) {
+                            if (newNode.getValuesOfChildren().contains("<cast_izraz>")) {
                               newNode = newNode.getChildren().get(0);
-                              if (newNode.getValuesOfChildren().contains("<postfiks_izraz>")) {
+                              if (newNode.getValuesOfChildren().contains("<unarni_izraz>")) {
                                 newNode = newNode.getChildren().get(0);
-                                if (newNode.getValuesOfChildren().contains("<primarni_izraz>")) {
+                                if (newNode.getValuesOfChildren().contains("<postfiks_izraz>")) {
                                   newNode = newNode.getChildren().get(0);
-                                  if (newNode.getValuesOfChildren().contains("BROJ")) {
-                                    value =
-                                        newNode.getChildren().get(0).getValue();
-                                  }
-                                  else if(newNode.getValuesOfChildren().contains("ZNAK")){
-                                    value = Integer.toString((int) newNode.getChildren().get(0).getValue().charAt(1));
+                                  if (newNode.getValuesOfChildren().contains("<primarni_izraz>")) {
+                                    newNode = newNode.getChildren().get(0);
+                                    if (newNode.getValuesOfChildren().contains("BROJ")) {
+                                      value = newNode.getChildren().get(0).getValue();
+                                    } else if (newNode.getValuesOfChildren().contains("ZNAK")) {
+                                      value = Integer.toString((int) newNode.getChildren().get(0)
+                                          .getValue().charAt(1));
+                                    }
                                   }
                                 }
                               }
@@ -125,10 +162,10 @@ public class InitDeklarator extends Rule {
             }
           }
         }
-      }
-      if(key != "" && !GeneratorKoda.globalneVarijable.containsKey(key)){
-          GeneratorKoda.globalneVarijable.put(key, value);
-      }
-    }
+    System.out.println(value);
+    return value;
+    
+    
+    
   }
 }
