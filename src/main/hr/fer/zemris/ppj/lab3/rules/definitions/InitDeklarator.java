@@ -69,6 +69,8 @@ public class InitDeklarator extends Rule {
       } else {
         throw new SemanticException(getErrorMessage(node));
       }
+      
+      
     }
   }
 }

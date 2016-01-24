@@ -46,13 +46,10 @@ public class IzrazPridruzivanja extends Rule {
       GeneratorKoda.writeln("\tPOP R1");
       GeneratorKoda.writeln("\tPOP R0");
 
-      GeneratorKoda.writeln("\tPOP R1");
       if (izraz_pridruzivanja.islValue()) {
         GeneratorKoda.writeln("\tLOAD R1, (R1)");
       }
-
-      GeneratorKoda.writeln("\tSTORE R1, (R0)");
-
+      GeneratorKoda.writeln("\tPUSH R1");
 
       node.setType(postfiks_izraz.getType());
       node.setlValue(false);
