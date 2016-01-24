@@ -45,10 +45,7 @@ public class NaredbaSkoka extends Rule {
       if (type == null || type != Void.VOID) {
         throw new SemanticException(getErrorMessage(node));
       }
-
-      for (int i = 5; i >= 0; i--) {
-        GeneratorKoda.writeln("\tPOP R" + i);
-      }
+      GeneratorKoda.writeln("\tMOVE R6, R7");
       GeneratorKoda.writeln("\tRET");
     } else if (childrenValues.equals(Arrays.asList("KR_RETURN", "<izraz>", "TOCKAZAREZ"))) {
       node.getChildren().get(1).visit(scope);
@@ -56,6 +53,7 @@ public class NaredbaSkoka extends Rule {
       if (type == null || !TypesHelper.canImplicitlyCast(node.getChildren().get(1).getType(), type)) {
         throw new SemanticException(getErrorMessage(node));
       }
+      
       GeneratorKoda.writeln("\tPOP R0");
       GeneratorKoda.writeln("\tMOVE R6, R7");
       GeneratorKoda.writeln("\tMOVE R0, R6");
