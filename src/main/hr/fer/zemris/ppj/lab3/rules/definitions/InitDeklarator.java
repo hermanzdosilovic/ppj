@@ -82,7 +82,6 @@ public class InitDeklarator extends Rule {
           Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))) {
         SNode broj = izravni_deklarator.getChildren().get(2);
         key = izravni_deklarator.getChildren().get(0).getValue();
-        System.out.println("tu sam! " + key);
         SNode newNode;
         if (inicijalizator.getValuesOfChildren().contains("<lista_izraza_pridruzivanja>")) {
           newNode = inicijalizator.getChildren().get(1);
@@ -90,7 +89,6 @@ public class InitDeklarator extends Rule {
           for (int i = 1; i <= Integer.parseInt(broj.getValue()); i++) {
             for (int j = Integer.parseInt(broj.getValue()) - i; j > 0; j--) {
               newNode = newNode.getChildren().get(0);
-              System.out.println(newNode.getSymbol().getValue());
             }
             value.add(findValue(newNode));
 
@@ -157,7 +155,6 @@ public class InitDeklarator extends Rule {
                             
                           } else if (newNode.getValuesOfChildren().contains("OP_INC")
                               || newNode.getValuesOfChildren().contains("OP_DEC")) {
-                            System.out.println("Tu sam sad!");
                             boolean flag = false;
                             if (newNode.getValuesOfChildren().get(0).equals("OP_INC")) {
                               flag = true;
@@ -173,7 +170,6 @@ public class InitDeklarator extends Rule {
                                     value =
                                         GeneratorKoda.globalneVarijable.get(
                                             newNode.getChildren().get(0).getValue()).get(0);
-                                    System.out.println(value);
                                     if (flag) {
                                       value =
                                           Integer.toString(Integer
@@ -201,7 +197,6 @@ public class InitDeklarator extends Rule {
         }
       }
     }
-    System.out.println(value);
     return value;
 
 

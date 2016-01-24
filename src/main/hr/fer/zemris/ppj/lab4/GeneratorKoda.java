@@ -195,7 +195,6 @@ public class GeneratorKoda {
   }
   
   public static void globalVariables(Scope global){
-    System.out.println(globalneVarijable.toString());
     StringBuilder stringBuilder = new StringBuilder();
     for(String key : globalneVarijable.keySet()){
       if(global.hasDeclared(key)){
