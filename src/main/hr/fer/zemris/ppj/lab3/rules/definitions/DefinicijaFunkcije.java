@@ -96,9 +96,11 @@ public class DefinicijaFunkcije extends Rule {
       // 7
       Scope scopeSlozenaNaredba = new Scope(scope);
       //scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
-      for (int i = 0; i < lista_parametara.getTypes().size(); i++) {
+      int size = lista_parametara.getTypes().size();
+      for (int i = 0; i < size; i++) {
         scopeSlozenaNaredba.insert(lista_parametara.getNames().get(i),
             lista_parametara.getTypes().get(i), false);
+        scopeSlozenaNaredba.setOffset(lista_parametara.getNames().get(i), 4*(size - i + 1));
       }
       node.getChildren().get(5).visit(scopeSlozenaNaredba);
     }
