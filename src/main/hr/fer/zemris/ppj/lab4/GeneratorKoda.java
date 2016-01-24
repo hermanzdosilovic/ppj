@@ -184,7 +184,7 @@ public class GeneratorKoda {
   public static void constants(){
     writeln("\t`ORG 20000");
     for(Long constant : constants){
-      writeln("C_" + constant.toString() + " `DW %D " + constant.toString());
+      writeln("C_" + constant.toString() + " DW %D " + constant.toString());
     }
   }
   

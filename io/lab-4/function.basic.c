@@ -3,5 +3,6 @@ int f(void) {
 }
 
 int main(void) {
+  5;
   return f();
 }

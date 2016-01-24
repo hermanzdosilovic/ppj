@@ -56,7 +56,9 @@ public class NaredbaSkoka extends Rule {
       if (type == null || !TypesHelper.canImplicitlyCast(node.getChildren().get(1).getType(), type)) {
         throw new SemanticException(getErrorMessage(node));
       }
-      GeneratorKoda.writeln("\tPOP R6");
+      GeneratorKoda.writeln("\tPOP R0");
+      GeneratorKoda.writeln("\tMOVE R6, R7");
+      GeneratorKoda.writeln("\tMOVE R0, R6");
       if (node.getChildren().get(1).islValue()) {
         GeneratorKoda.writeln("\tLOAD R6, (R6)");
       }

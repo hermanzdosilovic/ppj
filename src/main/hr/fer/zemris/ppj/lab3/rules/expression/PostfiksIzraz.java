@@ -75,7 +75,6 @@ public class PostfiksIzraz extends Rule {
       // 1
       postfiks_izraz.visit(scope);
 
-
       // 2
       if (!(postfiks_izraz.getType() instanceof VoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
