@@ -9,6 +9,7 @@ import hr.fer.zemris.ppj.lab3.types.NumericType;
 import hr.fer.zemris.ppj.lab3.types.ReturnType;
 import hr.fer.zemris.ppj.lab3.types.Void;
 import hr.fer.zemris.ppj.lab3.types.VoidFunctionType;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -25,7 +26,7 @@ public class IzravniDeklarator extends Rule {
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> children = node.getValuesOfChildren();
-
+    
     if (children.equals(Arrays.asList("IDN"))) {
       SNode idn = node.getChildren().get(0);
 
@@ -43,6 +44,8 @@ public class IzravniDeklarator extends Rule {
       scope.insert(idn.getName(), node.getnType(), true);
 
       node.setType(node.getnType());
+      
+      scope.setOffset(idn.getName(), - 4*(scope.getCurrentStackSize() + 1));
     } else if (children.equals(Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))) {
 
       // 1
