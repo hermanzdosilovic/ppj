@@ -109,6 +109,9 @@ public class InitDeklarator extends Rule {
                                     value =
                                         newNode.getChildren().get(0).getValue();
                                   }
+                                  else if(newNode.getValuesOfChildren().contains("ZNAK")){
+                                    value = Integer.toString((int) newNode.getChildren().get(0).getValue().charAt(1));
+                                  }
                                 }
                               }
                             }
