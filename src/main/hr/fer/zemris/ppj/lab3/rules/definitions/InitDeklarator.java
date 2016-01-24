@@ -7,6 +7,7 @@ import hr.fer.zemris.ppj.lab3.types.Array;
 import hr.fer.zemris.ppj.lab3.types.NumericType;
 import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
 import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 
@@ -70,7 +71,14 @@ public class InitDeklarator extends Rule {
         throw new SemanticException(getErrorMessage(node));
       }
       
-      
+      GeneratorKoda.writeln("\tPOP R0");
+      if (inicijalizator.getValuesOfChildren().equals(Arrays.asList("<izraz_pridruzivanja>"))) {
+        SNode izraz_pridruzivanja = inicijalizator.getChildren().get(0);
+        if (izraz_pridruzivanja.islValue()) {
+          GeneratorKoda.writeln("\tLOAD R0, (R0)");
+        }
+      }
+      GeneratorKoda.writeln("\tPUSH R0");
     }
   }
 }
