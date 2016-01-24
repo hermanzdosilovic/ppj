@@ -62,7 +62,7 @@ public class PostfiksIzraz extends Rule {
       node.setlValue(!TypesHelper.isConstT(X));
     } else if (children.equals(Arrays.asList("<postfiks_izraz>", "L_ZAGRADA", "D_ZAGRADA"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
-      
+
       GeneratorKoda.writeln("\tPUSH R6");
       if (GeneratorKoda.inUse) {
         GeneratorKoda.writeln("\tCALL " + GeneratorKoda
@@ -71,7 +71,7 @@ public class PostfiksIzraz extends Rule {
       GeneratorKoda.writeln("\tMOVE R6, R0");
       GeneratorKoda.writeln("\tPOP R6");
       GeneratorKoda.writeln("\tPUSH R0");
-      
+
       // 1
       postfiks_izraz.visit(scope);
 
@@ -92,6 +92,15 @@ public class PostfiksIzraz extends Rule {
       // 2
       lista_argumenata.visit(scope);
 
+      GeneratorKoda.writeln("\tPUSH R6");
+      if (GeneratorKoda.inUse) {
+        GeneratorKoda.writeln("\tCALL " + GeneratorKoda
+            .getFunctionLabel(postfiks_izraz.getChildren().get(0).getChildren().get(0).getName()));
+      }
+      GeneratorKoda.writeln("\tMOVE R6, R0");
+      GeneratorKoda.writeln("\tPOP R6");
+      GeneratorKoda.writeln("\tPUSH R0");
+      
       // 3
       if (!(postfiks_izraz.getType() instanceof NonVoidFunctionType)) {
         throw new SemanticException(getErrorMessage(node));
