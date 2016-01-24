@@ -23,19 +23,21 @@ public class GeneratorKoda {
   public static Deque<String> povratneLabele = new ArrayDeque<String>();
   public static Deque<String> prekidneLabele = new ArrayDeque<String>();
   
+  public static boolean inUse;
+  
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
     writeln("\tMOVE 40000, R7");
-    writeln("\tCALL F_main");
+    writeln("\tCALL " + getFunctionLabel("main"));
     writeln("\tHALT");
+    inUse = true;
     SemantickiAnalizator.main(args);
     
     modulo();
     division();
     multiplication();
+    constants();
     fileWriter.close();
-
-
   }
 
   /**
@@ -71,8 +73,8 @@ public class GeneratorKoda {
     writeln(MULT_LABEL + "\tPUSH R0");
     writeln("\tPUSH R1");
 
-    writeln("\tLOAD R0,(R7 + 010)");
-    writeln("\tLOAD R1,(R7 + 0C)");
+    writeln("\tLOAD R0,(R7+010)");
+    writeln("\tLOAD R1,(R7+0C)");
     
     writeln("\tMOVE 0, R6");
     String labela = getNextLabel();
@@ -94,8 +96,8 @@ public class GeneratorKoda {
     writeln("\tPUSH R2");
     
     
-    writeln("\tLOAD R0,(R7 + 014)");
-    writeln("\tLOAD R1,(R7 + 010)");
+    writeln("\tLOAD R0,(R7+014)");
+    writeln("\tLOAD R1,(R7+010)");
    
     writeln("\tMOVE 0, R2");
     writeln("\tCMP R0, 0");
@@ -140,8 +142,8 @@ public class GeneratorKoda {
     writeln("\tPUSH R1");
     writeln("\tPUSH R2");
     
-    writeln("\tLOAD R0, (R7 + 014)");
-    writeln("\tLOAD R1, (R7 + 010)");
+    writeln("\tLOAD R0, (R7+014)");
+    writeln("\tLOAD R1, (R7+010)");
      
     // dijeljenje
     writeln("\tPUSH R6");
@@ -178,6 +180,15 @@ public class GeneratorKoda {
     
     
   }
+  
+  public static void constants(){
+    writeln("\t`ORG 20000");
+    for(Long constant : constants){
+      writeln("C_" + constant.toString() + " DW %D " + constant.toString());
+    }
+  }
+  
+  
   /**
    * Takes a name of a global variable and returns a label representing that
    * global variable in FRISC code. 
