@@ -51,12 +51,16 @@ public class PrimarniIzraz extends Rule {
               GeneratorKoda.writeln("\tADD R6, %D " + scope.getOffset(child.getName()) + ", R0");
             }
 
+            boolean isAlone = true;
             boolean isArgument = false;
             SNode parent = node.getParent();
             while (parent != null) {
               if (parent.getSymbol().getValue().equals("<lista_argumenata>")) {
-                isArgument = true;
+                isArgument = true & isAlone;
                 break;
+              }
+              if (parent.getChildren().size() > 1) {
+                isAlone = false;
               }
               parent = parent.getParent();
             }
