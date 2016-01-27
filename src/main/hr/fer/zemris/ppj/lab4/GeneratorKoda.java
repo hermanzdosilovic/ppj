@@ -84,8 +84,8 @@ public class GeneratorKoda {
     writeln(MULT_LABEL + "\tPUSH R0");
     writeln("\tPUSH R1");
 
-    writeln("\tLOAD R0,(R7 + 010)");
-    writeln("\tLOAD R1,(R7 + 0C)");
+    writeln("\tLOAD R0,(R7+010)");
+    writeln("\tLOAD R1,(R7+0C)");
 
     writeln("\tMOVE 0, R6");
     String labela = getNextLabel();
@@ -192,9 +192,9 @@ public class GeneratorKoda {
   }
 
   public static void constants() {
-    writeln("\tORG 20000");
+    writeln("\t`ORG 20000");
     for (Long constant : constants) {
-      writeln(getConstantLabel(constant) + " DW %D" + constant.toString());
+      writeln(getConstantLabel(constant) + " DW %D " + constant.toString());
     }
   }
 
