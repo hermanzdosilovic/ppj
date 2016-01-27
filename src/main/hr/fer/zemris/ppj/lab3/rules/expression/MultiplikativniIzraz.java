@@ -67,6 +67,8 @@ public class MultiplikativniIzraz extends Rule {
       }
       GeneratorKoda.writeln("\tADD R6, 0, R0");
       GeneratorKoda.writeln("\tPOP R6");
+      GeneratorKoda.writeln("\tPOP R6");
+      GeneratorKoda.writeln("\tPOP R6");
       GeneratorKoda.writeln("\tPUSH R0");
 
       node.setType(Int.INT);
