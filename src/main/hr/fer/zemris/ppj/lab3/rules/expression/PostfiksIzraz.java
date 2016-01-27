@@ -70,6 +70,8 @@ public class PostfiksIzraz extends Rule {
       GeneratorKoda.writeln("\tCALL " + GeneratorKoda.MULT_LABEL);
       GeneratorKoda.writeln("\tSUB R1, R6, R1");
       GeneratorKoda.writeln("\tPOP R6");
+      GeneratorKoda.writeln("\tPOP R6");
+      GeneratorKoda.writeln("\tPOP R6");
       node.setType(X);
       node.setlValue(!TypesHelper.isConstT(X));
       if(!node.islValue()) {
