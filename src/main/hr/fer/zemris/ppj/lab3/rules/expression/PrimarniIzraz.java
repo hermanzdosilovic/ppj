@@ -37,7 +37,6 @@ public class PrimarniIzraz extends Rule {
       SNode child = node.getChildren().get(0);
 
       // 1
-      int offset = 0;
       while (scope != null) {
         if (scope.hasDeclared(child.getName())) {
           Type type = scope.getType(child.getName());
@@ -49,10 +48,21 @@ public class PrimarniIzraz extends Rule {
               GeneratorKoda.writeln("\tMOVE " + globalLabel + ", R0");
 
             } else {
-              GeneratorKoda.writeln("\tADD R6, %D " + (offset + scope.getOffset(child.getName()))
-                  + ", R0");
+              GeneratorKoda.writeln("\tADD R6, %D " + scope.getOffset(child.getName()) + ", R0");
             }
-            if(!TypesHelper.isLType(type) && !TypesHelper.isArray(type)) {
+
+            boolean isArgument = false;
+            SNode parent = node.getParent();
+            while (parent != null) {
+              if (parent.getSymbol().getValue().equals("<lista_argumenata>")) {
+                isArgument = true;
+                break;
+              }
+              parent = parent.getParent();
+            }
+            if (isArgument && (TypesHelper.isLType(type) || TypesHelper.isArray(type))) {
+              GeneratorKoda.writeln("\tLOAD R0, (R0)");
+            } else if (!isArgument && !TypesHelper.isLType(type) && !TypesHelper.isArray(type)) {
               GeneratorKoda.writeln("\tLOAD R0, (R0)");
             }
             GeneratorKoda.writeln("\tPUSH R0");
@@ -62,7 +72,6 @@ public class PrimarniIzraz extends Rule {
           return; // all good
         }
         scope = scope.getParentScope();
-//        offset -= scope.getCurrentStackSize();
       }
 
       throw new SemanticException(getErrorMessage(node));
