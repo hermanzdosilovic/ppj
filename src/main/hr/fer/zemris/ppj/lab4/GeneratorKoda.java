@@ -240,7 +240,7 @@ public class GeneratorKoda {
    * @return label representing provided variable
    */
   public static String getGlobalVariableLabel(String name) {
-    return "G_" + name.toUpperCase();
+    return "G_" + name;
   }
 
   /**
