@@ -48,7 +48,9 @@ public class IzravniDeklarator extends Rule {
       if (parent.getValuesOfChildren().equals(Arrays.asList("<izravni_deklarator>"))) {
         GeneratorKoda.writeln("\tPUSH R0\t; declaration"); // trash for declaration;
       }
-      scope.setOffset(idn.getName(), -4 * (scope.getCurrentStackSize() + 1));
+      
+      int numberOfLocals = scope.numberOfLocalVariables();
+      scope.setOffset(idn.getName(), -4 * (numberOfLocals + 1));
     } else if (children.equals(Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))) {
 
       // 1

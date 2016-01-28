@@ -110,6 +110,16 @@ public class Scope {
     return stackOffset.get(variable);
   }
   
+  public int numberOfLocalVariables() {
+    int cnt = 0;
+    for (int offset : stackOffset.values()) {
+      if (offset < 0) {
+        cnt++;
+      }
+    }
+    return cnt;
+  }
+  
   public int getCurrentStackSize() {
     return stackOffset.keySet().size();
   }

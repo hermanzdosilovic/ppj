@@ -5,5 +5,5 @@ int f(int a, int b) {
 int main(void) {
   int x = 300;
   int y = 200;
-  return f(x, y); // 100
+  return f(x + 100, y + 100); // 100
 }

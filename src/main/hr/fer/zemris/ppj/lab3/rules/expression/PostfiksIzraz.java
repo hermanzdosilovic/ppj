@@ -117,6 +117,10 @@ public class PostfiksIzraz extends Rule {
       }
       GeneratorKoda.writeln("\tMOVE R6, R0");
       GeneratorKoda.writeln("\tPOP R6");
+      
+      for (int i = 0; i < lista_argumenata.getTypes().size(); i++) {
+        GeneratorKoda.writeln("\tPOP R3 ; remove argument");
+      }
       GeneratorKoda.writeln("\tPUSH R0");
       
       // 3
