@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,18 +32,26 @@ public class GeneratorKoda {
   
   public static Map<String, List<String>> globalneVarijable = new HashMap<String, List<String>>();
 
-
+  public static List<String> globalCode = new ArrayList<>();
+  public static boolean isGlobalCode;
+  
   public static void main(String[] args) throws IOException {
     fileWriter = new BufferedWriter(new FileWriter(new File("a.frisc")));
     writeln("\tMOVE 40000, R7");
-    writeln("\tCALL " + getFunctionLabel("main"));
-    writeln("\tHALT");
+    writeln("\tCALL GLOBAL");
 
     inUse = true;
 
     SemantickiAnalizator semAnalizator = new SemantickiAnalizator();
     Scope globalScope = semAnalizator.run();
-
+    
+    writeln("GLOBAL");
+    for(String line : globalCode) {
+      GeneratorKoda.write(line);
+    }
+    writeln("\tCALL " + getFunctionLabel("main"));
+    writeln("\tHALT");
+    
     modulo();
     division();
     multiplication();
@@ -61,6 +70,12 @@ public class GeneratorKoda {
     if (fileWriter == null) {
       return;
     }
+    
+    if (isGlobalCode) {
+      globalCode.add(line);
+      return;
+    }
+    
     System.err.print(line);
     try {
       fileWriter.write(line);
@@ -187,8 +202,6 @@ public class GeneratorKoda {
     writeln("\tPOP R0");
     writeln("\tRET");
     writeln("");
-
-
   }
 
   public static void constants() {
@@ -204,13 +217,13 @@ public class GeneratorKoda {
     for (String key : globalneVarijable.keySet()) {
       if (global.hasDeclared(key)) {
         for (String list : globalneVarijable.get(key)) {
-          stack.push("\t DW %D " + list);
+          stack.push(" DW %D " + list);
         }
       }
       StringBuilder stringBuilder = new StringBuilder();
       while (!stack.isEmpty()) {
         if (stack.size() == 1) {
-          stringBuilder.append("G_" + key + " ");
+          stringBuilder.append(getGlobalVariableLabel(key));
         }
         stringBuilder.append(stack.pop());
         writeln(stringBuilder.toString());
