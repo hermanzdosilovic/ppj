@@ -63,7 +63,9 @@ public class PostfiksIzraz extends Rule {
       if(izraz.islValue()) {
         GeneratorKoda.writeln("\tLOAD R0, (R0)");
       }
-      GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      if (scope.hasDeclared(postfiks_izraz.getChildren().get(0).getChildren().get(0).getName())) {
+        GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      }
       
       GeneratorKoda.writeln("\tPUSH R1\n\tPUSH R6\n\tPUSH R0\n\tMOVE %D 4, R0\n\tPUSH R0");
       GeneratorKoda.writeln("\tCALL " + GeneratorKoda.MULT_LABEL);

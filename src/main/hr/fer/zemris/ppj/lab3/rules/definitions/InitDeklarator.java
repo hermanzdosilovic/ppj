@@ -107,7 +107,6 @@ public class InitDeklarator extends Rule {
 
         if (izravni_deklarator.getValuesOfChildren().equals(Arrays.asList("IDN"))) {
           key = izravni_deklarator.getChildren().get(0).getValue();
-          SNode newNode = inicijalizator;
           value.add("0");
           GeneratorKoda.writeln("\tPOP R0");
           GeneratorKoda.writeln("\tSTORE R0, (" + GeneratorKoda.getGlobalVariableLabel(key) + ")");
@@ -118,13 +117,16 @@ public class InitDeklarator extends Rule {
           SNode newNode;
           if (inicijalizator.getValuesOfChildren().contains("<lista_izraza_pridruzivanja>")) {
             newNode = inicijalizator.getChildren().get(1);
-
+            GeneratorKoda.writeln("\tPOP R0");
+            GeneratorKoda.writeln("\tMOVE " + GeneratorKoda.getGlobalVariableLabel(key) + ", R1");
             for (int i = 1; i <= Integer.parseInt(broj.getValue()); i++) {
               for (int j = Integer.parseInt(broj.getValue()) - i; j > 0; j--) {
                 newNode = newNode.getChildren().get(0);
               }
               value.add("0");
-
+              GeneratorKoda.writeln("\tPOP R0");
+              GeneratorKoda.writeln("\tSTORE R0, (R1)");
+              GeneratorKoda.writeln("\tSUB R1, %D 4, R1");
               for (int j = Integer.parseInt(broj.getValue()) - i; j > 0; j--) {
                 newNode = newNode.getParent();
               }
@@ -137,6 +139,7 @@ public class InitDeklarator extends Rule {
           GeneratorKoda.globalneVarijable.put(key, value);
         }
       }
+      
       GeneratorKoda.isGlobalCode = false;
     }
   }

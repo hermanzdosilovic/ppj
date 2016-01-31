@@ -213,23 +213,29 @@ public class GeneratorKoda {
 
 
   public static void globalVariables(Scope global) {
-    Deque<String> stack = new ArrayDeque<String>();
+//    Deque<String> stack = new ArrayDeque<String>();
     for (String key : globalneVarijable.keySet()) {
-      if (global.hasDeclared(key)) {
-        for (String list : globalneVarijable.get(key)) {
-          stack.push(" DW %D " + list);
-        }
+      for (int i = 0; i < globalneVarijable.get(key).size() - 1; i++) {
+        writeln(" DW %D " + globalneVarijable.get(key).get(i));
       }
-      StringBuilder stringBuilder = new StringBuilder();
-      while (!stack.isEmpty()) {
-        if (stack.size() == 1) {
-          stringBuilder.append(getGlobalVariableLabel(key));
-        }
-        stringBuilder.append(stack.pop());
-        writeln(stringBuilder.toString());
-        stringBuilder.delete(0, stringBuilder.length());
-      }
+      writeln(getGlobalVariableLabel(key) + " DW %D " + globalneVarijable.get(key).get(0));
     }
+//    for (String key : globalneVarijable.keySet()) {
+//      if (global.hasDeclared(key)) {
+//        for (String list : globalneVarijable.get(key)) {
+//          stack.push(" DW %D " + list);
+//        }
+//      }
+//      StringBuilder stringBuilder = new StringBuilder();
+//      while (!stack.isEmpty()) {
+//        if (stack.size() == 1) {
+//          stringBuilder.append(getGlobalVariableLabel(key));
+//        }
+//        stringBuilder.append(stack.pop());
+//        writeln(stringBuilder.toString());
+//        stringBuilder.delete(0, stringBuilder.length());
+//      }
+//    }
   }
 
   /**
