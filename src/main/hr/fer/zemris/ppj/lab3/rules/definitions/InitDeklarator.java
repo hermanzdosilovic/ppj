@@ -35,15 +35,27 @@ public class InitDeklarator extends Rule {
       // 1
       izravni_deklarator.setnType(node.getnType());
       izravni_deklarator.visit(scope);
-      
-      if (GeneratorKoda.isGlobalCode && izravni_deklarator.getValuesOfChildren().equals(Arrays.asList("IDN"))) {
+
+      if (GeneratorKoda.isGlobalCode
+          && izravni_deklarator.getValuesOfChildren().equals(Arrays.asList("IDN"))) {
         String name = izravni_deklarator.getChildren().get(0).getValue();
         List<String> value = new ArrayList<String>();
         value.add("0");
         GeneratorKoda.globalneVarijable.put(name, value);
         GeneratorKoda.writeln("\tPOP R0");
+      } else if (GeneratorKoda.isGlobalCode && izravni_deklarator.getValuesOfChildren()
+          .equals(Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))) {
+        String name = izravni_deklarator.getChildren().get(0).getValue();
+        List<String> value = new ArrayList<String>();
+        Integer broj = izravni_deklarator.getElemCount();
+        GeneratorKoda.writeln("\tPOP R0");
+        for (int i = 0; i < broj; i++) {
+          value.add("0");
+          GeneratorKoda.writeln("\tPOP R0");
+        }
+        GeneratorKoda.globalneVarijable.put(name, value);
       }
-      
+
       GeneratorKoda.isGlobalCode = false;
 
       // 2
@@ -87,7 +99,7 @@ public class InitDeklarator extends Rule {
       } else {
         throw new SemanticException(getErrorMessage(node));
       }
-      
+
       if (!TypesHelper.isArray(izravni_deklarator.getType())) {
         GeneratorKoda.writeln("\tPOP R0");
         if (inicijalizator.getValuesOfChildren().equals(Arrays.asList("<izraz_pridruzivanja>"))) {
@@ -97,7 +109,8 @@ public class InitDeklarator extends Rule {
           }
         }
       } else {
-        GeneratorKoda.writeln("\tADD R7, %D " + 4*(izravni_deklarator.getElemCount() - 1)+ ", R0");
+        GeneratorKoda
+            .writeln("\tADD R7, %D " + 4 * (izravni_deklarator.getElemCount() - 1) + ", R0");
       }
       GeneratorKoda.writeln("\tPUSH R0");
 
@@ -139,7 +152,7 @@ public class InitDeklarator extends Rule {
           GeneratorKoda.globalneVarijable.put(key, value);
         }
       }
-      
+
       GeneratorKoda.isGlobalCode = false;
     }
   }
