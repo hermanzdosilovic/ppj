@@ -55,7 +55,7 @@ public class OdnosniIzraz extends Rule {
       }
         
       GeneratorKoda.writeln("\tMOVE 1, R2");
-      GeneratorKoda.writeln("\tCMP R1, R0");
+      GeneratorKoda.writeln("\tCMP R0, R1");
       String labela = GeneratorKoda.getNextLabel();
 
       if (children.contains("OP_LT")) {
