@@ -5,7 +5,9 @@ import hr.fer.zemris.ppj.lab3.rules.Rule;
 import hr.fer.zemris.ppj.lab3.scope.Scope;
 import hr.fer.zemris.ppj.lab3.types.NonVoidFunctionType;
 import hr.fer.zemris.ppj.lab3.types.ReturnType;
+import hr.fer.zemris.ppj.lab3.types.Type;
 import hr.fer.zemris.ppj.lab3.types.TypesHelper;
+import hr.fer.zemris.ppj.lab3.types.Void;
 import hr.fer.zemris.ppj.lab3.types.VoidFunctionType;
 import hr.fer.zemris.ppj.lab4.GeneratorKoda;
 import hr.fer.zemris.ppj.node.SNode;
@@ -103,6 +105,10 @@ public class DefinicijaFunkcije extends Rule {
         scopeSlozenaNaredba.setOffset(lista_parametara.getNames().get(i), 4*(size - i + 1));
       }
       node.getChildren().get(5).visit(scopeSlozenaNaredba);
+      if (functionType.getReturnType() instanceof Void) {
+        GeneratorKoda.writeln("\tMOVE R6, R7");
+        GeneratorKoda.writeln("\tRET");
+      }
     }
   }
 }

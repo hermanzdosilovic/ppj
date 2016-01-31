@@ -131,11 +131,13 @@ public class InitDeklarator extends Rule {
           if (inicijalizator.getValuesOfChildren().contains("<lista_izraza_pridruzivanja>")) {
             GeneratorKoda.writeln("\tPOP R0");
             GeneratorKoda.writeln("\tMOVE " + GeneratorKoda.getGlobalVariableLabel(key) + ", R1");
+            GeneratorKoda
+                .writeln("\tSUB R1, %D " + 4 * (inicijalizator.getElemCount() - 1) + ", R1");
             for (int i = 0; i < inicijalizator.getElemCount(); i++) {
               value.add("0");
               GeneratorKoda.writeln("\tPOP R0");
               GeneratorKoda.writeln("\tSTORE R0, (R1)");
-              GeneratorKoda.writeln("\tSUB R1, %D 4, R1");
+              GeneratorKoda.writeln("\tADD R1, %D 4, R1");
             }
           }
         }
