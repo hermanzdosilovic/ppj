@@ -120,6 +120,16 @@ public class Scope {
     return cnt;
   }
   
+  public int lastOffset() {
+    int mini = 0;
+    for (int offset : stackOffset.values()) {
+      if (offset < mini) {
+        mini = offset;
+      }
+    }
+    return mini;
+  }
+  
   public int getCurrentStackSize() {
     return stackOffset.keySet().size();
   }

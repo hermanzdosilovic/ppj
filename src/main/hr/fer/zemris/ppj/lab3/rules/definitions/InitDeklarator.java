@@ -87,12 +87,17 @@ public class InitDeklarator extends Rule {
       } else {
         throw new SemanticException(getErrorMessage(node));
       }
-      GeneratorKoda.writeln("\tPOP R0");
-      if (inicijalizator.getValuesOfChildren().equals(Arrays.asList("<izraz_pridruzivanja>"))) {
-        SNode izraz_pridruzivanja = inicijalizator.getChildren().get(0);
-        if (izraz_pridruzivanja.islValue()) {
-          GeneratorKoda.writeln("\tLOAD R0, (R0)");
+      
+      if (!TypesHelper.isArray(izravni_deklarator.getType())) {
+        GeneratorKoda.writeln("\tPOP R0");
+        if (inicijalizator.getValuesOfChildren().equals(Arrays.asList("<izraz_pridruzivanja>"))) {
+          SNode izraz_pridruzivanja = inicijalizator.getChildren().get(0);
+          if (izraz_pridruzivanja.islValue()) {
+            GeneratorKoda.writeln("\tLOAD R0, (R0)");
+          }
         }
+      } else {
+        GeneratorKoda.writeln("\tADD R7, %D " + 4*(izravni_deklarator.getElemCount() - 1)+ ", R0");
       }
       GeneratorKoda.writeln("\tPUSH R0");
 

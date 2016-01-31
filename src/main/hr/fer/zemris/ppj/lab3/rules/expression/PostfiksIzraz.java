@@ -63,21 +63,16 @@ public class PostfiksIzraz extends Rule {
       if(izraz.islValue()) {
         GeneratorKoda.writeln("\tLOAD R0, (R0)");
       }
-      GeneratorKoda.writeln("\tPUSH R6");
-      GeneratorKoda.writeln("\tPUSH R0");
-      GeneratorKoda.writeln("\tMOVE %D 4, R0");   
-      GeneratorKoda.writeln("\tPUSH R0");
+      GeneratorKoda.writeln("\tLOAD R1, (R1)");
+      
+      GeneratorKoda.writeln("\tPUSH R1\n\tPUSH R6\n\tPUSH R0\n\tMOVE %D 4, R0\n\tPUSH R0");
       GeneratorKoda.writeln("\tCALL " + GeneratorKoda.MULT_LABEL);
-      GeneratorKoda.writeln("\tSUB R1, R6, R1");
-      GeneratorKoda.writeln("\tPOP R6");
-      GeneratorKoda.writeln("\tPOP R6");
-      GeneratorKoda.writeln("\tPOP R6");
+      GeneratorKoda.writeln("\tMOVE R6, R0\n\tPOP R6\n\tPOP R6\n\tPOP R6\n\tPOP R1");
+      
+      GeneratorKoda.writeln("\tSUB R1, R0, R1");
+      GeneratorKoda.writeln("\tPUSH R1");
       node.setType(X);
       node.setlValue(!TypesHelper.isConstT(X));
-      if(!node.islValue()) {
-        GeneratorKoda.writeln("\tLOAD R1, (R1)");
-      } 
-      GeneratorKoda.writeln("\tPUSH R1");
     } else if (children.equals(Arrays.asList("<postfiks_izraz>", "L_ZAGRADA", "D_ZAGRADA"))) {
       SNode postfiks_izraz = node.getChildren().get(0);
 

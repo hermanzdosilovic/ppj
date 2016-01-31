@@ -49,8 +49,8 @@ public class IzravniDeklarator extends Rule {
         GeneratorKoda.writeln("\tPUSH R0\t; declaration"); // trash for declaration;
       }
       
-      int numberOfLocals = scope.numberOfLocalVariables();
-      scope.setOffset(idn.getName(), -4 * (numberOfLocals + 1));
+      int lastOffset = scope.lastOffset();
+      scope.setOffset(idn.getName(), lastOffset - 4);
     } else if (children.equals(Arrays.asList("IDN", "L_UGL_ZAGRADA", "BROJ", "D_UGL_ZAGRADA"))) {
 
       // 1
@@ -80,6 +80,18 @@ public class IzravniDeklarator extends Rule {
       scope.insert(idn.getName(), node.getType(), true);
 
       node.setElemCount(brojValue);
+      
+      SNode parent = node.getParent();
+      if (parent.getValuesOfChildren().equals(Arrays.asList("<izravni_deklarator>"))) {
+        for (int i = 0; i < brojValue; i++) {
+          GeneratorKoda.writeln("\tPUSH R0\t; declaration"); // trash for declaration;
+        }
+        GeneratorKoda.writeln("\tADD R7, %D " + 4*(brojValue - 1) + ", R0");
+        GeneratorKoda.writeln("\tPUSH R0");
+      }
+      
+      int lastOffset = scope.lastOffset();
+      scope.setOffset(idn.getName(), lastOffset - 4*brojValue - 4);
     } else if (children.equals(Arrays.asList("IDN", "L_ZAGRADA", "KR_VOID", "D_ZAGRADA"))) {
 
       // 1
