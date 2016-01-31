@@ -104,10 +104,14 @@ public class Scope {
   }
   
   public int getOffset(String variable) {
-    if (!stackOffset.containsKey(variable)) {
-      return -1;
-    }
-    return stackOffset.get(variable);
+    Scope parent = this;
+    do {
+      if (parent.stackOffset.containsKey(variable)) {
+        return parent.stackOffset.get(variable);
+      }
+      parent = parent.getParentScope();
+    } while (parent != null && parent.getParentScope() != null);
+    return -1;
   }
   
   public int numberOfLocalVariables() {

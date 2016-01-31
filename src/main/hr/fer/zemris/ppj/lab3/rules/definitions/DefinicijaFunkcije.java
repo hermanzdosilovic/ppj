@@ -96,7 +96,7 @@ public class DefinicijaFunkcije extends Rule {
       scope.insert(idn.getName(), functionType, true);
 
       // 7
-      Scope scopeSlozenaNaredba = new Scope(scope);
+      Scope scopeSlozenaNaredba = new Scope(scope.getGlobalScope());
       //scopeSlozenaNaredba.insert(idn.getName(), functionType, true);
       int size = lista_parametara.getTypes().size();
       for (int i = 0; i < size; i++) {
