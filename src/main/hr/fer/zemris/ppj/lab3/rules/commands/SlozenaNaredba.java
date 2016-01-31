@@ -12,11 +12,11 @@ import hr.fer.zemris.ppj.symbol.NonTerminalSymbol;
 public class SlozenaNaredba extends Rule {
 
   public static SlozenaNaredba SLOZENA_NAREDBA = new SlozenaNaredba();
-  
+
   private SlozenaNaredba() {
     super(new NonTerminalSymbol("<slozena_naredba>"));
   }
-  
+
   @Override
   public void checkRule(SNode node, Scope scope) throws SemanticException {
     List<String> childrenValues = node.getValuesOfChildren();

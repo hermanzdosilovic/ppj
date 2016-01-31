@@ -122,11 +122,15 @@ public class Scope {
   
   public int lastOffset() {
     int mini = 0;
-    for (int offset : stackOffset.values()) {
-      if (offset < mini) {
-        mini = offset;
+    Scope parent = this;
+    do {
+      for (int offset : parent.stackOffset.values()) {
+        if (offset < mini) {
+          mini = offset;
+        }
       }
-    }
+      parent = parent.getParentScope();
+    } while (parent != null && parent.getParentScope() != null);
     return mini;
   }
   
