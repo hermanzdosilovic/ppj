@@ -1,4 +1,4 @@
-int x[20] = {0, 1};
+int x[2] = {0, 1};
 int len = 2;
 
 int fib(int n){

@@ -13,7 +13,7 @@ public class UnarniOperator extends Rule {
   public static UnarniOperator UNARNI_OPERATOR = new UnarniOperator();
   
   private UnarniOperator() {
-    super(new NonTerminalSymbol("<unarni operator>"));
+    super(new NonTerminalSymbol("<unarni_operator>"));
   }
   
   @Override

@@ -92,7 +92,7 @@ public class PrimarniIzraz extends Rule {
       if (value >= Integer.MIN_VALUE && value <= Integer.MAX_VALUE) {
         node.setType(Int.INT);
         node.setlValue(false);
-
+        
         GeneratorKoda.constants.add(value);
         GeneratorKoda.writeln("\tLOAD R0, (" + GeneratorKoda.getConstantLabel(value) + ")");
         GeneratorKoda.writeln("\tPUSH R0");

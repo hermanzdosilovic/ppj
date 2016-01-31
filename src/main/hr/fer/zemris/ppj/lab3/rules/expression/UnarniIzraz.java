@@ -80,7 +80,7 @@ public class UnarniIzraz extends Rule {
       } else if (unarni_operator.contains("OP_TILDA")) {
         GeneratorKoda.writeln("\tXOR R0, -1, R0");
 
-      } else if (unarni_operator.contains("OP_MINUS")) {
+      } else if (unarni_operator.contains("MINUS")) {
         GeneratorKoda.writeln("\tMOVE 0, R1");
         GeneratorKoda.writeln("\tSUB R1, R0, R0");
 
